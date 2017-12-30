@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Coin Market Cap</string>
+
+    <string name="default_currency">USD</string>
+
+    <string-array name="currency">
+        <item>USD</item>
+        <item>EUR</item>
+    </string-array>
+</resources>
