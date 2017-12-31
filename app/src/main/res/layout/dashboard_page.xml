@@ -21,6 +21,70 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/base_half_padding"
+                android:paddingLeft="@dimen/base_padding"
+                android:paddingRight="@dimen/base_padding"
+                android:paddingTop="@dimen/base_half_padding">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coin Market Cap"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_price"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="25.54.25"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/base_half_padding"
+                android:paddingLeft="@dimen/base_padding"
+                android:paddingRight="@dimen/base_padding"
+                android:paddingTop="@dimen/base_half_padding">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{M.marketCap}"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_price"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{M.marketVolume}"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_small"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/base_half_padding"
@@ -33,15 +97,16 @@
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
                 android:text="#"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/text_light_color" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/AppTheme.CoinItem"
-                android:layout_width="0dp"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Name"
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:textColor="@color/text_light_color" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/AppTheme.CoinItem"
@@ -49,7 +114,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Price"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/text_light_color" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/AppTheme.CoinItem"
@@ -57,7 +123,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Change"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/text_light_color" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/AppTheme.CoinItem"
@@ -65,15 +132,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="M. Cap"
-                android:textAlignment="textEnd" />
-
-            <android.support.v7.widget.AppCompatTextView
-                style="@style/AppTheme.CoinItem"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Volume"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/text_light_color" />
 
         </LinearLayout>
 

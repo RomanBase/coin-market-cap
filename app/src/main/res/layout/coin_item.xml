@@ -30,50 +30,83 @@
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/AppTheme.CoinItem"
-            android:layout_width="0dp"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@{M.coin.symbol}"
             android:textAlignment="textStart"
             android:textSize="@dimen/text_size_highlight"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/AppTheme.CoinItem"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{M.coin.price_usd}"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/text_size_price" />
+            android:gravity="end"
+            android:orientation="vertical">
 
-        <com.ankhrom.coinmarketcap.view.AppTextView
-            style="@style/AppTheme.CoinItem"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@{M.coin.percent_change_24h}"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/text_size_price"
-            app:textColorResource="@{M.change_24h_color_res}" />
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.priceUsd}"
+                android:textSize="@dimen/text_size_price" />
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/AppTheme.CoinItem"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@{M.coin.market_cap}"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/text_size_price" />
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.supply}"
+                android:textSize="@dimen/text_size_small" />
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/AppTheme.CoinItem"
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{M.coin.volume_usd}"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/text_size_price" />
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <com.ankhrom.coinmarketcap.view.AppTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.percentChange24h}"
+                android:textSize="@dimen/text_size_price"
+                app:textColorResource="@{M.change_24h_color_res}" />
+
+            <com.ankhrom.coinmarketcap.view.AppTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.percentChange1h}"
+                android:textSize="@dimen/text_size_small"
+                app:textColorResource="@{M.change_1h_color_res}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.marketCap}"
+                android:textSize="@dimen/text_size_price" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.volumeUsd}"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </layout>

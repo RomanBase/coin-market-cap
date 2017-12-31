@@ -61,7 +61,13 @@ public class BaseFactory implements ObjectFactory {
     @Override
     public RequestQueue getRequestQueue() {
 
-        RequestQueue queue = get(RequestQueue.class);
+        RequestQueue queue = null;
+
+        for (Object arg : objects) {
+            if (RequestQueue.class.isInstance(arg)) {
+                queue = (RequestQueue) arg;
+            }
+        }
 
         if (queue == null) {
             queue = new VolleyBuilder(context)

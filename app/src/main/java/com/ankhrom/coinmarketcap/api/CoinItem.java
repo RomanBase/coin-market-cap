@@ -12,14 +12,18 @@ public class CoinItem {
     public String name;
     public String symbol;
     public String rank;
-    public String price_usd;
-    public String price_btc;
+
+    @SerializedName("price_usd")
+    public String priceUsd;
+
+    @SerializedName("price_btc")
+    public String priceBtc;
 
     @SerializedName("24h_volume_usd")
-    public String volume_usd;
+    public String volumeUsd;
 
     @SerializedName("market_cap_usd")
-    public String market_cap;
+    public String marketCap;
 
     @SerializedName("available_supply")
     public String supply;
@@ -27,9 +31,14 @@ public class CoinItem {
     @SerializedName("total_supply")
     public String supply_total;
 
-    public String percent_change_1h;
-    public String percent_change_24h;
-    public String percent_change_7d;
+    @SerializedName("percent_change_1h")
+    public String percentChange1h;
+
+    @SerializedName("percent_change_24h")
+    public String percentChange24h;
+
+    @SerializedName("percent_change_7d")
+    public String percentChange7d;
 
     @SerializedName("last_updated")
     public String timestamp;

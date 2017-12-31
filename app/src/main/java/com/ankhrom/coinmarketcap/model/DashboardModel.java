@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.ankhrom.base.model.AdapterModel;
 import com.ankhrom.coinmarketcap.BR;
+import com.ankhrom.coinmarketcap.api.ApiMath;
+import com.ankhrom.coinmarketcap.api.MarketData;
 
 import java.util.Collection;
 
@@ -13,12 +15,14 @@ import java.util.Collection;
 
 public class DashboardModel extends AdapterModel<CoinItemModel> {
 
-    public DashboardModel(Context context) {
-        super(context);
-    }
+    public final String marketCap;
+    public final String marketVolume;
 
-    public DashboardModel(Context context, Collection<CoinItemModel> collection) {
+    public DashboardModel(Context context, Collection<CoinItemModel> collection, MarketData market) {
         super(context, collection);
+
+        marketCap = ApiMath.toShortFormat(String.valueOf(market.marketCap));
+        marketVolume = ApiMath.toShortFormat(String.valueOf(market.marketVolume));
     }
 
     @Override
