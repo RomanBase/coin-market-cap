@@ -7,7 +7,7 @@ import java.text.NumberFormat;
  * Created by R' on 12/30/2017.
  */
 
-public class ApiMath {
+public class ApiFormat {
 
     public static final double ONE = 1;
     public static final double TEN = 10;
@@ -30,7 +30,7 @@ public class ApiMath {
         double value = Double.parseDouble(number);
 
         if (value > THOUSAND) {
-            number = String.valueOf((int) Math.round(value));
+            number = NumberFormat.getInstance().format((int) Math.round(value)) + "." + Math.round((value - Math.floor(value)) * 100.0);
         } else if (value > TEN) {
             number = toShortFormatString(value);
         } else if (value > ONE) {
@@ -46,14 +46,14 @@ public class ApiMath {
 
         double value = Double.parseDouble(number);
 
-        if (value > ApiMath.BILLION) {
-            value /= ApiMath.BILLION;
+        if (value > ApiFormat.BILLION) {
+            value /= ApiFormat.BILLION;
             number = toShortFormatString(value) + BILLION_SIGN;
-        } else if (value > ApiMath.MILLION) {
-            value /= ApiMath.MILLION;
+        } else if (value > ApiFormat.MILLION) {
+            value /= ApiFormat.MILLION;
             number = toShortFormatString(value) + MILLION_SIGN;
         } else {
-            value /= ApiMath.HUNDRED_THOUSAND;
+            value /= ApiFormat.HUNDRED_THOUSAND;
             number = toShortFormatString(value) + THOUSAND_SIGN;
         }
 

@@ -1,5 +1,9 @@
 package com.ankhrom.coinmarketcap.viewmodel;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.view.MenuItem;
+
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.viewmodel.BaseViewModel;
@@ -19,13 +23,23 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class DashboardViewModel extends BaseViewModel<DashboardPageBinding, DashboardModel> implements DataLoadingListener {
+public class DashboardViewModel extends BaseViewModel<DashboardPageBinding, DashboardModel> implements DataLoadingListener, BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
 
     @Override
     public void onInit() {
         super.onInit();
 
         requestData();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public void onNavigationItemReselected(@NonNull MenuItem item) {
+
     }
 
     private void requestData() {
@@ -36,11 +50,7 @@ public class DashboardViewModel extends BaseViewModel<DashboardPageBinding, Dash
 
     private void updateModel(List<CoinItemModel> items, MarketData market) {
 
-        if (model == null) {
-            setModel(new DashboardModel(getContext(), items, market));
-        } else {
-            model.adapter.addAll(items);
-        }
+        setModel(new DashboardModel(getContext(), items, market));
     }
 
     private List<CoinItemModel> convertCoinItems(List<CoinItem> coins) {

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.ankhrom.base.model.AdapterModel;
 import com.ankhrom.coinmarketcap.BR;
-import com.ankhrom.coinmarketcap.api.ApiMath;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.api.MarketData;
 
 import java.util.Collection;
@@ -23,8 +23,8 @@ public class DashboardModel extends AdapterModel<CoinItemModel> {
     public DashboardModel(Context context, Collection<CoinItemModel> collection, MarketData market) {
         super(context, collection);
 
-        marketCap = ApiMath.toShortFormat(String.valueOf(market.marketCap));
-        marketVolume = ApiMath.toShortFormat(String.valueOf(market.marketVolume));
+        marketCap = ApiFormat.toShortFormat(String.valueOf(market.marketCap));
+        marketVolume = ApiFormat.toShortFormat(String.valueOf(market.marketVolume));
         date = new Date(market.timestamp * 1000).toLocaleString();
     }
 

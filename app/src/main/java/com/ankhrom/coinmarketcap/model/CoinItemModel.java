@@ -3,7 +3,7 @@ package com.ankhrom.coinmarketcap.model;
 import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
-import com.ankhrom.coinmarketcap.api.ApiMath;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.api.CoinItem;
 
 /**
@@ -22,8 +22,8 @@ public class CoinItemModel extends SelectableItemModel {
 
         coin = item;
 
-        coin.priceUsd = ApiMath.toPriceFormat(coin.priceUsd) + " $";
-        coin.supply = ApiMath.toPriceFormat(coin.supply);
+        coin.priceUsd = ApiFormat.toPriceFormat(coin.priceUsd) + " $";
+        coin.supply = ApiFormat.toPriceFormat(coin.supply);
 
         coin.percentChange1h += "%";
         coin.percentChange24h += "%";
@@ -33,8 +33,8 @@ public class CoinItemModel extends SelectableItemModel {
         change_24h_color_res = coin.percentChange24h.startsWith("-") ? R.color.red : R.color.green;
         change_7d_color_res = coin.percentChange7d.startsWith("-") ? R.color.red : R.color.green;
 
-        coin.marketCap = ApiMath.toShortFormat(coin.marketCap);
-        coin.volumeUsd = ApiMath.toShortFormat(coin.volumeUsd);
+        coin.marketCap = ApiFormat.toShortFormat(coin.marketCap);
+        coin.volumeUsd = ApiFormat.toShortFormat(coin.volumeUsd);
     }
 
     @Override
