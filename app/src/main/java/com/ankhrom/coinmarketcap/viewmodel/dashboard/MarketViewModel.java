@@ -175,14 +175,13 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         if (!isLoading) {
 
-            List<String> favs = getFactory().get(UserPrefs.class).getFavourites();
             List<CoinItemModel> items = state == ListState.NORMAL ? holder.getCoinItems() : holder.getFavouriteCoinItems();
 
-            for (CoinItemModel item : items) {
-                item.isFavourite.set(favs.contains(item.coin.id));
+            // TODO: 1/1/2018 click listener
+            /*for (CoinItemModel item : items) {
                 item.setOnItemSelectedListener(itemSelectedListener);
                 item.setOnItemSelectedLongListener(itemSelectedLongListener);
-            }
+            }*/
 
             setModel(new CoinsAdapterModel(getContext(), items, holder.getMarket()));
         }

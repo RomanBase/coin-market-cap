@@ -91,6 +91,12 @@ public class DataHolder {
 
         if (coinItems == null) {
             coinItems = ObjectHelper.convert(coins, new CoinItemConverter());
+
+            List<String> favs = factory.get(UserPrefs.class).getFavourites();
+
+            for (CoinItemModel item : coinItems) {
+                item.isFavourite.set(favs.contains(item.coin.id));
+            }
         }
 
         return coinItems;
