@@ -8,12 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.ankhrom.base.model.ItemModel;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import com.ankhrom.base.model.ItemModel;
 
 public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adapter<AdapterRecycleBinder.ViewHolder> {
 
@@ -36,6 +36,12 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
 
         items.add(item);
         notifyItemInserted(items.size() - 1);
+    }
+
+    public void add(int index, T item) {
+
+        items.add(index, item);
+        notifyItemInserted(index);
     }
 
     public void addAll(@NonNull Collection<? extends T> collection) {

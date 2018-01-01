@@ -12,7 +12,6 @@ import com.ankhrom.base.interfaces.viewmodel.ViewModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
-import com.ankhrom.coinmarketcap.viewmodel.dashboard.FavouritesViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.MarketViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.PortfolioViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.SearchViewModel;
@@ -82,8 +81,8 @@ public class MainViewModel extends AppViewModel implements BottomNavigationView.
     protected List<ViewModel> initViewModels() {
 
         List<ViewModel> viewModels = new ArrayList<>();
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class));
-        viewModels.add(getFactory().getViewModel(FavouritesViewModel.class));
+        viewModels.add(getFactory().getViewModel(MarketViewModel.class, MarketViewModel.ListState.NORMAL));
+        viewModels.add(getFactory().getViewModel(MarketViewModel.class, MarketViewModel.ListState.FAVOURITES));
         viewModels.add(getFactory().getViewModel(SearchViewModel.class));
         viewModels.add(getFactory().getViewModel(PortfolioViewModel.class));
         viewModels.add(getFactory().getViewModel(SettingsViewModel.class));

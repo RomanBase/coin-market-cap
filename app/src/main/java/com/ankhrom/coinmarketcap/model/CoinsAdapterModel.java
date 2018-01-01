@@ -28,6 +28,14 @@ public class CoinsAdapterModel extends AdapterModel<CoinItemModel> {
         date = new Date(market.timestamp * 1000).toLocaleString();
     }
 
+    public CoinsAdapterModel(Context context, Collection<CoinItemModel> collection) {
+        super(context, collection);
+
+        marketCap = null;
+        marketVolume = null;
+        date = null;
+    }
+
     @Override
     public int getVariableBindingResource() {
         return BR.M;

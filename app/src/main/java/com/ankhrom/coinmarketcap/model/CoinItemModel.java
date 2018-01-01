@@ -1,5 +1,10 @@
 package com.ankhrom.coinmarketcap.model;
 
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableFloat;
+import android.view.View;
+
+import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
@@ -24,6 +29,12 @@ public class CoinItemModel extends SelectableItemModel {
     public final int change_1h_color_res;
     public final int change_24h_color_res;
 
+    public final ObservableBoolean isFavourite = new ObservableBoolean();
+    public final ObservableFloat swipeProgress = new ObservableFloat();
+    public final ObservableBoolean swipeDirectionLeft = new ObservableBoolean();
+
+    private OnItemSelectedListener<CoinItemModel> itemSelectedLongListener;
+
     public CoinItemModel(CoinItem item) {
 
         coin = item;
@@ -39,6 +50,20 @@ public class CoinItemModel extends SelectableItemModel {
 
         marketCap = ApiFormat.toShortFormat(coin.marketCap);
         volume = ApiFormat.toShortFormat(coin.volumeUsd);
+    }
+
+    public void setOnItemSelectedLongListener(OnItemSelectedListener<CoinItemModel> itemSelectedLongListener) {
+        this.itemSelectedLongListener = itemSelectedLongListener;
+    }
+
+    public boolean onItemLongSelected(View view) {
+
+        if (itemSelectedLongListener != null) {
+            itemSelectedLongListener.onItemSelected(view, this);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

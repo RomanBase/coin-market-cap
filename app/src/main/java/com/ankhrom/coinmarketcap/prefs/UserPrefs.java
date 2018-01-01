@@ -5,10 +5,13 @@ import android.support.annotation.NonNull;
 
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.listener.OnFavouriteItemChangedListener;
+import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,13 +24,38 @@ public class UserPrefs extends BasePrefs {
     private static final String CURRENCY = "currency";
     private static final String FAVOURITES = "favourites";
 
+    private List<OnFavouriteItemChangedListener> favouriteItemChangedListeners;
+
     public UserPrefs(@NonNull Context context) {
         super(context);
+
+        favouriteItemChangedListeners = new ArrayList<>();
+    }
+
+    public void addFavouriteItemChangedListener(OnFavouriteItemChangedListener listener) {
+
+        if (!favouriteItemChangedListeners.contains(listener)) {
+            favouriteItemChangedListeners.add(listener);
+        }
+    }
+
+    public void removeFavouriteItemChangedListener(OnFavouriteItemChangedListener listener) {
+
+        if (favouriteItemChangedListeners.contains(listener)) {
+            favouriteItemChangedListeners.remove(listener);
+        }
+    }
+
+    public void notifyFavouriteItemChangedListeners(CoinItemModel item) {
+
+        for (OnFavouriteItemChangedListener listener : favouriteItemChangedListeners) {
+            listener.onFavouriteItemPrefsChanged(item);
+        }
     }
 
     public void setCurrency(String currency) {
 
-        edit().putString(CURRENCY, currency);
+        edit().putString(CURRENCY, currency).apply();
     }
 
     public String getCurrency() {
@@ -38,9 +66,9 @@ public class UserPrefs extends BasePrefs {
     public void setFavourites(List<String> coins) {
 
         if (coins == null || coins.isEmpty()) {
-            edit().putString(FAVOURITES, null);
+            edit().putString(FAVOURITES, null).apply();
         } else {
-            edit().putString(FAVOURITES, new Gson().toJson(coins));
+            edit().putString(FAVOURITES, new Gson().toJson(coins)).apply();
         }
     }
 
@@ -50,6 +78,22 @@ public class UserPrefs extends BasePrefs {
         }.getType();
 
         return new Gson().fromJson(getPrefs().getString(FAVOURITES, DEFAULT_JSON_LIST), type);
+    }
+
+    public void addFavourite(String id) {
+
+        List<String> favs = getFavourites();
+        favs.add(id);
+
+        setFavourites(favs);
+    }
+
+    public void removeFavourite(String id) {
+
+        List<String> favs = getFavourites();
+        favs.remove(id);
+
+        setFavourites(favs);
     }
 
     @Override
