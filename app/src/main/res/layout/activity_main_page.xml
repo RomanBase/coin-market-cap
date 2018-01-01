@@ -6,7 +6,7 @@
 
         <variable
             name="VM"
-            type="com.ankhrom.coinmarketcap.viewmodel.MainViewModel" />
+            type="com.ankhrom.coinmarketcap.viewmodel.master.MainViewModel" />
     </data>
 
     <LinearLayout

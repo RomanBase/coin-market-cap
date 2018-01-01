@@ -1,9 +1,7 @@
-package com.ankhrom.coinmarketcap.viewmodel;
+package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
-import com.ankhrom.base.viewmodel.BaseViewModel;
-import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.CoinItem;
 import com.ankhrom.coinmarketcap.api.MarketData;
@@ -12,6 +10,7 @@ import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
 import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.CoinsAdapterModel;
+import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
 import java.util.List;
 
@@ -19,16 +18,11 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class MarketViewModel extends BaseViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener {
+public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener {
 
     @Override
     public void onInit() {
         super.onInit();
-
-        requestData();
-    }
-
-    private void requestData() {
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.getFetcher().addListener(this);
@@ -68,10 +62,5 @@ public class MarketViewModel extends BaseViewModel<MarketPageBinding, CoinsAdapt
     @Override
     public int getLayoutResource() {
         return R.layout.market_page;
-    }
-
-    @Override
-    public int getBindingResource() {
-        return BR.VM;
     }
 }

@@ -9,7 +9,7 @@ import com.ankhrom.base.interfaces.viewmodel.ViewModelObserver;
 import com.ankhrom.base.viewmodel.BaseViewModelObserver;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
-import com.ankhrom.coinmarketcap.viewmodel.MainViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.master.MainViewModel;
 
 public class MainActivity extends BaseActivity {
 

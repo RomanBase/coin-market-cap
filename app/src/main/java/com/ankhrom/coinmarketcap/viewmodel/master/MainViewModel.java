@@ -1,4 +1,4 @@
-package com.ankhrom.coinmarketcap.viewmodel;
+package com.ankhrom.coinmarketcap.viewmodel.master;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +12,11 @@ import com.ankhrom.base.viewmodel.BaseViewModel;
 import com.ankhrom.base.viewmodel.CompositeViewModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.viewmodel.dashboard.FavouritesViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dashboard.MarketViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dashboard.PortfolioViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dashboard.SearchViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dashboard.SettingsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +68,10 @@ public class MainViewModel extends CompositeViewModel implements BottomNavigatio
 
         List<BaseViewModel> viewModels = new ArrayList<>();
         viewModels.add(getFactory().getViewModel(MarketViewModel.class));
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class));
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class));
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class));
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class));
+        viewModels.add(getFactory().getViewModel(FavouritesViewModel.class));
+        viewModels.add(getFactory().getViewModel(SearchViewModel.class));
+        viewModels.add(getFactory().getViewModel(PortfolioViewModel.class));
+        viewModels.add(getFactory().getViewModel(SettingsViewModel.class));
 
         return viewModels;
     }
