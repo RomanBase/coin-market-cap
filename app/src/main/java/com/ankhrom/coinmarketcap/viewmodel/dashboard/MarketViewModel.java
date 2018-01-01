@@ -155,12 +155,11 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                 return;
             }
 
-            activeItem.swipeProgress.set(0.0f);
-
             if (activeItem.swipeProgress.get() >= 1.0f) {
                 toggleItemFavouriteState(activeItem);
             }
 
+            activeItem.swipeProgress.set(0.0f);
             activeItem = null;
             return;
         }
