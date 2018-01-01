@@ -1,17 +1,17 @@
 package com.ankhrom.coinmarketcap.viewmodel.master;
 
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.ankhrom.base.viewmodel.BaseViewModel;
-import com.ankhrom.base.viewmodel.CompositeViewModel;
+import com.ankhrom.base.interfaces.viewmodel.ViewModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.FavouritesViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.MarketViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.PortfolioViewModel;
@@ -25,13 +25,29 @@ import java.util.List;
  * Created by R' on 12/31/2017.
  */
 
-public class MainViewModel extends CompositeViewModel implements BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
+public class MainViewModel extends AppViewModel implements BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
+
+    public final ObservableField<ViewModel> currentViewModel = new ObservableField<>();
+
+    private List<ViewModel> viewModels;
+
+    @Override
+    public void onInit() {
+        super.onInit();
+
+        viewModels = initViewModels();
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        onModelCreated();
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                setCurrentPage(0);
+            }
+        });
     }
 
     @Override
@@ -44,29 +60,28 @@ public class MainViewModel extends CompositeViewModel implements BottomNavigatio
 
         switch (item.getItemId()) {
             case R.id.menu_market:
-                setCurrentPage(0, true);
+                setCurrentPage(0);
                 break;
             case R.id.menu_favourites:
-                setCurrentPage(1, true);
+                setCurrentPage(1);
                 break;
             case R.id.menu_search:
-                setCurrentPage(2, true);
+                setCurrentPage(2);
                 break;
             case R.id.menu_porfolio:
-                setCurrentPage(3, true);
+                setCurrentPage(3);
                 break;
             case R.id.menu_settings:
-                setCurrentPage(4, true);
+                setCurrentPage(4);
                 break;
         }
 
         return true;
     }
 
-    @Override
-    protected List<BaseViewModel> initViews() {
+    protected List<ViewModel> initViewModels() {
 
-        List<BaseViewModel> viewModels = new ArrayList<>();
+        List<ViewModel> viewModels = new ArrayList<>();
         viewModels.add(getFactory().getViewModel(MarketViewModel.class));
         viewModels.add(getFactory().getViewModel(FavouritesViewModel.class));
         viewModels.add(getFactory().getViewModel(SearchViewModel.class));
@@ -76,19 +91,19 @@ public class MainViewModel extends CompositeViewModel implements BottomNavigatio
         return viewModels;
     }
 
-    @Override
-    protected int getViewPagerId() {
-        return R.id.pager;
-    }
+    protected void setCurrentPage(int index) {
 
-    @Override
-    protected int getViewTabsId() {
-        return 0;
-    }
+        if (index < 0) {
+            index = 0;
+        } else if (index > viewModels.size() - 1) {
+            index = viewModels.size() - 1;
+        }
 
-    @Override
-    protected ViewPager.PageTransformer getPageTransformer() {
-        return new FadePageTransformer();
+        ViewModel vm = viewModels.get(index);
+
+        currentViewModel.set(vm);
+
+        getNavigation().replaceViewModel(vm, R.id.content_container);
     }
 
     @Override
