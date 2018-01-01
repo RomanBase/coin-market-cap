@@ -16,7 +16,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_deals"
+        android:id="@+id/menu_search"
         android:enabled="true"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search"

@@ -11,6 +11,7 @@ import com.ankhrom.coinmarketcap.api.MarketData;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class DataFetcher {
 
     private final ObjectFactory factory;
 
-    private DataLoadingListener listener;
+    private List<DataLoadingListener> listeners;
 
     private int index;
     private boolean hasNext;
@@ -31,17 +32,36 @@ public class DataFetcher {
 
     public DataFetcher(ObjectFactory factory) {
         this.factory = factory;
+
+        listeners = new ArrayList<>();
     }
 
-    public void setListener(DataLoadingListener listener) {
-        this.listener = listener;
-        notifyListener(true);
+    public void addListener(DataLoadingListener listener) {
+
+        if (listeners.contains(listener)) {
+            return;
+        }
+
+        if (!loadingCoins && !loadingMarket) {
+            listener.onDataLoading(false, factory.get(DataHolder.class));
+        }
+
+        listeners.add(listener);
+    }
+
+    public void removeListener(DataLoadingListener listener) {
+
+        if (!listeners.contains(listener)) {
+            return;
+        }
+
+        listeners.remove(listener);
     }
 
     public void requestCoins() {
 
         loadingCoins = true;
-        notifyListener(true);
+        notifyListeners(true);
 
         RequestBuilder.get(ApiUrl.TICKER)
                 .param(ApiParam.CURRENCY, factory.get(UserPrefs.class).getCurrency())
@@ -55,7 +75,7 @@ public class DataFetcher {
     public void requestMarket() {
 
         loadingMarket = true;
-        notifyListener(true);
+        notifyListeners(true);
 
         RequestBuilder.get(ApiUrl.GLOBAL)
                 .param(ApiParam.CURRENCY, factory.get(UserPrefs.class).getCurrency())
@@ -65,9 +85,9 @@ public class DataFetcher {
                 .queue(factory);
     }
 
-    private void notifyListener(boolean isValid) {
+    private void notifyListeners(boolean isValid) {
 
-        if (listener == null) {
+        if (listeners.size() == 0) {
             return;
         }
 
@@ -75,10 +95,12 @@ public class DataFetcher {
 
         boolean isLoading = loadingCoins || loadingMarket;
 
-        if (isValid) {
-            listener.onDataLoading(isLoading, holder);
-        } else {
-            listener.onDataLoadingFailed(isLoading, holder);
+        for (DataLoadingListener listener : listeners) {
+            if (isValid) {
+                listener.onDataLoading(isLoading, holder);
+            } else {
+                listener.onDataLoadingFailed(isLoading, holder);
+            }
         }
     }
 
@@ -89,13 +111,13 @@ public class DataFetcher {
             loadingCoins = false;
 
             if (response == null) {
-                notifyListener(false);
+                notifyListeners(false);
                 return;
             }
 
             factory.get(DataHolder.class).updateCoins(response);
 
-            notifyListener(true);
+            notifyListeners(true);
         }
 
         @Override
@@ -103,7 +125,7 @@ public class DataFetcher {
             error.printStackTrace();
 
             loadingCoins = false;
-            notifyListener(false);
+            notifyListeners(false);
         }
     };
 
@@ -114,13 +136,13 @@ public class DataFetcher {
             loadingMarket = false;
 
             if (response == null) {
-                notifyListener(false);
+                notifyListeners(false);
                 return;
             }
 
             factory.get(DataHolder.class).updateMarket(response);
 
-            notifyListener(true);
+            notifyListeners(true);
         }
 
         @Override
@@ -128,7 +150,7 @@ public class DataFetcher {
             error.printStackTrace();
 
             loadingCoins = false;
-            notifyListener(false);
+            notifyListeners(false);
         }
     };
 }

@@ -14,27 +14,31 @@ public class CoinItemModel extends SelectableItemModel {
 
     public final CoinItem coin;
 
+    public final String price;
+    public final String supply;
+    public final String change1h;
+    public final String change24h;
+    public final String marketCap;
+    public final String volume;
+
     public final int change_1h_color_res;
     public final int change_24h_color_res;
-    public final int change_7d_color_res;
 
     public CoinItemModel(CoinItem item) {
 
         coin = item;
 
-        coin.priceUsd = ApiFormat.toPriceFormat(coin.priceUsd) + " $";
-        coin.supply = ApiFormat.toPriceFormat(coin.supply);
-
-        coin.percentChange1h += "%";
-        coin.percentChange24h += "%";
-        coin.percentChange7d += "%";
-
         change_1h_color_res = coin.percentChange1h.startsWith("-") ? R.color.red : R.color.green;
         change_24h_color_res = coin.percentChange24h.startsWith("-") ? R.color.red : R.color.green;
-        change_7d_color_res = coin.percentChange7d.startsWith("-") ? R.color.red : R.color.green;
 
-        coin.marketCap = ApiFormat.toShortFormat(coin.marketCap);
-        coin.volumeUsd = ApiFormat.toShortFormat(coin.volumeUsd);
+        price = ApiFormat.toPriceFormat(coin.priceUsd) + " $";
+        supply = ApiFormat.toShortFormat(coin.supply);
+
+        change1h = coin.percentChange1h + "%";
+        change24h = coin.percentChange24h + "%";
+
+        marketCap = ApiFormat.toShortFormat(coin.marketCap);
+        volume = ApiFormat.toShortFormat(coin.volumeUsd);
     }
 
     @Override

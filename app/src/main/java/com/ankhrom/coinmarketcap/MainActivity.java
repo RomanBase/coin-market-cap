@@ -9,7 +9,7 @@ import com.ankhrom.base.interfaces.viewmodel.ViewModelObserver;
 import com.ankhrom.base.viewmodel.BaseViewModelObserver;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
-import com.ankhrom.coinmarketcap.viewmodel.DashboardViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.MainViewModel;
 
 public class MainActivity extends BaseActivity {
 
@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity {
         factory.add(DataHolder.init(factory));
 
         return BaseViewModelObserver.with(factory, R.id.root_container)
-                .setViewModel(DashboardViewModel.class)
+                .setViewModel(MainViewModel.class)
                 .build();
     }
 

@@ -14,13 +14,13 @@ import java.util.Date;
  * Created by R' on 12/30/2017.
  */
 
-public class DashboardModel extends AdapterModel<CoinItemModel> {
+public class CoinsAdapterModel extends AdapterModel<CoinItemModel> {
 
     public final String marketCap;
     public final String marketVolume;
     public final String date;
 
-    public DashboardModel(Context context, Collection<CoinItemModel> collection, MarketData market) {
+    public CoinsAdapterModel(Context context, Collection<CoinItemModel> collection, MarketData market) {
         super(context, collection);
 
         marketCap = ApiFormat.toShortFormat(String.valueOf(market.marketCap));

@@ -97,7 +97,11 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        tabs.setOnPageChangeListener(listener);
+        if (tabs != null) {
+            tabs.setOnPageChangeListener(listener);
+        } else {
+            pager.setOnPageChangeListener(listener);
+        }
     }
 
     public ViewPager getPager() {
@@ -147,7 +151,10 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
 
         pager.removeAllViews();
         pager.setAdapter(null);
-        tabs.removeAllViews();
+
+        if (tabs != null) {
+            tabs.removeAllViews();
+        }
 
         pager.setAdapter(new ViewModelFragmentAdapter(getChildFragmentManager()));
 
@@ -195,7 +202,10 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
         if (view != null) {
 
             pager = (ViewPager) view.findViewById(getViewPagerId());
-            tabs = (PagerSlidingTabStrip) view.findViewById(getViewTabsId());
+
+            if (getViewTabsId() > 0) {
+                tabs = (PagerSlidingTabStrip) view.findViewById(getViewTabsId());
+            }
 
             return view;
         } else {
@@ -273,17 +283,18 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
         public void transformPage(View view, float position) {
             int pageWidth = view.getWidth();
 
-            if (position < -1) { // [-Infinity,-1)
+            if (position <= -1.0f) { // [-Infinity,-1)
                 // This page is way off-screen to the left.
                 view.setAlpha(0);
+                view.setTranslationX(0);
 
             } else if (position <= 0) { // [-1,0]
                 // Use the default slide transition when moving to the left page
-                view.setAlpha(1 + position);
+                view.setAlpha(1.0f + position);
                 view.setTranslationX(-(float) pageWidth * position);
-            } else if (position <= 1) { // (0,1]
+            } else if (position < 1.0f) { // (0,1]
                 // Fade the page out.
-                view.setAlpha(1 - position);
+                view.setAlpha(1.0f - position);
 
                 // Counteract the default slide transition
                 view.setTranslationX(-(float) pageWidth * position);
@@ -291,6 +302,7 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
             } else { // (1,+Infinity]
                 // This page is way off-screen to the right.
                 view.setAlpha(0);
+                view.setTranslationX(0);
             }
         }
     }

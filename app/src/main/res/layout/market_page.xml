@@ -6,11 +6,11 @@
 
         <variable
             name="VM"
-            type="com.ankhrom.coinmarketcap.viewmodel.DashboardViewModel" />
+            type="com.ankhrom.coinmarketcap.viewmodel.MarketViewModel" />
 
         <variable
             name="M"
-            type="com.ankhrom.coinmarketcap.model.DashboardModel" />
+            type="com.ankhrom.coinmarketcap.model.CoinsAdapterModel" />
     </data>
 
     <LinearLayout
@@ -194,23 +194,8 @@
 
         <com.ankhrom.base.custom.view.BaseListView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             app:adapter="@{M.adapter}" />
-
-        <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_color"
-            app:OnNavigationItemReselectedListener="@{VM}"
-            app:OnNavigationItemSelectedListener="@{VM}"
-            app:enableAnimation="@{true}"
-            app:enableItemShiftingMode="@{false}"
-            app:enableShiftingMode="@{false}"
-            app:itemIconTint="@color/menu_bottom_item_color"
-            app:itemTextColor="@color/menu_bottom_item_color"
-            app:menu="@menu/dashboard_bottom_menu" />
 
     </LinearLayout>
 
