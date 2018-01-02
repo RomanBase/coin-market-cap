@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="VM"
+            type="com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioPlusViewModel" />
+
+        <variable
+            name="M"
+            type="com.ankhrom.coinmarketcap.model.PortfolioPlusModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A000"
+        android:clickable="true"
+        android:padding="@dimen/base_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_color"
+            android:orientation="vertical"
+            android:padding="@dimen/base_padding">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="currency"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                app:text="@{M.currency}" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="units"
+                android:inputType="numberDecimal"
+                app:text="@{M.units}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="sum price"
+                    android:inputType="numberDecimal"
+                    app:text="@{M.sumPrice}" />
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="unit price"
+                    android:inputType="numberDecimal"
+                    app:text="@{M.unitPrice}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="cancel"
+                    android:onClick="@{VM::onCancelPressed}" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="create"
+                    android:onClick="@{VM::onCreatePressed}" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

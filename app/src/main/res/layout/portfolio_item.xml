@@ -17,13 +17,97 @@
         android:paddingRight="@dimen/base_padding"
         android:paddingTop="@dimen/base_half_padding">
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/AppTheme.CoinItem"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{M.coin.symbol}"
-            android:textSize="@dimen/text_size_price"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.symbol}"
+                android:textSize="@dimen/text_size_price"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.coin.name}"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.amount}"
+                android:textSize="@dimen/text_size_price" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.avgPrice}"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <com.ankhrom.coinmarketcap.view.AppTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.profitLoss}"
+                android:textSize="@dimen/text_size_price" />
+
+            <com.ankhrom.coinmarketcap.view.AppTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.profitLossAmount}"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.currentValue}"
+                android:textSize="@dimen/text_size_price" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{M.investedValue}"
+                android:textSize="@dimen/text_size_small" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

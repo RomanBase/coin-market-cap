@@ -13,16 +13,29 @@
             type="com.ankhrom.coinmarketcap.model.PortfolioAdapterModel" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.ankhrom.base.custom.view.BaseListView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:adapter="@{M.adapter}" />
+            android:gravity="center"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <com.ankhrom.base.custom.view.BaseListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:adapter="@{M.adapter}" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:onClick="@{VM::onAddPressed}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/base_padding" />
+
+    </FrameLayout>
 </layout>

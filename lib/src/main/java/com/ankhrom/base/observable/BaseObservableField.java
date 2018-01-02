@@ -4,10 +4,11 @@ import android.databinding.BaseObservable;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import java.lang.ref.WeakReference;
-
 import com.ankhrom.base.common.statics.ObjectHelper;
+import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
+
+import java.lang.ref.WeakReference;
 
 public abstract class BaseObservableField<T extends View, S> extends BaseObservable {
 
@@ -33,13 +34,24 @@ public abstract class BaseObservableField<T extends View, S> extends BaseObserva
 
     public void set(S value) {
 
-        if (!ObjectHelper.equals(this.value, value)) {
+        if (!ObjectHelper.equals(this.value, value) && !(StringHelper.isEmpty(value) && StringHelper.isEmpty(this.value))) {
             this.value = value;
             if (view != null) {
                 onValueChanged(value);
                 if (listener != null) {
                     listener.onValueChanged(value);
                 }
+            }
+            notifyChange();
+        }
+    }
+
+    public void setValue(S value) {
+
+        if (!ObjectHelper.equals(this.value, value)) {
+            this.value = value;
+            if (view != null) {
+                onValueChanged(value);
             }
             notifyChange();
         }

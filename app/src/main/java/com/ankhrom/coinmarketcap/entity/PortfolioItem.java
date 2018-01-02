@@ -8,7 +8,7 @@ public class PortfolioItem {
 
     public String coinId;
 
-    public double price;
+    public double unitPrice;
 
     public double amount;
 }

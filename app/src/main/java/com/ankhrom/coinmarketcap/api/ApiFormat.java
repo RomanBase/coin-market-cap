@@ -25,12 +25,27 @@ public class ApiFormat {
     private static final NumberFormat extendedFormat = new DecimalFormat("#0.000");
     private static final NumberFormat longFormat = new DecimalFormat("#0.0000");
 
+    public static String toDigitFormat(String number) {
+
+        return toDigitFormat(Double.parseDouble(number));
+    }
+
+    public static String toDigitFormat(double value) {
+
+        return shortFormat.format(value); //NumberFormat.getInstance().format((int) Math.round(value)) + "." + Math.round((value - Math.floor(value)) * 100.0);
+    }
+
     public static String toPriceFormat(String number) {
 
-        double value = Double.parseDouble(number);
+        return toPriceFormat(Double.parseDouble(number));
+    }
+
+    public static String toPriceFormat(double value) {
+
+        String number;
 
         if (value > THOUSAND) {
-            number = NumberFormat.getInstance().format((int) Math.round(value)) + "." + Math.round((value - Math.floor(value)) * 100.0);
+            number = toDigitFormat(value);
         } else if (value > TEN) {
             number = toShortFormatString(value);
         } else if (value > ONE) {

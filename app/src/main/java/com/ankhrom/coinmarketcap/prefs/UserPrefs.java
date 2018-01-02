@@ -115,7 +115,7 @@ public class UserPrefs extends BasePrefs {
     public void setPortfolio(List<PortfolioCoin> portfolio) {
 
         if (portfolio == null || portfolio.isEmpty()) {
-            edit().putString(PORTFOLIO, null);
+            edit().putString(PORTFOLIO, null).apply();
         } else {
             edit().putString(PORTFOLIO, new Gson().toJson(portfolio)).apply();
         }
@@ -148,6 +148,8 @@ public class UserPrefs extends BasePrefs {
             coin.coinId = item.coinId;
             coin.items = new ArrayList<>();
             coin.items.add(item);
+
+            portfolio.add(coin);
         }
 
         setPortfolio(portfolio);
