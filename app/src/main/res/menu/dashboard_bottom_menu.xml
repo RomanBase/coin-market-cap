@@ -4,14 +4,14 @@
     <item
         android:id="@+id/menu_market"
         android:enabled="true"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_donut_large"
         android:title="Market"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_favourites"
         android:enabled="true"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_star_border"
         android:title="Favourites"
         app:showAsAction="ifRoom" />
 
@@ -25,14 +25,14 @@
     <item
         android:id="@+id/menu_porfolio"
         android:enabled="true"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_person_outline"
         android:title="Portfolio"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_settings"
         android:enabled="true"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_info_outline"
         android:title="Settings"
         app:showAsAction="ifRoom" />
 </menu>
