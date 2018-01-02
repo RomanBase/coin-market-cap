@@ -10,6 +10,8 @@ import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.base.custom.listener.OnTouchActionListener;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.api.MarketData;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
@@ -20,6 +22,7 @@ import com.ankhrom.coinmarketcap.model.CoinsAdapterModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,6 +50,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     @Override
     public void onInit() {
         super.onInit();
+
+        headerTitle.set(getContext().getString(R.string.app_name));
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.getFetcher().addListener(this);
@@ -200,12 +205,21 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         activeItem = model.adapter.get(index);
     }
 
+    protected void setMarketData(MarketData market) {
+
+        headerSubtitle.set(new Date(market.timestamp * 1000).toLocaleString());
+        headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
+        headerSubinfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
+    }
+
     @Override
     public void onDataLoading(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(isLoading);
 
         if (!isLoading) {
+
+            setMarketData(holder.getMarket());
 
             List<CoinItemModel> items = holder.getCoinItems();
             List<CoinItemModel> favs = holder.getFavouriteCoinItems();
@@ -221,7 +235,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                     items = holder.getFavouriteCoinItems();
                 }
 
-                setModel(new CoinsAdapterModel(getContext(), items, holder.getMarket()));
+                setModel(new CoinsAdapterModel(getContext(), items));
             } else {
 
                 int count = items.size();

@@ -18,9 +18,116 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/coin_list_header"
-            app:M="@{M}" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/base_half_padding"
+            android:paddingEnd="@dimen/base_padding"
+            android:paddingStart="@dimen/base_half_padding"
+            android:paddingTop="@dimen/base_half_padding">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="#"
+                android:textAlignment="center"
+                android:textColor="@color/text_light_color"
+                android:textSize="@dimen/text_size_small" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/AppTheme.CoinItem"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:text="Currency"
+                android:textAlignment="textStart"
+                android:textColor="@color/text_light_color"
+                android:textSize="@dimen/text_size_small" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_small" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Supply"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_mini" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change 24h"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_small" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change 1h"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_mini" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="M. Cap"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_small" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Volume 24h"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/text_light_color"
+                    android:textSize="@dimen/text_size_mini" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <com.ankhrom.base.custom.view.BaseListView
             android:id="@+id/items_container"

@@ -8,7 +8,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.ankhrom.base.interfaces.viewmodel.ViewModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
@@ -26,9 +25,9 @@ import java.util.List;
 
 public class MainViewModel extends AppViewModel implements BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
 
-    public final ObservableField<ViewModel> currentViewModel = new ObservableField<>();
+    public final ObservableField<AppViewModel> currentViewModel = new ObservableField<>();
 
-    private List<ViewModel> viewModels;
+    private List<AppViewModel> viewModels;
 
     @Override
     public void onInit() {
@@ -67,24 +66,23 @@ public class MainViewModel extends AppViewModel implements BottomNavigationView.
                 ((MarketViewModel) currentViewModel.get()).changeState(MarketViewModel.ListState.FAVOURITES);
                 break;
             case R.id.menu_search:
-                setCurrentPage(2);
+                setCurrentPage(1);
                 break;
             case R.id.menu_porfolio:
-                setCurrentPage(3);
+                setCurrentPage(2);
                 break;
             case R.id.menu_settings:
-                setCurrentPage(4);
+                setCurrentPage(3);
                 break;
         }
 
         return true;
     }
 
-    protected List<ViewModel> initViewModels() {
+    protected List<AppViewModel> initViewModels() {
 
-        List<ViewModel> viewModels = new ArrayList<>();
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class, MarketViewModel.ListState.NORMAL));
-        viewModels.add(getFactory().getViewModel(SearchViewModel.class));
+        List<AppViewModel> viewModels = new ArrayList<>();
+        viewModels.add(getFactory().getViewModel(MarketViewModel.class));
         viewModels.add(getFactory().getViewModel(SearchViewModel.class));
         viewModels.add(getFactory().getViewModel(PortfolioViewModel.class));
         viewModels.add(getFactory().getViewModel(SettingsViewModel.class));
@@ -100,7 +98,7 @@ public class MainViewModel extends AppViewModel implements BottomNavigationView.
             index = viewModels.size() - 1;
         }
 
-        ViewModel vm = viewModels.get(index);
+        AppViewModel vm = viewModels.get(index);
 
         currentViewModel.set(vm);
 
