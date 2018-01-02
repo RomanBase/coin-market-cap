@@ -67,6 +67,12 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         notifyItemRemoved(index);
     }
 
+    public void clear(){
+
+        items.clear();
+        notifyDataSetChanged();
+    }
+
     public T get(int index) {
 
         return items.get(index);

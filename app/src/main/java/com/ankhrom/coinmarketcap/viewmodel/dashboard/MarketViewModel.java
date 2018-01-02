@@ -1,6 +1,7 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
 import android.graphics.Canvas;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, OnFavouriteItemChangedListener {
+public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, OnFavouriteItemChangedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static enum ListState {
         NORMAL,
@@ -68,6 +69,16 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         binding.itemsContainer.setOnTouchListener(touchActionListener);
         new ItemTouchHelper(itemSwipeListener).attachToRecyclerView(binding.itemsContainer);
+    }
+
+    @Override
+    public void onRefresh() {
+
+        binding.pullToRefresh.setRefreshing(false);
+        model.adapter.clear();
+
+        DataHolder holder = getFactory().get(DataHolder.class);
+        holder.reload();
     }
 
     public void changeState(ListState state) {
@@ -224,7 +235,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             List<CoinItemModel> items = holder.getCoinItems();
             List<CoinItemModel> favs = holder.getFavouriteCoinItems();
 
-            if (model == null) {
+            if (model == null || model.adapter.getItemCount() == 0) {
 
                 for (CoinItemModel item : items) {
                     item.setOnItemSelectedListener(itemSelectedListener);
