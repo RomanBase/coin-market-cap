@@ -85,6 +85,13 @@ public class DataFetcher {
                 .queue(factory);
     }
 
+    public void notifyListeners() {
+
+        if (!loadingCoins && !loadingMarket) {
+            notifyListeners(true);
+        }
+    }
+
     private void notifyListeners(boolean isValid) {
 
         if (listeners.size() == 0) {

@@ -10,6 +10,7 @@ import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.base.custom.listener.OnTouchActionListener;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
@@ -34,6 +35,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
     private ListState state;
     private CoinItemModel activeItem;
+    private boolean itemActivated;
 
     @Override
     public void init(InitArgs args) {
@@ -61,6 +63,26 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         binding.itemsContainer.setOnTouchListener(touchActionListener);
         new ItemTouchHelper(itemSwipeListener).attachToRecyclerView(binding.itemsContainer);
+    }
+
+    public void changeState(ListState state) {
+
+        if (this.state == state) {
+            return;
+        }
+
+        this.state = state;
+
+        UserPrefs prefs = getFactory().get(UserPrefs.class);
+
+        DataHolder holder = getFactory().get(DataHolder.class);
+        holder.getFetcher().notifyListeners();
+
+        if (state == ListState.FAVOURITES) {
+            prefs.addFavouriteItemChangedListener(this);
+        } else {
+            prefs.removeFavouriteItemChangedListener(this);
+        }
     }
 
     private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
@@ -145,9 +167,20 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         activeItem.swipeProgress.set(progress);
         activeItem.swipeDirectionLeft.set(directionToLeft);
+
+        boolean activate = progress >= 1.0f;
+
+        if (activate != itemActivated) {
+            itemActivated = activate;
+            if (itemActivated) {
+                AppVibrator.itemActivated(getContext());
+            }
+        }
     }
 
     protected void selectedItemChanged(int index) {
+
+        itemActivated = false;
 
         if (index < 0) {
 
@@ -174,15 +207,36 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         if (!isLoading) {
 
-            List<CoinItemModel> items = state == ListState.NORMAL ? holder.getCoinItems() : holder.getFavouriteCoinItems();
+            List<CoinItemModel> items = holder.getCoinItems();
+            List<CoinItemModel> favs = holder.getFavouriteCoinItems();
 
-            // TODO: 1/1/2018 click listener
-            /*for (CoinItemModel item : items) {
-                item.setOnItemSelectedListener(itemSelectedListener);
-                item.setOnItemSelectedLongListener(itemSelectedLongListener);
-            }*/
+            if (model == null) {
 
-            setModel(new CoinsAdapterModel(getContext(), items, holder.getMarket()));
+                for (CoinItemModel item : items) {
+                    item.setOnItemSelectedListener(itemSelectedListener);
+                    item.setOnItemSelectedLongListener(itemSelectedLongListener);
+                }
+
+                if (state == ListState.FAVOURITES) {
+                    items = holder.getFavouriteCoinItems();
+                }
+
+                setModel(new CoinsAdapterModel(getContext(), items, holder.getMarket()));
+            } else {
+
+                int count = items.size();
+                for (int i = 0; i < count; i++) {
+                    CoinItemModel item = items.get(i);
+
+                    if (!favs.contains(item)) {
+                        if (state == ListState.NORMAL) {
+                            model.adapter.add(i, item);
+                        } else {
+                            model.adapter.remove(item);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -250,7 +304,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
             getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
 
-            float border = 300.0f;
+            float border = getResources().getDimension(R.dimen.toggle_favourite_border);
             float progress = Math.min(Math.abs(dX) / border, 1.0f);
             itemSwipeProgress(viewHolder.getAdapterPosition(), progress, dX < 0.0f);
 

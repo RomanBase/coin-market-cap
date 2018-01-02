@@ -60,9 +60,11 @@ public class MainViewModel extends AppViewModel implements BottomNavigationView.
         switch (item.getItemId()) {
             case R.id.menu_market:
                 setCurrentPage(0);
+                ((MarketViewModel) currentViewModel.get()).changeState(MarketViewModel.ListState.NORMAL);
                 break;
             case R.id.menu_favourites:
-                setCurrentPage(1);
+                setCurrentPage(0);
+                ((MarketViewModel) currentViewModel.get()).changeState(MarketViewModel.ListState.FAVOURITES);
                 break;
             case R.id.menu_search:
                 setCurrentPage(2);
@@ -82,7 +84,7 @@ public class MainViewModel extends AppViewModel implements BottomNavigationView.
 
         List<ViewModel> viewModels = new ArrayList<>();
         viewModels.add(getFactory().getViewModel(MarketViewModel.class, MarketViewModel.ListState.NORMAL));
-        viewModels.add(getFactory().getViewModel(MarketViewModel.class, MarketViewModel.ListState.FAVOURITES));
+        viewModels.add(getFactory().getViewModel(SearchViewModel.class));
         viewModels.add(getFactory().getViewModel(SearchViewModel.class));
         viewModels.add(getFactory().getViewModel(PortfolioViewModel.class));
         viewModels.add(getFactory().getViewModel(SettingsViewModel.class));
