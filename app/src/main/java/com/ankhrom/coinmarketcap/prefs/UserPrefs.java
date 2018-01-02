@@ -5,7 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
+import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 import com.ankhrom.coinmarketcap.listener.OnFavouriteItemChangedListener;
+import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,8 +26,10 @@ public class UserPrefs extends BasePrefs {
     private static final String PREFS = "user_prefs";
     private static final String CURRENCY = "currency";
     private static final String FAVOURITES = "favourites";
+    private static final String PORTFOLIO = "portfolio";
 
     private List<OnFavouriteItemChangedListener> favouriteItemChangedListeners;
+    private OnPortfolioChangedListener portfolioChangedListener;
 
     public UserPrefs(@NonNull Context context) {
         super(context);
@@ -46,10 +51,21 @@ public class UserPrefs extends BasePrefs {
         }
     }
 
-    public void notifyFavouriteItemChangedListeners(CoinItemModel item) {
+    public void setPortfolioChangedListener(OnPortfolioChangedListener portfolioChangedListener) {
+        this.portfolioChangedListener = portfolioChangedListener;
+    }
+
+    public void notifyFavouriteItemChanged(CoinItemModel item) {
 
         for (OnFavouriteItemChangedListener listener : favouriteItemChangedListeners) {
             listener.onFavouriteItemPrefsChanged(item);
+        }
+    }
+
+    public void notifyPortfolioChanged(List<PortfolioCoin> portfolio) {
+
+        if (portfolioChangedListener != null) {
+            portfolioChangedListener.onPortfolioChanged(portfolio);
         }
     }
 
@@ -94,6 +110,70 @@ public class UserPrefs extends BasePrefs {
         favs.remove(id);
 
         setFavourites(favs);
+    }
+
+    public void setPortfolio(List<PortfolioCoin> portfolio) {
+
+        if (portfolio == null || portfolio.isEmpty()) {
+            edit().putString(PORTFOLIO, null);
+        } else {
+            edit().putString(PORTFOLIO, new Gson().toJson(portfolio)).apply();
+        }
+    }
+
+    public List<PortfolioCoin> getPortfolio() {
+
+        Type type = new TypeToken<List<PortfolioCoin>>() {
+        }.getType();
+
+        return new Gson().fromJson(getPrefs().getString(PORTFOLIO, DEFAULT_JSON_LIST), type);
+    }
+
+    public void addPorfolioItem(PortfolioItem item) {
+
+        List<PortfolioCoin> portfolio = getPortfolio();
+
+        boolean newItem = true;
+
+        for (PortfolioCoin coin : portfolio) {
+            if (coin.coinId.equals(item.coinId)) {
+                coin.items.add(item);
+                newItem = false;
+                break;
+            }
+        }
+
+        if (newItem) {
+            PortfolioCoin coin = new PortfolioCoin();
+            coin.coinId = item.coinId;
+            coin.items = new ArrayList<>();
+            coin.items.add(item);
+        }
+
+        setPortfolio(portfolio);
+        notifyPortfolioChanged(portfolio);
+    }
+
+    public void removePorfolioItem(PortfolioItem item) {
+
+        List<PortfolioCoin> portfolio = getPortfolio();
+
+        PortfolioCoin editedCoin = null;
+
+        for (PortfolioCoin coin : portfolio) {
+            if (coin.coinId.equals(item.coinId)) {
+                coin.items.remove(item);
+                editedCoin = coin;
+                break;
+            }
+        }
+
+        if (editedCoin != null && editedCoin.items.size() == 0) {
+            portfolio.remove(editedCoin);
+        }
+
+        setPortfolio(portfolio);
+        notifyPortfolioChanged(portfolio);
     }
 
     @Override

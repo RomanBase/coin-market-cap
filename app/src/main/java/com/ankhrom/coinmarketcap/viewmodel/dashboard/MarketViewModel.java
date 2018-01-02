@@ -141,7 +141,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             prefs.removeFavourite(item.coin.id);
         }
 
-        prefs.notifyFavouriteItemChangedListeners(item);
+        prefs.notifyFavouriteItemChanged(item);
     }
 
     @Override

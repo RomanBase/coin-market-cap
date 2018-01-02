@@ -1,5 +1,7 @@
 package com.ankhrom.coinmarketcap.data;
 
+import android.support.annotation.Nullable;
+
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
@@ -130,6 +132,18 @@ public class DataHolder {
         });
 
         return output;
+    }
+
+    @Nullable
+    public CoinItem getCoin(String id) {
+
+        for (CoinItem coin : coins) {
+            if (coin.id.equals(id)) {
+                return coin;
+            }
+        }
+
+        return null;
     }
 
     private class CoinItemConverter implements ObjectConverter<CoinItemModel, CoinItem> {
