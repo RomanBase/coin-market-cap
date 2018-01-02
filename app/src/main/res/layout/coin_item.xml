@@ -140,16 +140,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{M.change24h}"
-                    android:textSize="@dimen/text_size_price"
-                    app:textColorResource="@{M.change_24h_color_res}" />
+                    android:textSize="@dimen/text_size_price" />
 
                 <com.ankhrom.coinmarketcap.view.AppTextView
                     style="@style/AppTheme.CoinItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{M.change1h}"
-                    android:textSize="@dimen/text_size_small"
-                    app:textColorResource="@{M.change_1h_color_res}" />
+                    android:textSize="@dimen/text_size_small" />
 
             </LinearLayout>
 

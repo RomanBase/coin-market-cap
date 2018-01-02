@@ -9,7 +9,7 @@ import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
-import com.ankhrom.coinmarketcap.api.CoinItem;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
 
 /**
  * Created by R' on 12/30/2017.
@@ -26,9 +26,6 @@ public class CoinItemModel extends SelectableItemModel {
     public final String marketCap;
     public final String volume;
 
-    public final int change_1h_color_res;
-    public final int change_24h_color_res;
-
     public final ObservableBoolean isFavourite = new ObservableBoolean();
     public final ObservableFloat swipeProgress = new ObservableFloat();
     public final ObservableBoolean swipeDirectionLeft = new ObservableBoolean();
@@ -38,9 +35,6 @@ public class CoinItemModel extends SelectableItemModel {
     public CoinItemModel(CoinItem item) {
 
         coin = item;
-
-        change_1h_color_res = coin.percentChange1h.startsWith("-") ? R.color.red : R.color.green;
-        change_24h_color_res = coin.percentChange24h.startsWith("-") ? R.color.red : R.color.green;
 
         price = ApiFormat.toPriceFormat(coin.priceUsd) + " $";
         supply = ApiFormat.toShortFormat(coin.supply);

@@ -6,8 +6,8 @@ import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.coinmarketcap.api.ApiParam;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
-import com.ankhrom.coinmarketcap.api.CoinItem;
-import com.ankhrom.coinmarketcap.api.MarketData;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
+import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.google.gson.reflect.TypeToken;
 

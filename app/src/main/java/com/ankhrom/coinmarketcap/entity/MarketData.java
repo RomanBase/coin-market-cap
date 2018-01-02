@@ -1,4 +1,4 @@
-package com.ankhrom.coinmarketcap.api;
+package com.ankhrom.coinmarketcap.entity;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -12,7 +12,7 @@ import com.ankhrom.base.custom.listener.OnTouchActionListener;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
-import com.ankhrom.coinmarketcap.api.MarketData;
+import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;

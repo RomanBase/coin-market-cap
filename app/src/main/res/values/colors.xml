@@ -11,6 +11,6 @@
     <color name="text_color">#000000</color>
     <color name="text_light_color">#FFFF</color>
 
-    <color name="green">#F0A5</color>
-    <color name="red">#FA11</color>
+    <color name="profit_color">#F0A5</color>
+    <color name="loss_color">#FA11</color>
 </resources>

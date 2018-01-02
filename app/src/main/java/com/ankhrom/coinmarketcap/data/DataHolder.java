@@ -3,8 +3,8 @@ package com.ankhrom.coinmarketcap.data;
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
-import com.ankhrom.coinmarketcap.api.CoinItem;
-import com.ankhrom.coinmarketcap.api.MarketData;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
+import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
