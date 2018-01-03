@@ -2,6 +2,7 @@ package com.ankhrom.coinmarketcap.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -21,11 +22,13 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
 
     private final Context context;
     private final OnItemSwipeListener listener;
+    private final int foregroundItem;
 
-    public ItemSwipeListener(@NonNull Context context, @Nullable OnItemSwipeListener listener) {
+    public ItemSwipeListener(@NonNull Context context, @IdRes int foregroundItem, @Nullable OnItemSwipeListener listener) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
 
         this.context = context;
+        this.foregroundItem = foregroundItem;
         this.listener = listener;
     }
 
@@ -38,13 +41,13 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
 
         if (viewHolder == null || viewHolder.itemView == null) {
-            if(listener != null) {
+            if (listener != null) {
                 listener.onSelectedItemChanged(-1);
             }
             return;
         }
 
-        View view = viewHolder.itemView.findViewById(R.id.item_foreground);
+        View view = viewHolder.itemView.findViewById(foregroundItem);
 
         if (view != null) {
             getDefaultUIUtil().onSelected(view);
@@ -52,7 +55,7 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
             super.onSelectedChanged(viewHolder, actionState);
         }
 
-        if(listener != null) {
+        if (listener != null) {
             listener.onSelectedItemChanged(viewHolder.getAdapterPosition());
         }
     }
@@ -74,14 +77,16 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
             return;
         }
 
-        View view = viewHolder.itemView.findViewById(R.id.item_foreground);
+        View view = viewHolder.itemView.findViewById(foregroundItem);
 
-        getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
+        if (view != null) {
+            getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
+        }
 
         float border = context.getResources().getDimension(R.dimen.toggle_item_action_border);
         float progress = Math.min(Math.abs(dX) / border, 1.0f);
 
-        if(listener != null) {
+        if (listener != null) {
             listener.onItemSwipeProgress(viewHolder.getAdapterPosition(), progress, dX < 0.0f);
         }
     }
@@ -93,9 +98,11 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
             return;
         }
 
-        View view = viewHolder.itemView.findViewById(R.id.item_foreground);
+        View view = viewHolder.itemView.findViewById(foregroundItem);
 
-        getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
+        if (view != null) {
+            getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
+        }
     }
 
     @Override

@@ -19,6 +19,8 @@ import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioEditViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioPlusViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -79,6 +81,13 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         headerSubTitle.set(ApiFormat.toDigitFormat(invested * profit) + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
         headerInfo.set(ApiFormat.toDigitFormat(current));
         headerSubInfo.set(ApiFormat.toDigitFormat(invested));
+
+        Collections.sort(items, new Comparator<PortfolioItemModel>() {
+            @Override
+            public int compare(PortfolioItemModel a, PortfolioItemModel b) {
+                return Integer.parseInt(a.coin.rank) > Integer.parseInt(b.coin.rank) ? 1 : -1;
+            }
+        });
 
         setModel(new PortfolioAdapterModel(getContext(), items));
     }

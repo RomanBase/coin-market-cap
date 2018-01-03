@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -156,22 +157,21 @@ public class UserPrefs extends BasePrefs {
         notifyPortfolioChanged(portfolio);
     }
 
-    public void removePorfolioItem(PortfolioItem item) {
+    public void updatePorfolioItem(PortfolioCoin coin) {
 
         List<PortfolioCoin> portfolio = getPortfolio();
 
-        PortfolioCoin editedCoin = null;
-
-        for (PortfolioCoin coin : portfolio) {
-            if (coin.coinId.equals(item.coinId)) {
-                coin.items.remove(item);
-                editedCoin = coin;
+        Iterator<PortfolioCoin> iterator = portfolio.iterator();
+        while (iterator.hasNext()) {
+            PortfolioCoin item = iterator.next();
+            if (item.coinId.equals(coin.coinId)) {
+                iterator.remove();
                 break;
             }
         }
 
-        if (editedCoin != null && editedCoin.items.size() == 0) {
-            portfolio.remove(editedCoin);
+        if (coin.items != null && coin.items.size() > 0) {
+            portfolio.add(coin);
         }
 
         setPortfolio(portfolio);

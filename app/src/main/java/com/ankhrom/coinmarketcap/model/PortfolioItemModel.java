@@ -1,5 +1,8 @@
 package com.ankhrom.coinmarketcap.model;
 
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableFloat;
+
 import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coinmarketcap.BR;
@@ -15,6 +18,9 @@ import java.util.List;
  */
 
 public class PortfolioItemModel extends SelectableItemModel {
+
+    public final ObservableFloat swipeProgress = new ObservableFloat();
+    public final ObservableBoolean swipeDirectionLeft = new ObservableBoolean();
 
     public final ObservableString investedValue = new ObservableString();
     public final ObservableString currentValue = new ObservableString();

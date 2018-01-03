@@ -55,7 +55,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         headerTitle.set(getContext().getString(R.string.app_name));
 
-        itemSwipeListener = new ItemSwipeListener(getContext(), this);
+        itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.getFetcher().addListener(this);
@@ -139,26 +139,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     }
 
     @Override
-    public void onItemSwipeProgress(int index, float progress, boolean directionToLeft) {
-
-        if (activeItem == null) {
-            return;
-        }
-
-        activeItem.swipeProgress.set(progress);
-        activeItem.swipeDirectionLeft.set(directionToLeft);
-
-        boolean activate = progress >= 1.0f;
-
-        if (activate != itemActivated) {
-            itemActivated = activate;
-            if (itemActivated) {
-                AppVibrator.itemActivated(getContext());
-            }
-        }
-    }
-
-    @Override
     public void onSelectedItemChanged(int index) {
 
         itemActivated = false;
@@ -179,6 +159,26 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
 
         activeItem = model.adapter.get(index);
+    }
+
+    @Override
+    public void onItemSwipeProgress(int index, float progress, boolean directionToLeft) {
+
+        if (activeItem == null) {
+            return;
+        }
+
+        activeItem.swipeProgress.set(progress);
+        activeItem.swipeDirectionLeft.set(directionToLeft);
+
+        boolean activate = progress >= 1.0f;
+
+        if (activate != itemActivated) {
+            itemActivated = activate;
+            if (itemActivated) {
+                AppVibrator.itemActivated(getContext());
+            }
+        }
     }
 
     protected void setMarketData(MarketData market) {
