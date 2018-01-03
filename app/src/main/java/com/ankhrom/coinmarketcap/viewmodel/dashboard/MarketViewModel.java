@@ -175,9 +175,9 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
     protected void setMarketData(MarketData market) {
 
-        headerSubtitle.set(new Date(market.timestamp * 1000).toLocaleString());
+        headerSubTitle.set(new Date(market.timestamp * 1000).toLocaleString());
         headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
-        headerSubinfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " / " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
+        headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " / " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }
 
     @Override

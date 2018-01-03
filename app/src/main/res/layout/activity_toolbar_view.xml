@@ -37,7 +37,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{VM.headerSubtitle}"
+                android:text="@{VM.headerSubTitle}"
                 android:textColor="@color/text_light_color"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />
@@ -65,7 +65,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{VM.headerSubinfo}"
+                android:text="@{VM.headerSubInfo}"
                 android:textColor="@color/text_light_color"
                 android:textSize="@dimen/text_size_small"
                 android:textStyle="bold" />

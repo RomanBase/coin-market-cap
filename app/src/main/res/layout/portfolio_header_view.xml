@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/base_half_padding"
+    android:paddingEnd="@dimen/base_padding"
+    android:paddingStart="@dimen/base_padding"
+    android:paddingTop="@dimen/base_half_padding">
+
+    <android.support.v7.widget.AppCompatTextView
+        style="@style/AppTheme.CoinItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Currency"
+        android:textAlignment="textStart"
+        android:textColor="@color/text_light_color"
+        android:textSize="@dimen/text_size_small" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/AppTheme.CoinItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Units"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_light_color"
+            android:textSize="@dimen/text_size_small" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/AppTheme.CoinItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unit Price"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_light_color"
+            android:textSize="@dimen/text_size_mini" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/AppTheme.CoinItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profit/Loss"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_light_color"
+            android:textSize="@dimen/text_size_small" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/AppTheme.CoinItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_light_color"
+            android:textSize="@dimen/text_size_mini" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/AppTheme.CoinItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Value"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_light_color"
+            android:textSize="@dimen/text_size_small" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/AppTheme.CoinItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invested"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_light_color"
+            android:textSize="@dimen/text_size_mini" />
+
+    </LinearLayout>
+
+</LinearLayout>

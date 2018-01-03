@@ -2,6 +2,7 @@ package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
 import android.view.View;
 
+import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.data.DataHolder;
@@ -14,6 +15,7 @@ import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioEditViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioPlusViewModel;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.List;
  * Created by R' on 1/1/2018.
  */
 
-public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener {
+public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel> {
 
     @Override
     public void onInit() {
@@ -58,6 +60,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             if (coin != null) {
 
                 PortfolioItemModel model = new PortfolioItemModel(coin, item.items);
+                model.setOnItemSelectedListener(this);
                 invested += model.invested;
                 current += model.current;
 
@@ -73,11 +76,21 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             profit = -(1.0f - profit);
         }
 
-        headerSubtitle.set(ApiFormat.toDigitFormat(invested * profit) + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
+        headerSubTitle.set(ApiFormat.toDigitFormat(invested * profit) + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
         headerInfo.set(ApiFormat.toDigitFormat(current));
-        headerSubinfo.set(ApiFormat.toDigitFormat(invested));
+        headerSubInfo.set(ApiFormat.toDigitFormat(invested));
 
         setModel(new PortfolioAdapterModel(getContext(), items));
+    }
+
+    @Override
+    public void onItemSelected(View view, PortfolioItemModel model) {
+
+        if (model == null) {
+            return;
+        }
+
+        addViewModel(PortfolioEditViewModel.class, model, model.coin);
     }
 
     @Override

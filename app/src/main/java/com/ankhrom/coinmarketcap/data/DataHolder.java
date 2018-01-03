@@ -7,6 +7,7 @@ import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
+import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
@@ -139,6 +140,20 @@ public class DataHolder {
 
         for (CoinItem coin : coins) {
             if (coin.id.equals(id)) {
+                return coin;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public PortfolioCoin getPortfolioCoin(String id) {
+
+        List<PortfolioCoin> portfolio = factory.get(UserPrefs.class).getPortfolio();
+
+        for (PortfolioCoin coin : portfolio) {
+            if (coin.coinId.equals(id)) {
                 return coin;
             }
         }

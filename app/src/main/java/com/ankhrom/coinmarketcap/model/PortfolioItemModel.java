@@ -1,6 +1,6 @@
 package com.ankhrom.coinmarketcap.model;
 
-import com.ankhrom.base.model.ItemModel;
+import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by R' on 1/2/2018.
  */
 
-public class PortfolioItemModel extends ItemModel {
+public class PortfolioItemModel extends SelectableItemModel {
 
     public final ObservableString investedValue = new ObservableString();
     public final ObservableString currentValue = new ObservableString();
@@ -36,10 +36,39 @@ public class PortfolioItemModel extends ItemModel {
         marketPrice = ApiFormat.toPriceFormat(coin.priceUsd);
     }
 
+    public PortfolioItemModel(CoinItem coin, PortfolioItem item) {
+        this(coin);
+
+        updateData(item);
+    }
+
     public PortfolioItemModel(CoinItem coin, List<PortfolioItem> items) {
         this(coin);
 
         updateData(items);
+    }
+
+    public void updateData(PortfolioItem item) {
+
+        double profit = Double.parseDouble(coin.priceUsd) / item.unitPrice;
+        double profit100;
+
+        if (profit > 1.0f) {
+            profit100 = profit * 100.0 - 100.0;
+        } else {
+            profit100 = -(1.0f - profit) * 100.0;
+        }
+
+        invested = item.unitPrice * item.amount;
+        current = invested * profit;
+
+        investedValue.set(ApiFormat.toDigitFormat(invested) + " $");
+        currentValue.set(ApiFormat.toDigitFormat(current) + " $");
+        amount.set(ApiFormat.toDigitFormat(item.amount));
+
+        avgPrice.set(ApiFormat.toDigitFormat(item.unitPrice));
+        profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
+        profitLossAmount.set(ApiFormat.toDigitFormat(profit100 / 100.0 * invested));
     }
 
     public void updateData(List<PortfolioItem> items) {
@@ -57,7 +86,7 @@ public class PortfolioItemModel extends ItemModel {
         }
 
         invested = priceSum;
-        current = priceSum * profit;
+        current = invested * profit;
 
         investedValue.set(ApiFormat.toDigitFormat(invested) + " $");
         currentValue.set(ApiFormat.toDigitFormat(current) + " $");

@@ -13,10 +13,12 @@ import com.ankhrom.coinmarketcap.BR;
 
 public abstract class AppViewModel<S extends ViewDataBinding, T extends Model> extends BaseViewModel<S, T> {
 
+    public final AppViewModel ref = this;
+
     public final ObservableString headerTitle = new ObservableString();
-    public final ObservableString headerSubtitle = new ObservableString();
+    public final ObservableString headerSubTitle = new ObservableString();
     public final ObservableString headerInfo = new ObservableString();
-    public final ObservableString headerSubinfo = new ObservableString();
+    public final ObservableString headerSubInfo = new ObservableString();
 
     @Override
     public int getBindingResource() {
