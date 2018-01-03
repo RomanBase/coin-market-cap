@@ -1,8 +1,6 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
-import android.graphics.Canvas;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
@@ -17,9 +15,11 @@ import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
 import com.ankhrom.coinmarketcap.entity.MarketData;
+import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
 import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.CoinsAdapterModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
+import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
 import java.util.Date;
@@ -29,7 +29,7 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener {
+public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener {
 
     public enum ListState {
         NORMAL,
@@ -39,6 +39,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     private ListState state;
     private CoinItemModel activeItem;
     private boolean itemActivated;
+
+    private ItemSwipeListener itemSwipeListener;
 
     @Override
     public void init(InitArgs args) {
@@ -52,6 +54,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         super.onInit();
 
         headerTitle.set(getContext().getString(R.string.app_name));
+
+        itemSwipeListener = new ItemSwipeListener(getContext(), this);
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.getFetcher().addListener(this);
@@ -107,8 +111,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
     };
 
-    private final ItemSwipeListener itemSwipeListener = new ItemSwipeListener();
-
     private final View.OnTouchListener touchActionListener = new OnTouchActionListener() {
         @Override
         public void onTouchActionDown(View view) {
@@ -136,7 +138,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         prefs.notifyFavouriteItemChanged(item);
     }
 
-    protected void itemSwipeProgress(int index, float progress, boolean directionToLeft) {
+    @Override
+    public void onItemSwipeProgress(int index, float progress, boolean directionToLeft) {
 
         if (activeItem == null) {
             return;
@@ -155,7 +158,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
     }
 
-    protected void selectedItemChanged(int index) {
+    @Override
+    public void onSelectedItemChanged(int index) {
 
         itemActivated = false;
 
@@ -235,88 +239,5 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     @Override
     public int getLayoutResource() {
         return R.layout.market_page;
-    }
-
-    class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
-
-        protected boolean swipeBack;
-
-        public ItemSwipeListener() {
-            super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        }
-
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-
-            if (viewHolder == null || viewHolder.itemView == null) {
-                selectedItemChanged(-1);
-                return;
-            }
-
-            View view = viewHolder.itemView.findViewById(R.id.item_foreground);
-
-            if (view != null) {
-                getDefaultUIUtil().onSelected(view);
-            } else {
-                super.onSelectedChanged(viewHolder, actionState);
-            }
-
-            selectedItemChanged(viewHolder.getAdapterPosition());
-        }
-
-        @Override
-        public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
-        }
-
-        @Override
-        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-
-            if (viewHolder == null || viewHolder.itemView == null) {
-                return;
-            }
-
-            View view = viewHolder.itemView.findViewById(R.id.item_foreground);
-
-            getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
-
-            float border = getResources().getDimension(R.dimen.toggle_favourite_border);
-            float progress = Math.min(Math.abs(dX) / border, 1.0f);
-            itemSwipeProgress(viewHolder.getAdapterPosition(), progress, dX < 0.0f);
-
-        }
-
-        @Override
-        public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-
-            if (viewHolder == null || viewHolder.itemView == null) {
-                return;
-            }
-
-            View view = viewHolder.itemView.findViewById(R.id.item_foreground);
-
-            getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
-        }
-
-        @Override
-        public int convertToAbsoluteDirection(int flags, int layoutDirection) {
-
-            if (swipeBack) {
-                swipeBack = false;
-                return 0;
-            }
-
-            return super.convertToAbsoluteDirection(flags, layoutDirection);
-        }
     }
 }

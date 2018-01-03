@@ -30,6 +30,7 @@
                 android:scaleX="@{M.swipeProgress}"
                 android:scaleY="@{M.swipeProgress}"
                 android:src="@{M.isFavourite ? @drawable/ic_remove_circle_outline : @drawable/ic_star_border}"
+                android:tint="@color/background_color"
                 android:visibility="@{M.swipeDirectionLeft ? View.GONE : View.VISIBLE}" />
 
             <android.support.v7.widget.AppCompatImageView
@@ -39,6 +40,7 @@
                 android:scaleX="@{M.swipeProgress}"
                 android:scaleY="@{M.swipeProgress}"
                 android:src="@{M.isFavourite ? @drawable/ic_remove_circle_outline : @drawable/ic_star_border}"
+                android:tint="@color/background_color"
                 android:visibility="@{M.swipeDirectionLeft ? View.VISIBLE : View.GONE}" />
 
         </FrameLayout>
