@@ -129,7 +129,7 @@ public class RequestBuilder {
         return this;
     }
 
-    private String getUrl() {
+    public String getUrl() {
 
         if (method == Request.Method.GET && params != null) {
             StringBuilder builder = new StringBuilder(url);

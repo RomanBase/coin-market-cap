@@ -10,6 +10,7 @@ import com.ankhrom.base.viewmodel.BaseViewModelObserver;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.master.MainViewModel;
+import com.ankhrom.hitbtc.HitBTC;
 
 public class MainActivity extends BaseActivity {
 
@@ -27,6 +28,8 @@ public class MainActivity extends BaseActivity {
         BaseFactory factory = BaseFactory.init(this);
         factory.add(new UserPrefs(this));
         factory.add(DataHolder.init(factory));
+
+        factory.add(HitBTC.init(factory.getRequestQueue()));
 
         return BaseViewModelObserver.with(factory, R.id.root_container)
                 .setViewModel(MainViewModel.class)
