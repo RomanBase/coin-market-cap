@@ -23,7 +23,11 @@ public class EditTextObservable extends BaseObservableField<EditText, String> {
 
         EditText editText = view.get();
 
-        return !(editText instanceof MandatoryView) || ((MandatoryView) editText).isValid();
+        if (editText instanceof MandatoryView) {
+            return ((MandatoryView) editText).isValid();
+        }
+
+        return !StringHelper.isEmpty(value);
     }
 
     @Override

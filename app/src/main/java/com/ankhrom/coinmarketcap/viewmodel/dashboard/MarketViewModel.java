@@ -12,12 +12,11 @@ import com.ankhrom.base.custom.listener.OnTouchActionListener;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
-import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
-import com.ankhrom.coinmarketcap.listener.OnFavouriteItemChangedListener;
+import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.model.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.CoinsAdapterModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
@@ -30,9 +29,9 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, OnFavouriteItemChangedListener, SwipeRefreshLayout.OnRefreshListener {
+public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener {
 
-    public static enum ListState {
+    public enum ListState {
         NORMAL,
         FAVOURITES
     }
@@ -56,11 +55,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.getFetcher().addListener(this);
-
-        if (state == ListState.FAVOURITES) {
-            UserPrefs prefs = getFactory().get(UserPrefs.class);
-            prefs.addFavouriteItemChangedListener(this);
-        }
     }
 
     @Override
@@ -93,12 +87,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.getFetcher().notifyListeners();
-
-        if (state == ListState.FAVOURITES) {
-            prefs.addFavouriteItemChangedListener(this);
-        } else {
-            prefs.removeFavouriteItemChangedListener(this);
-        }
     }
 
     private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
@@ -142,37 +130,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
 
         prefs.notifyFavouriteItemChanged(item);
-    }
-
-    @Override
-    public void onFavouriteItemPrefsChanged(CoinItemModel item) {
-
-        if (model == null) {
-            return;
-        }
-
-        if (state == ListState.FAVOURITES) {
-
-            if (item.isFavourite.get()) {
-                List<CoinItemModel> items = model.adapter.getItems();
-
-                int rankA = Integer.valueOf(item.coin.rank);
-                int count = items.size();
-                int index = count;
-
-                for (int i = 0; i < count; i++) {
-                    int rankB = Integer.valueOf(items.get(i).coin.rank);
-                    if (rankA < rankB) {
-                        index = i;
-                        break;
-                    }
-                }
-
-                model.adapter.add(index, item);
-            } else {
-                model.adapter.remove(item);
-            }
-        }
     }
 
     protected void itemSwipeProgress(int index, float progress, boolean directionToLeft) {
@@ -220,7 +177,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         headerSubtitle.set(new Date(market.timestamp * 1000).toLocaleString());
         headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
-        headerSubinfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
+        headerSubinfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " / " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }
 
     @Override
