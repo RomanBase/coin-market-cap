@@ -73,7 +73,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             profit = -(1.0f - profit);
         }
 
-        headerSubtitle.set(ApiFormat.toDigitFormat(invested * profit));
+        headerSubtitle.set(ApiFormat.toDigitFormat(invested * profit) + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
         headerInfo.set(ApiFormat.toDigitFormat(current));
         headerSubinfo.set(ApiFormat.toDigitFormat(invested));
 
