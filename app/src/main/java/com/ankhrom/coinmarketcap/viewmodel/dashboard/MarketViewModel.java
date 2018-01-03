@@ -89,6 +89,10 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         holder.getFetcher().notifyListeners();
     }
 
+    public ListState getListState() {
+        return state;
+    }
+
     private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
         @Override
         public void onItemSelected(View view, CoinItemModel model) {

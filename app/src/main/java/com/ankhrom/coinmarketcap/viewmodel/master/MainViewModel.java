@@ -8,8 +8,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.ankhrom.base.model.Model;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.databinding.ActivityMainPageBinding;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.MarketViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.PortfolioViewModel;
@@ -23,7 +25,7 @@ import java.util.List;
  * Created by R' on 12/31/2017.
  */
 
-public class MainViewModel extends AppViewModel implements BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
+public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> implements BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
 
     public final ObservableField<AppViewModel> currentViewModel = new ObservableField<>();
 
@@ -34,6 +36,21 @@ public class MainViewModel extends AppViewModel implements BottomNavigationView.
         super.onInit();
 
         viewModels = initViewModels();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+
+        boolean defaultPage = currentViewModel.get() instanceof MarketViewModel && ((MarketViewModel) currentViewModel.get()).getListState() == MarketViewModel.ListState.NORMAL;
+
+        if (!defaultPage && binding != null) {
+
+            binding.bottomNavigation.setCurrentItem(0);
+
+            return true;
+        }
+
+        return super.onBackPressed();
     }
 
     @Override
