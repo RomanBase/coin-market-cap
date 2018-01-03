@@ -4,9 +4,12 @@ import android.view.View;
 
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.ScreenHelper;
+import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPlusPageBinding;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioPlusModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
@@ -17,11 +20,26 @@ import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
 public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBinding, PortfolioPlusModel> {
 
+    private CoinItem coin;
+    private OnPortfolioChangedListener listener;
+
+    @Override
+    public void init(InitArgs args) {
+        super.init(args);
+
+        coin = args.getArg(CoinItem.class);
+        listener = args.getArg(OnPortfolioChangedListener.class);
+    }
+
     @Override
     public void onInit() {
         super.onInit();
 
         setModel(new PortfolioPlusModel());
+
+        if (coin != null) {
+            model.currency.set(coin.id);
+        }
     }
 
     public void onCreatePressed(View view) {
@@ -38,6 +56,10 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         UserPrefs prefs = getFactory().get(UserPrefs.class);
 
         prefs.addPorfolioItem(item);
+
+        if (listener != null) {
+            listener.onPortfolioChanged(prefs.getPortfolio());
+        }
 
         close();
     }

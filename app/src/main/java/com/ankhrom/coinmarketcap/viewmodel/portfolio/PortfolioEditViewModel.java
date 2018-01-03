@@ -14,6 +14,7 @@ import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
+import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
@@ -26,7 +27,7 @@ import java.util.List;
  * Created by R' on 1/2/2018.
  */
 
-public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBinding, PortfolioAdapterModel> implements OnItemSwipeListener {
+public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBinding, PortfolioAdapterModel> implements OnItemSwipeListener, OnPortfolioChangedListener {
 
     private CoinItem coin;
     private PortfolioItemModel parentModel;
@@ -167,6 +168,15 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
     public void onAddPressed(View view) {
 
+        addViewModel(PortfolioPlusViewModel.class, coin, this);
+    }
+
+    @Override
+    public void onPortfolioChanged(List<PortfolioCoin> portfolio) {
+
+        reloadParentModel();
+        reloadHeader();
+        reloadModel();
     }
 
     @Override
