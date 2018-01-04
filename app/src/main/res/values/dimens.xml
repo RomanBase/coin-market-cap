@@ -7,4 +7,5 @@
     <dimen name="text_size_highlight">18sp</dimen>
 
     <dimen name="toggle_item_action_border">64dp</dimen>
+    <dimen name="popup_corner_cadius">8dp</dimen>
 </resources>

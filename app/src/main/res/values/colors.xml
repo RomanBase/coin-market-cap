@@ -13,4 +13,5 @@
 
     <color name="profit_color">#F0A5</color>
     <color name="loss_color">#FA11</color>
+    <color name="popup_background_color">#A000</color>
 </resources>
