@@ -68,6 +68,10 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
         DataHolder holder = getFactory().get(DataHolder.class);
         PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
 
+        if (portfolio == null) {
+            return;
+        }
+
         if (parentModel == null) {
             parentModel = new PortfolioItemModel(coin);
         }
@@ -161,6 +165,11 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
         prefs.updatePorfolioItem(portfolio);
 
         model.adapter.remove(index);
+
+        if (model.adapter.getItemCount() == 0) {
+            getNavigation().navigateBack();
+            return;
+        }
 
         reloadParentModel();
         reloadHeader();
