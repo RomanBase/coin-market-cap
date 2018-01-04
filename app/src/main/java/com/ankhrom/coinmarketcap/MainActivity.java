@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity {
         factory.add(new UserPrefs(this));
         factory.add(DataHolder.init(factory));
 
-        factory.add(HitBTC.init(factory.getRequestQueue()));
+        factory.add(HitBTC.init(factory.getRequestQueue()).auth("252d13df5fb7d277c6c6de185c18bb65", "6c60036d5a2655be6e988af8fa385be0"));
 
         return BaseViewModelObserver.with(factory, R.id.root_container)
                 .setViewModel(MainViewModel.class)
