@@ -1,6 +1,8 @@
 package com.ankhrom.hitbtc;
 
 
+import android.util.Base64;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.ankhrom.base.Base;
@@ -14,6 +16,9 @@ import java.util.List;
 public class HitBTC {
 
     private final RequestQueue requestQueue;
+
+    private final String ApiKey = "252d13df5fb7d277c6c6de185c18bb65";
+    private final String ApiSecret = "6c60036d5a2655be6e988af8fa385be0";
 
     private HitBTC(RequestQueue requestQueue) {
 
@@ -47,9 +52,8 @@ public class HitBTC {
 
     public void balance() {
 
-        RequestBuilder builder = RequestBuilder.get(HitApiUrl.BALANCE)
-                .param("nonce", String.valueOf(System.currentTimeMillis()))
-                .param("apiKey", "252d13df5fb7d277c6c6de185c18bb65")
+        RequestBuilder.get(HitApiUrl.BALANCE)
+                .authBasic(ApiKey, ApiSecret)
                 .listener(new ResponseListener() {
                     @Override
                     public void onResponse(Object response) {
@@ -60,15 +64,8 @@ public class HitBTC {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                });
-
-        builder.header("X-Signature", secret(builder.getUrl(), "6c60036d5a2655be6e988af8fa385be0"))
+                })
                 .asString()
                 .queue(requestQueue);
-    }
-
-    private String secret(String url, String secret) {
-
-        return HmacSHA512.digest(url, secret);
     }
 }

@@ -1,6 +1,7 @@
 package com.ankhrom.base.networking.volley;
 
 import android.support.annotation.NonNull;
+import android.util.Base64;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -85,6 +86,11 @@ public class RequestBuilder {
         return this;
     }
 
+    public RequestBuilder authBasic(String key, String secret) {
+
+        return header("Authorization", "Basic " + Base64.encodeToString((key + ":" + secret).getBytes(), Base64.NO_WRAP));
+    }
+
     public RequestBuilder param(String key, String value) {
 
         if (params == null) {
@@ -131,7 +137,7 @@ public class RequestBuilder {
 
     public String getUrl() {
 
-        if (method == Request.Method.GET && params != null) {
+        if (modifyRequired() && params != null) {
             StringBuilder builder = new StringBuilder(url);
             builder.append(url.contains("?") ? "&" : "?");
             for (Map.Entry<String, String> param : params.entrySet()) {
@@ -148,21 +154,36 @@ public class RequestBuilder {
         return url;
     }
 
+    public Map<String, String> getParams() {
+
+        return modifyRequired() ? null : params;
+    }
+
+    private boolean isForm() {
+
+        return contentType.contains("www-form-urlencoded");
+    }
+
+    private boolean modifyRequired() {
+
+        return method == Request.Method.GET && !isForm();
+    }
+
     @SuppressWarnings("unchecked")
     public <T> BaseVolleyRequest<T> asGson(@NonNull Type type) {
 
-        return new GsonRequest<T>(type, method, getUrl(), contentType, header, params, body, listener, errorListener);
+        return new GsonRequest<T>(type, method, getUrl(), contentType, header, getParams(), body, listener, errorListener);
     }
 
     @SuppressWarnings("unchecked")
     public BaseVolleyRequest<String> asString() {
 
-        return new StringRequest(method, getUrl(), contentType, header, params, body, listener, errorListener);
+        return new StringRequest(method, getUrl(), contentType, header, getParams(), body, listener, errorListener);
     }
 
     @SuppressWarnings("unchecked")
     public BaseVolleyRequest<byte[]> asBytes() {
 
-        return new ByteRequest(method, getUrl(), contentType, header, params, body, listener, errorListener);
+        return new ByteRequest(method, getUrl(), contentType, header, getParams(), body, listener, errorListener);
     }
 }
