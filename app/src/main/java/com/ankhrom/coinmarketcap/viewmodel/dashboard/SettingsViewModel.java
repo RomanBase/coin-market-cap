@@ -1,6 +1,9 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
+import android.view.View;
+
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
 /**
@@ -8,6 +11,12 @@ import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
  */
 
 public class SettingsViewModel extends AppViewModel {
+
+    public void onHitBTCPressed(View view) {
+
+        addViewModel(ThirdPartyLoginViewModel.class);
+    }
+
     @Override
     public int getLayoutResource() {
         return R.layout.settings_page;

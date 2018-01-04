@@ -17,6 +17,17 @@ public class ThirdPartyLoginModel extends Model {
 
     public final ObservableBoolean edit = new ObservableBoolean();
 
+    public ThirdPartyLoginModel() {
+
+    }
+
+    public void presetEdit(String key, String secret) {
+
+        this.key.set(key);
+        this.secret.set(secret);
+        this.edit.set(true);
+    }
+
     @Override
     public int getVariableBindingResource() {
         return BR.M;

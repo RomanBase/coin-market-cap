@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ankhrom.base.custom.prefs.BasePrefs;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.google.gson.Gson;
 
@@ -14,7 +15,6 @@ import com.google.gson.Gson;
 public class ExchangePrefs extends BasePrefs {
 
     private static final String PREFS = "exchange";
-    private static final String HIT_BTC = "hit_btc";
 
     public ExchangePrefs(@NonNull Context context) {
         super(context);
@@ -25,14 +25,19 @@ public class ExchangePrefs extends BasePrefs {
         return PREFS;
     }
 
-    public void setHitBtc(AuthCredentials credentials) {
+    public void setAuth(ExchangeType type, AuthCredentials credentials) {
 
-        edit().putString(HIT_BTC, new Gson().toJson(credentials)).apply();
+        if (credentials == null) {
+            edit().putString(type.name(), null).apply();
+            return;
+        }
+
+        edit().putString(type.name(), new Gson().toJson(credentials)).apply();
     }
 
-    public AuthCredentials getHitBtc() {
+    public AuthCredentials getAuth(ExchangeType type) {
 
-        return new Gson().fromJson(prefs.getString(HIT_BTC, DEFAULT_JSON), AuthCredentials.class);
+        return new Gson().fromJson(getPrefs().getString(type.name(), DEFAULT_JSON), AuthCredentials.class);
     }
 
 }
