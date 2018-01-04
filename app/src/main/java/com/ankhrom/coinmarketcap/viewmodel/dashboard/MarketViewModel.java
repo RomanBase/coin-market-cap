@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.custom.builder.ToastBuilder;
-import com.ankhrom.base.custom.listener.OnTouchActionListener;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
@@ -65,7 +64,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     protected void onCreateViewBinding(MarketPageBinding binding) {
         super.onCreateViewBinding(binding);
 
-        binding.itemsContainer.setOnTouchListener(touchActionListener);
         new ItemTouchHelper(itemSwipeListener).attachToRecyclerView(binding.itemsContainer);
     }
 
@@ -111,18 +109,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
     };
 
-    private final View.OnTouchListener touchActionListener = new OnTouchActionListener() {
-        @Override
-        public void onTouchActionDown(View view) {
-            itemSwipeListener.swipeBack = false;
-        }
-
-        @Override
-        public void onTouchActionUp(View view) {
-            itemSwipeListener.swipeBack = true;
-        }
-    };
-
     protected void toggleItemFavouriteState(CoinItemModel item) {
 
         item.isFavourite.set(!item.isFavourite.get());
@@ -142,6 +128,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     public void onSelectedItemChanged(int index) {
 
         itemActivated = false;
+        itemSwipeListener.swipeBack = true;
 
         if (index < 0) {
 
