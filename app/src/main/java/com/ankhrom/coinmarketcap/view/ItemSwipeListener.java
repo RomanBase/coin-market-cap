@@ -34,6 +34,7 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
         return false;
     }
 
@@ -77,17 +78,17 @@ public class ItemSwipeListener extends ItemTouchHelper.SimpleCallback {
             return;
         }
 
-        View view = viewHolder.itemView.findViewById(foregroundItem);
-
-        if (view != null) {
-            getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
-        }
-
         float border = context.getResources().getDimension(R.dimen.toggle_item_action_border);
         float progress = Math.min(Math.abs(dX) / border, 1.0f);
 
         if (listener != null) {
             listener.onItemSwipeProgress(viewHolder.getAdapterPosition(), progress, dX < 0.0f);
+        }
+
+        View view = viewHolder.itemView.findViewById(foregroundItem);
+
+        if (view != null) {
+            getDefaultUIUtil().onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);
         }
     }
 

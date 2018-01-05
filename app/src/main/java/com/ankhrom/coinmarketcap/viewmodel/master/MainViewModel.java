@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ankhrom.base.model.Model;
+import com.ankhrom.coinmarketcap.AppCode;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.databinding.ActivityMainPageBinding;
@@ -30,6 +31,7 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
     public final ObservableField<AppViewModel> currentViewModel = new ObservableField<>();
 
     private List<AppViewModel> viewModels;
+    private int currentPageIndex = -1;
 
     @Override
     public void onInit() {
@@ -75,12 +77,10 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
 
         switch (item.getItemId()) {
             case R.id.menu_market:
-                setCurrentPage(0);
-                ((MarketViewModel) currentViewModel.get()).changeState(MarketViewModel.ListState.NORMAL);
+                setCurrentPage(0, MarketViewModel.ListState.NORMAL);
                 break;
             case R.id.menu_favourites:
-                setCurrentPage(0);
-                ((MarketViewModel) currentViewModel.get()).changeState(MarketViewModel.ListState.FAVOURITES);
+                setCurrentPage(0, MarketViewModel.ListState.FAVOURITES);
                 break;
             case R.id.menu_search:
                 setCurrentPage(1);
@@ -107,7 +107,12 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
         return viewModels;
     }
 
-    protected void setCurrentPage(int index) {
+    protected void setCurrentPage(int index, Object... args) {
+
+        if (currentPageIndex == index && currentViewModel.get() != null) {
+            currentViewModel.get().onReceiveArgs(AppCode.STATE, args);
+            return;
+        }
 
         if (index < 0) {
             index = 0;
@@ -115,7 +120,12 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
             index = viewModels.size() - 1;
         }
 
-        AppViewModel vm = viewModels.get(index);
+        if (index == 0) { // TODO: 1/5/2018 item swipe listener / fragment state workaround
+            viewModels.remove(0);
+            viewModels.add(0, getFactory().getViewModel(MarketViewModel.class, args));
+        }
+
+        AppViewModel vm = viewModels.get(currentPageIndex = index);
 
         currentViewModel.set(vm);
 
