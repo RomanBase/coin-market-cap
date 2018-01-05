@@ -70,24 +70,32 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             }
         }
 
-        double profit = current / invested;
+        if (items.size() > 0) {
 
-        if (profit > 1.0f) {
-            profit -= 1.0;
-        } else {
-            profit = -(1.0f - profit);
-        }
+            double profit = current / invested;
 
-        headerSubTitle.set(ApiFormat.toDigitFormat(invested * profit) + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
-        headerInfo.set(ApiFormat.toDigitFormat(current));
-        headerSubInfo.set(ApiFormat.toDigitFormat(invested));
-
-        Collections.sort(items, new Comparator<PortfolioItemModel>() {
-            @Override
-            public int compare(PortfolioItemModel a, PortfolioItemModel b) {
-                return Integer.parseInt(a.coin.rank) > Integer.parseInt(b.coin.rank) ? 1 : -1;
+            if (profit > 1.0f) {
+                profit -= 1.0;
+            } else {
+                profit = -(1.0f - profit);
             }
-        });
+
+            headerSubTitle.set(ApiFormat.toDigitFormat(invested * profit) + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
+            headerInfo.set(ApiFormat.toDigitFormat(current));
+            headerSubInfo.set(ApiFormat.toDigitFormat(invested));
+
+            Collections.sort(items, new Comparator<PortfolioItemModel>() {
+                @Override
+                public int compare(PortfolioItemModel a, PortfolioItemModel b) {
+                    return Integer.parseInt(a.coin.rank) > Integer.parseInt(b.coin.rank) ? 1 : -1;
+                }
+            });
+
+        } else {
+            headerSubTitle.set(null);
+            headerInfo.set(null);
+            headerSubInfo.set(null);
+        }
 
         setModel(new PortfolioAdapterModel(getContext(), items));
     }

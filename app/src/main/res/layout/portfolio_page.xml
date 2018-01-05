@@ -11,17 +11,21 @@
         <variable
             name="M"
             type="com.ankhrom.coinmarketcap.model.PortfolioAdapterModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="@{M.isEmpty ? View.INVISIBLE : View.VISIBLE}">
 
             <include layout="@layout/portfolio_header_view" />
 
@@ -31,6 +35,13 @@
                 app:adapter="@{M.adapter}" />
 
         </LinearLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Start with +"
+            android:visibility="@{M.isEmpty ? View.VISIBLE : View.GONE}" />
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"

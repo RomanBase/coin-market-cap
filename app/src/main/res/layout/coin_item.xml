@@ -50,7 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
             android:onClick="@{M::onItemSelected}"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/base_half_padding"
@@ -144,11 +143,19 @@
                     android:text="@{M.change24h}"
                     android:textSize="@dimen/text_size_price" />
 
+
                 <com.ankhrom.coinmarketcap.view.AppTextView
                     style="@style/AppTheme.CoinItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{M.change1h}"
+                    android:textSize="@dimen/text_size_small" />
+
+                <com.ankhrom.coinmarketcap.view.AppTextView
+                    style="@style/AppTheme.CoinItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{M.change7d}"
                     android:textSize="@dimen/text_size_small" />
 
             </LinearLayout>

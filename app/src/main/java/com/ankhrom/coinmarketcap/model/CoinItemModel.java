@@ -23,6 +23,7 @@ public class CoinItemModel extends SelectableItemModel {
     public final String supply;
     public final String change1h;
     public final String change24h;
+    public final String change7d;
     public final String marketCap;
     public final String volume;
 
@@ -41,6 +42,7 @@ public class CoinItemModel extends SelectableItemModel {
 
         change1h = coin.percentChange1h + "%";
         change24h = coin.percentChange24h + "%";
+        change7d = coin.percentChange7d + "%";
 
         marketCap = ApiFormat.toShortFormat(coin.marketCap);
         volume = ApiFormat.toShortFormat(coin.volumeUsd);

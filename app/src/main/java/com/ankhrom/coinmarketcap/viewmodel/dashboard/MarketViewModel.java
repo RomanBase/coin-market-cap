@@ -124,7 +124,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
         @Override
         public void onItemSelected(View view, CoinItemModel model) {
-            ToastBuilder.with(getContext()).text("clicked: " + model.coin.name).buildAndShow();
+            ToastBuilder.with(getContext()).text(model.coin.name).buildAndShow();
         }
     };
 
@@ -202,7 +202,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         headerSubTitle.set(new Date(market.timestamp * 1000).toLocaleString());
         headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
-        headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " / " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
+        headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " | " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }
 
     protected void updateModel(DataHolder holder) {
