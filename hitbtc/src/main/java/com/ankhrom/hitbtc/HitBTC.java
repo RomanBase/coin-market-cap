@@ -5,7 +5,6 @@ import com.android.volley.RequestQueue;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.hitbtc.entity.HitBalance;
-import com.ankhrom.hitbtc.entity.HitCurrency;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
@@ -17,9 +16,12 @@ public class HitBTC {
     private String apiKey;
     private String apiSecret;
 
+    public final HitApiCurrency currency;
+
     private HitBTC(RequestQueue requestQueue) {
 
         this.requestQueue = requestQueue;
+        this.currency = new HitApiCurrency(requestQueue);
     }
 
     public static HitBTC init(RequestQueue requestQueue) {
@@ -33,24 +35,6 @@ public class HitBTC {
         apiSecret = secret;
 
         return this;
-    }
-
-    public void currency(ResponseListener<List<HitCurrency>> listener) {
-
-        RequestBuilder.get(HitApiUrl.CURRENCY)
-                .listener(listener)
-                .asGson(new TypeToken<List<HitCurrency>>() {
-                }.getType())
-                .queue(requestQueue);
-    }
-
-    public void currency(String currencyId, ResponseListener<HitCurrency> listener) {
-
-        RequestBuilder.get(HitApiUrl.CURRENCY + currencyId)
-                .listener(listener)
-                .asGson(new TypeToken<List<HitCurrency>>() {
-                }.getType())
-                .queue(requestQueue);
     }
 
     public void balanceTrading(ResponseListener<List<HitBalance>> listener) {

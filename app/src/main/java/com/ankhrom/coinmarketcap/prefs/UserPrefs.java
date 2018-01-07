@@ -25,7 +25,7 @@ import java.util.List;
 public class UserPrefs extends BasePrefs {
 
     private static final String PREFS = "user_prefs";
-    private static final String CURRENCY = "currency";
+    private static final String CURRENCY = "info";
     private static final String FAVOURITES = "favourites";
     private static final String PORTFOLIO = "portfolio";
 

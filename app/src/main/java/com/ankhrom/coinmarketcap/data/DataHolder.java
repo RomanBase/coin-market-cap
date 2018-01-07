@@ -148,6 +148,18 @@ public class DataHolder {
     }
 
     @Nullable
+    public CoinItem getCoinBySymbol(String symbol) {
+
+        for (CoinItem coin : coins) {
+            if (coin.symbol.equals(symbol)) {
+                return coin;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
     public PortfolioCoin getPortfolioCoin(String id) {
 
         List<PortfolioCoin> portfolio = factory.get(UserPrefs.class).getPortfolio();

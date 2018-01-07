@@ -13,6 +13,7 @@ import com.ankhrom.base.model.ItemModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adapter<AdapterRecycleBinder.ViewHolder> {
@@ -67,9 +68,10 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         notifyItemRemoved(index);
     }
 
-    public void changed(T item) {
+    public void sort(Comparator<T> comparator) {
 
-        notifyItemChanged(items.indexOf(item));
+        Collections.sort(items, comparator);
+        notifyDataSetChanged();
     }
 
     public void clear() {

@@ -10,6 +10,8 @@ public final class HitApiUrl {
     public static final String ACCOUNT = BASE_URL + "account/";
 
     public static final String CURRENCY = PUBLIC_URL + "currency/";
+    public static final String CURRENCY_SYMBOL = PUBLIC_URL + "symbol/";
+    public static final String CURRENCY_TICKER = PUBLIC_URL + "ticker/";
 
     public static final String TRADING_BALANCE = TRADING + "balance/";
 

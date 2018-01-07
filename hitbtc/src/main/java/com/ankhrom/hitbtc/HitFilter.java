@@ -1,6 +1,7 @@
 package com.ankhrom.hitbtc;
 
 import com.ankhrom.hitbtc.entity.HitBalance;
+import com.ankhrom.hitbtc.entity.HitCurrencyTicker;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,8 +12,7 @@ import java.util.List;
 
 public final class HitFilter {
 
-
-    public List<HitBalance> filterZeroBalance(List<HitBalance> balances) {
+    public static List<HitBalance> filterZeroBalance(List<HitBalance> balances) {
 
         Iterator<HitBalance> iterator = balances.iterator();
         while (iterator.hasNext()) {
@@ -24,5 +24,19 @@ public final class HitFilter {
         }
 
         return balances;
+    }
+
+    public static List<HitCurrencyTicker> filterByCurrency(List<HitCurrencyTicker> tickers, String currency) {
+
+        Iterator<HitCurrencyTicker> iterator = tickers.iterator();
+        while (iterator.hasNext()) {
+
+            HitCurrencyTicker ticker = iterator.next();
+            if (!ticker.symbol.endsWith(currency)) {
+                iterator.remove();
+            }
+        }
+
+        return tickers;
     }
 }

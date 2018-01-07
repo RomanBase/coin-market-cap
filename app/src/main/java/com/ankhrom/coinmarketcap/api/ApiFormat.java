@@ -32,7 +32,7 @@ public class ApiFormat {
 
     public static String toDigitFormat(double value) {
 
-        return shortFormat.format(value); //NumberFormat.getInstance().format((int) Math.round(value)) + "." + Math.round((value - Math.floor(value)) * 100.0);
+        return shortFormat.format(value);
     }
 
     public static String toPriceFormat(String number) {
@@ -45,7 +45,7 @@ public class ApiFormat {
         String number;
 
         if (value > THOUSAND) {
-            number = toDigitFormat(value);
+            number = NumberFormat.getInstance().format(Double.valueOf(toDigitFormat(value)));
         } else if (value > TEN) {
             number = toShortFormatString(value);
         } else if (value > ONE) {
