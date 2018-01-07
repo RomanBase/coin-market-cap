@@ -4,6 +4,7 @@ import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.base.model.Model;
 import com.ankhrom.base.observable.EditTextObservable;
+import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coinmarketcap.BR;
 
 /**
@@ -12,7 +13,7 @@ import com.ankhrom.coinmarketcap.BR;
 
 public class PortfolioPlusModel extends Model {
 
-    public final EditTextObservable currency = new EditTextObservable();
+    public final ObservableString currency = new ObservableString();
     public final EditTextObservable units = new EditTextObservable();
     public final EditTextObservable unitPrice = new EditTextObservable();
     public final EditTextObservable sumPrice = new EditTextObservable();

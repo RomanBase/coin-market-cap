@@ -39,11 +39,16 @@
                     android:layout_height="wrap_content"
                     android:hint="currency">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
+                        android:background="?attr/selectableItemBackground"
                         android:maxLines="1"
+                        android:onClick="@{VM::onSearchPressed}"
+                        android:paddingBottom="@dimen/base_padding"
+                        android:paddingLeft="@dimen/base_quad_padding"
+                        android:paddingRight="@dimen/base_quad_padding"
+                        android:paddingTop="@dimen/base_padding"
                         app:text="@{M.currency}" />
 
                 </android.support.design.widget.TextInputLayout>

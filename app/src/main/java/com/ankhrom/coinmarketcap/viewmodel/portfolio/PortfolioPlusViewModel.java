@@ -9,16 +9,18 @@ import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPlusPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioPlusModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
 
 /**
  * Created by R' on 1/2/2018.
  */
 
-public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBinding, PortfolioPlusModel> {
+public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBinding, PortfolioPlusModel> implements OnCoinSelectedListener {
 
     private CoinItem coin;
     private OnPortfolioChangedListener listener;
@@ -38,23 +40,43 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         setModel(new PortfolioPlusModel());
 
         if (coin != null) {
-            model.currency.set(coin.id);
+            model.currency.set(coin.symbol + " - " + coin.name);
+        } else {
+            coin = getDataHolder().getCoin("bitcoin");
+            model.currency.set(coin.symbol + " - " + coin.name);
         }
+    }
+
+    public void onSearchPressed(View view) {
+
+        addViewModel(SearchViewModel.class, this);
+    }
+
+    @Override
+    public void onCoinSelected(CoinItem coin) {
+
+        if (coin == null) {
+            this.coin = null;
+            model.currency.set("-");
+            return;
+        }
+
+        this.coin = coin;
+        model.currency.set(coin.symbol + " - " + coin.name);
     }
 
     public void onCreatePressed(View view) {
 
-        if (!(model.currency.isValid() && model.units.isValid() && model.unitPrice.isValid())) {
+        if (coin == null || !(model.units.isValid() && model.unitPrice.isValid())) {
             return;
         }
 
         PortfolioItem item = new PortfolioItem();
-        item.coinId = model.currency.get();
+        item.coinId = coin.id;
         item.amount = Double.parseDouble(model.units.get());
         item.unitPrice = Double.parseDouble(model.unitPrice.get());
 
-        UserPrefs prefs = getFactory().get(UserPrefs.class);
-
+        UserPrefs prefs = getUserPrefs();
         prefs.addPorfolioItem(item);
 
         if (listener != null) {
@@ -71,9 +93,8 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
     private void close() {
 
         ScreenHelper.hideSoftKeyboard(getBaseActivity());
-
-        FragmentHelper.removePage(getContext(), this);
         getNavigation().setPreviousViewModel();
+        FragmentHelper.removePage(getContext(), this);
     }
 
     @Override
