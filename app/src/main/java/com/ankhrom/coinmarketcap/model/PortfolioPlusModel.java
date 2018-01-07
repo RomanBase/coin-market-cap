@@ -1,5 +1,7 @@
 package com.ankhrom.coinmarketcap.model;
 
+import android.databinding.ObservableBoolean;
+
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.base.model.Model;
@@ -17,6 +19,8 @@ public class PortfolioPlusModel extends Model {
     public final EditTextObservable units = new EditTextObservable();
     public final EditTextObservable unitPrice = new EditTextObservable();
     public final EditTextObservable sumPrice = new EditTextObservable();
+
+    public final ObservableBoolean editableCurrency = new ObservableBoolean(true);
 
     public PortfolioPlusModel() {
 

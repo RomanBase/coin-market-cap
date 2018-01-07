@@ -11,6 +11,8 @@
         <variable
             name="M"
             type="com.ankhrom.coinmarketcap.model.PortfolioPlusModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
@@ -31,31 +33,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/base_padding">
+                android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="currency">
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="@{M.editableCurrency}"
+                    android:onClick="@{VM::onSearchPressed}"
+                    android:paddingLeft="@dimen/base_padding"
+                    android:paddingRight="@dimen/base_padding">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
                         android:maxLines="1"
-                        android:onClick="@{VM::onSearchPressed}"
                         android:paddingBottom="@dimen/base_padding"
                         android:paddingLeft="@dimen/base_quad_padding"
                         android:paddingRight="@dimen/base_quad_padding"
                         android:paddingTop="@dimen/base_padding"
+                        android:textSize="@dimen/text_size_price"
+                        android:textStyle="bold"
                         app:text="@{M.currency}" />
 
-                </android.support.design.widget.TextInputLayout>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:src="@drawable/ic_arrow_drop_down"
+                        android:visibility="@{M.editableCurrency ? View.VISIBLE : View.GONE}" />
+
+                </FrameLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/base_padding"
+                    android:layout_marginRight="@dimen/base_padding"
                     android:hint="units">
 
                     <android.support.v7.widget.AppCompatEditText
@@ -69,6 +83,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/base_padding"
+                    android:layout_marginRight="@dimen/base_padding"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout

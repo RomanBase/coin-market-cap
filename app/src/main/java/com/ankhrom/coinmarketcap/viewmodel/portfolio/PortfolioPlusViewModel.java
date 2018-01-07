@@ -40,6 +40,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         setModel(new PortfolioPlusModel());
 
         if (coin != null) {
+            model.editableCurrency.set(false);
             model.currency.set(coin.symbol + " - " + coin.name);
         } else {
             coin = getDataHolder().getCoin("bitcoin");
