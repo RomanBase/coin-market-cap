@@ -6,6 +6,8 @@ import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.data.DataHolder;
+import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.CalcPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
@@ -17,7 +19,7 @@ import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
  * Created by R' on 1/8/2018.
  */
 
-public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> implements OnCoinSelectedListener {
+public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> implements OnCoinSelectedListener, DataLoadingListener {
 
     private CoinItem coin;
     private CoinItem bitcoin;
@@ -27,13 +29,13 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         super.onInit();
 
         headerTitle.set("Calculator");
+
+        getDataHolder().getFetcher().addListener(this);
     }
 
-    @Override
-    public void loadModel() {
-        super.loadModel();
+    private void createModel(DataHolder holder) {
 
-        bitcoin = getDataHolder().getCoin("bitcoin");
+        bitcoin = holder.getCoin("bitcoin");
 
         setModel(new CalcModel());
 
@@ -170,6 +172,22 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         if (!StringHelper.isEmpty(model.units)) {
             onSumPriceChanged.onValueChanged(model.sumPrice.get());
         }
+    }
+
+    @Override
+    public void onDataLoading(boolean isLoading, DataHolder holder) {
+
+        this.isLoading.set(isLoading);
+
+        if (!isLoading) {
+            createModel(holder);
+        }
+    }
+
+    @Override
+    public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
+
+        this.isLoading.set(false);
     }
 
     @Override
