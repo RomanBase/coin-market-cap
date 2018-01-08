@@ -8,6 +8,7 @@ import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPlusPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
@@ -84,13 +85,13 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
                 double unitPrice = price / Double.parseDouble(value);
                 model.unitPrice.setValue(String.valueOf(unitPrice));
                 model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
-                model.bitcoinUnitValue.setValue(String.valueOf(unitPrice / btcPrice));
+                model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
             } else if (unitAvailable) {
                 double unitPrice = Double.parseDouble(model.unitPrice.get());
                 double price = unitPrice * Double.parseDouble(value);
                 model.sumPrice.setValue(String.valueOf(price));
                 model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
-                model.bitcoinUnitValue.setValue(String.valueOf(unitPrice / btcPrice));
+                model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
             }
         }
     };
@@ -115,7 +116,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             model.sumPrice.setValue(String.valueOf(price));
             model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
-            model.bitcoinUnitValue.setValue(String.valueOf(unitPrice / btcPrice));
+            model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
         }
     };
 
@@ -139,7 +140,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             model.unitPrice.setValue(String.valueOf(unitPrice));
             model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
-            model.bitcoinUnitValue.setValue(String.valueOf(unitPrice / btcPrice));
+            model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
         }
     };
 

@@ -14,9 +14,9 @@ import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.databinding.ActivityMainPageBinding;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dashboard.CalcViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.MarketViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.PortfolioViewModel;
-import com.ankhrom.coinmarketcap.viewmodel.dashboard.SearchViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dashboard.SettingsViewModel;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
 
         List<AppViewModel> viewModels = new ArrayList<>();
         viewModels.add(getFactory().getViewModel(MarketViewModel.class));
-        viewModels.add(getFactory().getViewModel(SearchViewModel.class));
+        viewModels.add(getFactory().getViewModel(CalcViewModel.class));
         viewModels.add(getFactory().getViewModel(PortfolioViewModel.class));
         viewModels.add(getFactory().getViewModel(SettingsViewModel.class));
 

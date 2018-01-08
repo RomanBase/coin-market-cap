@@ -42,4 +42,9 @@ public class CoinItem {
 
     @SerializedName("last_updated")
     public String timestamp;
+
+    @Override
+    public String toString() {
+        return symbol + " - " + name;
+    }
 }
