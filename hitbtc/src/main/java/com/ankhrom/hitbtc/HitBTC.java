@@ -17,11 +17,14 @@ public class HitBTC {
     private String apiSecret;
 
     public final HitApiCurrency currency;
+    public final HitApiTrading trading;
 
     private HitBTC(RequestQueue requestQueue) {
 
         this.requestQueue = requestQueue;
+
         this.currency = new HitApiCurrency(requestQueue);
+        this.trading = new HitApiTrading(requestQueue);
     }
 
     public static HitBTC init(RequestQueue requestQueue) {
@@ -33,6 +36,9 @@ public class HitBTC {
 
         apiKey = key;
         apiSecret = secret;
+
+        currency.auth(key, secret);
+        trading.auth(key, secret);
 
         return this;
     }

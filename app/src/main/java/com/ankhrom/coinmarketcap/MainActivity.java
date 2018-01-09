@@ -1,5 +1,7 @@
 package com.ankhrom.coinmarketcap;
 
+import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.ankhrom.base.Base;
@@ -36,6 +38,15 @@ public class MainActivity extends BaseActivity {
         return BaseViewModelObserver.with(factory, R.id.root_container)
                 .setViewModel(MainViewModel.class)
                 .build();
+    }
+
+    @Override
+    protected void onPostInit(Bundle state, ViewDataBinding binding) {
+        super.onPostInit(state, binding);
+
+        HitBTC hitBTC = getViewModelObserver().getFactory().get(HitBTC.class);
+
+        hitBTC.trading.order();
     }
 
     @Override

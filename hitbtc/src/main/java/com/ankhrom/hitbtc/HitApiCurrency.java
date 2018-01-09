@@ -14,12 +14,10 @@ import java.util.List;
  * Created by R' on 1/6/2018.
  */
 
-public class HitApiCurrency {
-
-    private final RequestQueue requestQueue;
+public class HitApiCurrency extends HitApi {
 
     public HitApiCurrency(RequestQueue queue) {
-        this.requestQueue = queue;
+        super(queue);
     }
 
     public void info(ResponseListener<List<HitCurrency>> listener) {
