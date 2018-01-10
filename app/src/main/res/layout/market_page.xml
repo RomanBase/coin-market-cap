@@ -10,7 +10,7 @@
 
         <variable
             name="M"
-            type="com.ankhrom.coinmarketcap.model.CoinsAdapterModel" />
+            type="com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel" />
     </data>
 
     <LinearLayout

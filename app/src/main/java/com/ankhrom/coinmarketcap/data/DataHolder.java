@@ -8,7 +8,7 @@ import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
-import com.ankhrom.coinmarketcap.model.CoinItemModel;
+import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
 import java.util.ArrayList;

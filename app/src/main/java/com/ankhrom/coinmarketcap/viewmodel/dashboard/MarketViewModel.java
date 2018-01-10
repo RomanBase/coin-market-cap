@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.ankhrom.base.common.statics.ArgsHelper;
 import com.ankhrom.base.custom.args.InitArgs;
-import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.AppCode;
 import com.ankhrom.coinmarketcap.R;
@@ -17,11 +16,12 @@ import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
 import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
-import com.ankhrom.coinmarketcap.model.CoinItemModel;
-import com.ankhrom.coinmarketcap.model.CoinsAdapterModel;
+import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
+import com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
 
 import java.util.Date;
 import java.util.List;
@@ -127,7 +127,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
         @Override
         public void onItemSelected(View view, CoinItemModel model) {
-            ToastBuilder.with(getContext()).text(model.coin.name).buildAndShow();
+            openViewModel(CoinDetailViewModel.class, model.coin);
         }
     };
 

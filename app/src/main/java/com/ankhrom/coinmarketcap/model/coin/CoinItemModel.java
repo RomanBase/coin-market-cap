@@ -1,4 +1,4 @@
-package com.ankhrom.coinmarketcap.model;
+package com.ankhrom.coinmarketcap.model.coin;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableFloat;

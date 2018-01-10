@@ -9,7 +9,7 @@ import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 import com.ankhrom.coinmarketcap.listener.OnFavouriteItemChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
-import com.ankhrom.coinmarketcap.model.CoinItemModel;
+import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

@@ -1,6 +1,6 @@
 package com.ankhrom.coinmarketcap.listener;
 
-import com.ankhrom.coinmarketcap.model.CoinItemModel;
+import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 
 /**
  * Created by R' on 1/1/2018.

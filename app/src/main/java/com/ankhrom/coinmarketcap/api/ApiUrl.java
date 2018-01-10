@@ -6,6 +6,8 @@ package com.ankhrom.coinmarketcap.api;
 
 public final class ApiUrl {
 
+    public static final String COIN_MARKET_CAP_CURRECY = "https://coinmarketcap.com/currencies/";
+
     public static final String BASE_URL = "https://api.coinmarketcap.com/v1/";
     public static final String TICKER = BASE_URL + "ticker/";
     public static final String GLOBAL = BASE_URL + "global/";
