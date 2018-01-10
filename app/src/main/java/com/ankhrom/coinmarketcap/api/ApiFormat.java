@@ -1,5 +1,7 @@
 package com.ankhrom.coinmarketcap.api;
 
+import com.ankhrom.base.common.statics.StringHelper;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -23,7 +25,7 @@ public class ApiFormat {
 
     private static final NumberFormat shortFormat = new DecimalFormat("#0.00");
     private static final NumberFormat extendedFormat = new DecimalFormat("#0.000");
-    private static final NumberFormat longFormat = new DecimalFormat("#0.0000");
+    private static final NumberFormat longFormat = new DecimalFormat("#0.000000");
 
     public static String toDigitFormat(String number) {
 
@@ -36,6 +38,10 @@ public class ApiFormat {
     }
 
     public static String toPriceFormat(String number) {
+
+        if(StringHelper.isEmpty(number)){
+            return "0";
+        }
 
         return toPriceFormat(Double.parseDouble(number));
     }
@@ -58,6 +64,10 @@ public class ApiFormat {
     }
 
     public static String toShortFormat(String number) {
+
+        if (StringHelper.isEmpty(number)) {
+            return "0";
+        }
 
         double value = Double.parseDouble(number);
 

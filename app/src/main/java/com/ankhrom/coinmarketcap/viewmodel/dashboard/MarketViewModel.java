@@ -56,6 +56,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         super.onInit();
 
         headerTitle.set(getContext().getString(R.string.app_name));
+        isLoading.set(true);
 
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
 
@@ -72,6 +73,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
     @Override
     public void onRefresh() {
+
+        isLoading.set(true);
 
         binding.pullToRefresh.setRefreshing(false);
         model.adapter.clear();
@@ -228,15 +231,90 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             for (int i = 0; i < count; i++) {
                 CoinItemModel item = items.get(i);
 
-                if (!favs.contains(item)) {
-                    if (state == ListState.NORMAL) {
+                boolean isListed = model.adapter.getItems().contains(item);
+
+                if (state == ListState.NORMAL) {
+                    if (!isListed) {
                         model.adapter.add(i, item);
+                    }
+                } else {
+                    boolean isFavourite = favs.contains(item);
+                    if (isFavourite) {
+                        if (!isListed) {
+                            model.adapter.add(i, item);
+                        }
                     } else {
-                        model.adapter.remove(item);
+                        if (isListed) {
+                            model.adapter.remove(item);
+                        }
                     }
                 }
             }
         }
+/*
+        HitBTC hitBTC = getFactory().get(HitBTC.class);
+        hitBTC.currency.ticker(new ResponseListener<List<HitCurrencyTicker>>() {
+            @Override
+            public void onResponse(List<HitCurrencyTicker> response) {
+                response = HitFilter.filterByCurrency(response, "BTC");
+
+                Collections.sort(response, new Comparator<HitCurrencyTicker>() {
+                    @Override
+                    public int compare(HitCurrencyTicker a, HitCurrencyTicker b) {
+
+                        if (StringHelper.isEmpty(a.bid)) {
+                            return StringHelper.isEmpty(b.bid) ? 0 : 1;
+                        }
+
+                        if (StringHelper.isEmpty(b.bid)) {
+                            return -1;
+                        }
+
+                        double priceA = Double.parseDouble(a.bid);
+                        double priceB = Double.parseDouble(b.bid);
+
+                        CoinItem coinA = getDataHolder().getCoinBySymbol(a.symbol.replace("BTC", ""));
+                        CoinItem coinB = getDataHolder().getCoinBySymbol(b.symbol.replace("BTC", ""));
+
+                        if (coinA == null) {
+                            return coinB == null ? 0 : 1;
+                        }
+
+                        if (coinB == null) {
+                            return -1;
+                        }
+
+                        return priceA > priceB ? 1 : -1;
+                    }
+                });
+
+                List<CoinItemModel> items = ObjectHelper.convert(response, new ObjectConverter<CoinItemModel, HitCurrencyTicker>() {
+                    @Override
+                    public CoinItemModel convert(HitCurrencyTicker object) {
+
+                        CoinItem coin = getDataHolder().getCoinBySymbol(object.symbol.replace("BTC", ""));
+
+                        if (coin == null) {
+                            return null;
+                        }
+
+                        CoinItemModel itemModel = new CoinItemModel(coin);
+
+                        return itemModel;
+                    }
+                });
+
+                items.removeAll(Collections.singleton(null));
+
+                //setModel(new CoinsAdapterModel(getContext(), items));
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        */
     }
 
     @Override

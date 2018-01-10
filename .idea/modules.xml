@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/coin-market-cap.iml" filepath="$PROJECT_DIR$/coin-market-cap.iml" />
       <module fileurl="file://$PROJECT_DIR$/hitbtc/hitbtc.iml" filepath="$PROJECT_DIR$/hitbtc/hitbtc.iml" />
-      <module fileurl="file://D:\Apino\coin-market-cap\hitbtc\hitbtc.iml" filepath="D:\Apino\coin-market-cap\hitbtc\hitbtc.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
     </modules>
   </component>

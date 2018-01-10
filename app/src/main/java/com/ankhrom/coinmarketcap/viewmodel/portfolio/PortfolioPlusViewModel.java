@@ -78,19 +78,19 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             boolean sumAvailable = !StringHelper.isEmpty(model.sumPrice.get());
             boolean unitAvailable = !StringHelper.isEmpty(model.unitPrice.get());
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
             if (sumAvailable) {
-                double price = Double.parseDouble(model.sumPrice.get());
-                double unitPrice = price / Double.parseDouble(value);
-                model.unitPrice.setValue(String.valueOf(unitPrice));
-                model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
+                double price = parseDouble(model.sumPrice.get());
+                double unitPrice = price / parseDouble(value);
+                model.unitPrice.setValue(ApiFormat.toPriceFormat(unitPrice));
+                model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(price / btcPrice));
                 model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
             } else if (unitAvailable) {
-                double unitPrice = Double.parseDouble(model.unitPrice.get());
-                double price = unitPrice * Double.parseDouble(value);
-                model.sumPrice.setValue(String.valueOf(price));
-                model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
+                double unitPrice = parseDouble(model.unitPrice.get());
+                double price = unitPrice * parseDouble(value);
+                model.sumPrice.setValue(ApiFormat.toPriceFormat(price));
+                model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(price / btcPrice));
                 model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
             }
         }
@@ -109,13 +109,13 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             value = ensureFormat(value);
 
-            double unitPrice = Double.parseDouble(value);
-            double amount = Double.parseDouble(model.units.get());
+            double unitPrice = parseDouble(value);
+            double amount = parseDouble(model.units.get());
             double price = unitPrice * amount;
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
-            model.sumPrice.setValue(String.valueOf(price));
-            model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
+            model.sumPrice.setValue(ApiFormat.toPriceFormat(price));
+            model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(price / btcPrice));
             model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
         }
     };
@@ -133,13 +133,13 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             value = ensureFormat(value);
 
-            double price = Double.parseDouble(value);
-            double amount = Double.parseDouble(model.units.get());
+            double price = parseDouble(value);
+            double amount = parseDouble(model.units.get());
             double unitPrice = price / amount;
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
-            model.unitPrice.setValue(String.valueOf(unitPrice));
-            model.bitcoinUnits.setValue(String.valueOf(price / btcPrice));
+            model.unitPrice.setValue(ApiFormat.toPriceFormat(unitPrice));
+            model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(price / btcPrice));
             model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
         }
     };
@@ -154,20 +154,31 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             value = ensureFormat(value);
 
-            double btcUnits = Double.parseDouble(value);
-            double amount = Double.parseDouble(model.units.get());
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double btcUnits = parseDouble(value);
+            double amount = parseDouble(model.units.get());
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
             double price = btcUnits * btcPrice;
             double unitPrice = price / amount;
 
-            model.sumPrice.setValue(String.valueOf(price));
-            model.unitPrice.setValue(String.valueOf(unitPrice));
-            model.bitcoinUnitValue.setValue(String.valueOf(unitPrice / btcPrice));
+            model.sumPrice.setValue(ApiFormat.toPriceFormat(price));
+            model.unitPrice.setValue(ApiFormat.toPriceFormat(unitPrice));
+            model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
         }
     };
 
+    private double parseDouble(String value) {
+
+        return Double.valueOf(ensureFormat(value));
+    }
+
     private String ensureFormat(String value) {
+
+        if (StringHelper.isEmpty(value) || value.contains("E")) {
+            return "0";
+        }
+
+        value = value.replace(",", "");
 
         return value.startsWith(".") || value.startsWith(",") ? value + "0" : value;
     }
@@ -198,8 +209,8 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
         PortfolioItem item = new PortfolioItem();
         item.coinId = coin.id;
-        item.amount = Double.parseDouble(model.units.get());
-        item.unitPrice = Double.parseDouble(model.unitPrice.get());
+        item.amount = parseDouble(model.units.get());
+        item.unitPrice = parseDouble(model.unitPrice.get());
 
         UserPrefs prefs = getUserPrefs();
         prefs.addPorfolioItem(item);

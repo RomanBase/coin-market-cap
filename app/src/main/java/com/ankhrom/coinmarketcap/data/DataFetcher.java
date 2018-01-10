@@ -38,12 +38,12 @@ public class DataFetcher {
 
     public void addListener(DataLoadingListener listener) {
 
-        if (listeners.contains(listener)) {
-            return;
-        }
-
         if (!loadingCoins && !loadingMarket) {
             listener.onDataLoading(false, factory.get(DataHolder.class));
+        }
+
+        if (listeners.contains(listener)) {
+            return;
         }
 
         listeners.add(listener);

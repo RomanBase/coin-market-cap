@@ -10,5 +10,5 @@ public final class ApiParam {
     public static final String COUNT = "limit";
     public static final String CURRENCY = "convert";
 
-    public static final String COUNT_VALUE = "100";
+    public static final String COUNT_VALUE = "0";
 }

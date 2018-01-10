@@ -29,6 +29,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         super.onInit();
 
         headerTitle.set("Calculator");
+        isLoading.set(true);
 
         getDataHolder().getFetcher().addListener(this);
     }
@@ -59,13 +60,13 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
             value = ensureFormat(value);
 
-            double units = Double.parseDouble(value);
-            double unitPrice = Double.parseDouble(coin.priceUsd);
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double units = parseDouble(value);
+            double unitPrice = parseDouble(coin.priceUsd);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
             double sumPrice = unitPrice * units;
 
-            model.sumPrice.setValue(String.valueOf(sumPrice));
+            model.sumPrice.setValue(ApiFormat.toPriceFormat(sumPrice));
             model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(sumPrice / btcPrice));
 
             onProfitChanged.onValueChanged(model.profit.get());
@@ -84,13 +85,13 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
             value = ensureFormat(value);
 
-            double sumPrice = Double.parseDouble(value);
-            double unitPrice = Double.parseDouble(coin.priceUsd);
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double sumPrice = parseDouble(value);
+            double unitPrice = parseDouble(coin.priceUsd);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
             double units = sumPrice / unitPrice;
 
-            model.units.setValue(String.valueOf(units));
+            model.units.setValue(ApiFormat.toPriceFormat(units));
             model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(sumPrice / btcPrice));
 
             onProfitChanged.onValueChanged(model.profit.get());
@@ -109,14 +110,14 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
             value = ensureFormat(value);
 
-            double btcUnits = Double.parseDouble(value);
-            double unitPrice = Double.parseDouble(coin.priceUsd);
-            double btcPrice = Double.parseDouble(bitcoin.priceUsd);
+            double btcUnits = parseDouble(value);
+            double unitPrice = parseDouble(coin.priceUsd);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
 
             double sumPrice = btcUnits * btcPrice;
 
-            model.units.setValue(String.valueOf(sumPrice / unitPrice));
-            model.sumPrice.setValue(String.valueOf(sumPrice));
+            model.units.setValue(ApiFormat.toPriceFormat(sumPrice / unitPrice));
+            model.sumPrice.setValue(ApiFormat.toPriceFormat(sumPrice));
 
             onProfitChanged.onValueChanged(model.profit.get());
         }
@@ -133,15 +134,26 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
                 return;
             }
 
-            double sumPrice = Double.parseDouble(model.sumPrice.get());
-            double unitPrice = Double.parseDouble(coin.priceUsd);
+            double sumPrice = parseDouble(model.sumPrice.get());
+            double unitPrice = parseDouble(coin.priceUsd);
 
             model.profitSumPrice.set(ApiFormat.toPriceFormat(sumPrice + sumPrice * profit));
             model.profitUnitPrice.set(ApiFormat.toPriceFormat(unitPrice + unitPrice * profit));
         }
     };
 
+    private double parseDouble(String value) {
+
+        return Double.valueOf(ensureFormat(value));
+    }
+
     private String ensureFormat(String value) {
+
+        if (StringHelper.isEmpty(value) || value.contains("E")) {
+            return "0";
+        }
+
+        value = value.replace(",", "");
 
         return value.startsWith(".") || value.startsWith(",") ? value + "0" : value;
     }
@@ -169,9 +181,8 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd));
         model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(coin.priceBtc));
 
-        if (!StringHelper.isEmpty(model.units)) {
-            onSumPriceChanged.onValueChanged(model.sumPrice.get());
-        }
+        model.sumPrice.set(String.valueOf("100"));
+        onSumPriceChanged.onValueChanged(model.sumPrice.get());
     }
 
     @Override
