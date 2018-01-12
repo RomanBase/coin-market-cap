@@ -163,7 +163,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         itemActivated = false;
         itemSwipeListener.swipeBack = true;
 
-        if (index > 0) {
+        if (index > -1) {
 
             activeItem = model.adapter.get(index);
             return;
