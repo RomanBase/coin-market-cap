@@ -47,7 +47,5 @@ public class BaseListView extends RecyclerView {
         if (spacing > 0) {
             addItemDecoration(new ListSpaceDecorator(spacing, includeEdges));
         }
-
-
     }
 }
