@@ -38,6 +38,10 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
         bitcoin = holder.getCoin("bitcoin");
 
+        if (bitcoin == null) {
+            return;
+        }
+
         setModel(new CalcModel());
 
         model.units.setOnValueChangedListener(onUnitsChanged);
@@ -142,22 +146,6 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         }
     };
 
-    private double parseDouble(String value) {
-
-        return Double.valueOf(ensureFormat(value));
-    }
-
-    private String ensureFormat(String value) {
-
-        if (StringHelper.isEmpty(value) || value.contains("E")) {
-            return "0";
-        }
-
-        value = value.replace(",", "");
-
-        return value.startsWith(".") || value.startsWith(",") ? value + "0" : value;
-    }
-
     public void onSearchPressed(View view) {
 
         addViewModel(SearchViewModel.class, this);
@@ -181,7 +169,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd));
         model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(coin.priceBtc));
 
-        model.sumPrice.set(String.valueOf("100"));
+        model.sumPrice.set(ApiFormat.toPriceFormat(100));
         onSumPriceChanged.onValueChanged(model.sumPrice.get());
     }
 
@@ -199,6 +187,23 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
     public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(false);
+        onModelError();
+    }
+
+    private double parseDouble(String value) {
+
+        return Double.valueOf(ensureFormat(value));
+    }
+
+    private String ensureFormat(String value) {
+
+        if (StringHelper.isEmpty(value) || value.contains("E")) {
+            return "0";
+        }
+
+        value = value.replace(",", "");
+
+        return value.startsWith(".") || value.startsWith(",") ? value + "0" : value;
     }
 
     @Override

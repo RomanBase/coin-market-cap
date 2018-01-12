@@ -167,22 +167,6 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         }
     };
 
-    private double parseDouble(String value) {
-
-        return Double.valueOf(ensureFormat(value));
-    }
-
-    private String ensureFormat(String value) {
-
-        if (StringHelper.isEmpty(value) || value.contains("E")) {
-            return "0";
-        }
-
-        value = value.replace(",", "");
-
-        return value.startsWith(".") || value.startsWith(",") ? value + "0" : value;
-    }
-
     public void onSearchPressed(View view) {
 
         addViewModel(SearchViewModel.class, this);
@@ -231,6 +215,22 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         ScreenHelper.hideSoftKeyboard(getBaseActivity());
         getNavigation().setPreviousViewModel();
         FragmentHelper.removePage(getContext(), this);
+    }
+
+    private double parseDouble(String value) {
+
+        return Double.valueOf(ensureFormat(value));
+    }
+
+    private String ensureFormat(String value) {
+
+        if (StringHelper.isEmpty(value) || value.contains("E")) {
+            return "0";
+        }
+
+        value = value.replace(",", "");
+
+        return value.startsWith(".") || value.startsWith(",") ? value + "0" : value;
     }
 
     @Override
