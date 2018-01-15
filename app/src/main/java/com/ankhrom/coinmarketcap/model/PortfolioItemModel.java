@@ -56,6 +56,10 @@ public class PortfolioItemModel extends SelectableItemModel {
 
     public void updateData(PortfolioItem item) {
 
+        if (!(item.unitPrice < 0.0f)) {
+            item.unitPrice = Double.parseDouble(coin.priceUsd);
+        }
+
         double profit = Double.parseDouble(coin.priceUsd) / item.unitPrice;
         double profit100;
 
@@ -108,6 +112,11 @@ public class PortfolioItemModel extends SelectableItemModel {
         double sum = 0.0f;
 
         for (PortfolioItem item : items) {
+
+            if (!(item.unitPrice < 0.0f)) {
+                item.unitPrice = Double.parseDouble(coin.priceUsd) - 0.000001;
+            }
+
             sum += item.unitPrice * item.amount;
         }
 

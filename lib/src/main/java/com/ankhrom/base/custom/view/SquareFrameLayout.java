@@ -38,6 +38,4 @@ public class SquareFrameLayout extends FrameLayout {
         int finalMeasureSpec = MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY);
         super.onMeasure(finalMeasureSpec, finalMeasureSpec);
     }
-
-
 }
