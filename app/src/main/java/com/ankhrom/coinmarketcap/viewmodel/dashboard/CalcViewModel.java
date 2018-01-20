@@ -31,6 +31,10 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
     public void onInit() {
         super.onInit();
 
+        if (model != null) {
+            return;
+        }
+
         headerTitle.set("Calculator");
         isLoading.set(true);
 
@@ -38,10 +42,6 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
     }
 
     private void createModel(DataHolder holder) {
-
-        if (model != null) {
-            return;
-        }
 
         bitcoin = holder.getCoin("bitcoin");
 

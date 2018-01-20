@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_market"
         android:enabled="true"
-        android:icon="@drawable/ic_donut_large"
+        android:icon="@drawable/ic_multiline_chart"
         android:title="Market"
         app:showAsAction="ifRoom" />
 
@@ -18,21 +18,21 @@
     <item
         android:id="@+id/menu_search"
         android:enabled="true"
-        android:icon="@drawable/ic_grain"
+        android:icon="@drawable/ic_attach_money"
         android:title="Calc"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_porfolio"
         android:enabled="true"
-        android:icon="@drawable/ic_person_outline"
+        android:icon="@drawable/ic_trending"
         android:title="Portfolio"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_settings"
         android:enabled="true"
-        android:icon="@drawable/ic_info_outline"
-        android:title="Settings"
+        android:icon="@drawable/ic_person_outline"
+        android:title="Account"
         app:showAsAction="ifRoom" />
 </menu>

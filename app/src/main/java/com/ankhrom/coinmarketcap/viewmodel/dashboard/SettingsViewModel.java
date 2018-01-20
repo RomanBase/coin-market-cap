@@ -12,6 +12,15 @@ import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
 public class SettingsViewModel extends AppViewModel {
 
+    @Override
+    public void onInit() {
+        super.onInit();
+
+        if (model != null) {
+            return;
+        }
+    }
+
     public void onHitBTCPressed(View view) {
 
         addViewModel(ThirdPartyLoginViewModel.class);

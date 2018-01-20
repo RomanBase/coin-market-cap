@@ -1,6 +1,7 @@
 package com.ankhrom.coinmarketcap.data;
 
 import com.android.volley.VolleyError;
+import com.ankhrom.base.Base;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
@@ -33,10 +34,15 @@ public class DataFetcher {
         listeners = new ArrayList<>();
     }
 
-    public void addListener(DataLoadingListener listener) {
+    public void addListener(final DataLoadingListener listener) {
 
         if (!loadingCoins && !loadingMarket) {
-            listener.onDataLoading(false, factory.get(DataHolder.class));
+            Base.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onDataLoading(false, factory.get(DataHolder.class));
+                }
+            }, 25);
         }
 
         if (listeners.contains(listener)) {

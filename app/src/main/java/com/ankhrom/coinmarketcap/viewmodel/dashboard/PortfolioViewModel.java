@@ -33,6 +33,10 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     public void onInit() {
         super.onInit();
 
+        if (model != null) {
+            return;
+        }
+
         headerTitle.set("Portfolio");
         isLoading.set(true);
 

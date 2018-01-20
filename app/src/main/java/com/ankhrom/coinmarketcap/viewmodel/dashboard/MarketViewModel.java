@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.ankhrom.base.Base;
 import com.ankhrom.base.common.statics.ArgsHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
@@ -60,6 +61,10 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     @Override
     public void onInit() {
         super.onInit();
+
+        if (model != null) {
+            return;
+        }
 
         headerTitle.set(getContext().getString(R.string.app_name));
         isLoading.set(true);
@@ -309,8 +314,19 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     public void onReceiveArgs(int requestCode, Object[] args) {
         super.onReceiveArgs(requestCode, args);
 
+        final ListState state = ArgsHelper.getArg(ListState.class, args, ListState.NORMAL);
+
         if (requestCode == AppCode.STATE) {
-            changeState(ArgsHelper.getArg(ListState.class, args, ListState.NORMAL));
+
+            isLoading.set(true);
+
+            Base.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    changeState(state);
+                    isLoading.set(false);
+                }
+            }, 25);
         }
     }
 
