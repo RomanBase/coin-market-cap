@@ -14,7 +14,9 @@ import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
+import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel;
@@ -22,6 +24,7 @@ import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
 
 import java.util.Date;
 import java.util.List;
@@ -30,7 +33,7 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener {
+public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener, OnCoinSelectedListener {
 
     public enum ListState {
         NORMAL,
@@ -81,6 +84,11 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         DataHolder holder = getFactory().get(DataHolder.class);
         holder.reload();
+    }
+
+    public void onSearchPressed(View view) {
+
+        addViewModel(SearchViewModel.class, this);
     }
 
     private void attachSwipeListener() {
@@ -142,7 +150,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         item.isFavourite.set(!item.isFavourite.get());
 
-        UserPrefs prefs = getFactory().get(UserPrefs.class);
+        UserPrefs prefs = getUserPrefs();
 
         if (item.isFavourite.get()) {
             prefs.addFavourite(item.coin.id);
@@ -155,6 +163,20 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
 
         prefs.notifyFavouriteItemChanged(item);
+    }
+
+    @Override
+    public void onCoinSelected(CoinItem coin) {
+
+        CoinItemModel model = getDataHolder().getCoinItem(coin.id);
+
+        if (model == null || model.isFavourite.get()) {
+            return;
+        }
+
+        this.model.adapter.add(model);
+
+        toggleItemFavouriteState(model);
     }
 
     @Override
@@ -251,70 +273,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                 }
             }
         }
-/*
-        HitBTC hitBTC = getFactory().get(HitBTC.class);
-        hitBTC.currency.ticker(new ResponseListener<List<HitCurrencyTicker>>() {
-            @Override
-            public void onResponse(List<HitCurrencyTicker> response) {
-                response = HitFilter.filterByCurrency(response, "BTC");
-
-                Collections.sort(response, new Comparator<HitCurrencyTicker>() {
-                    @Override
-                    public int compare(HitCurrencyTicker a, HitCurrencyTicker b) {
-
-                        if (StringHelper.isEmpty(a.bid)) {
-                            return StringHelper.isEmpty(b.bid) ? 0 : 1;
-                        }
-
-                        if (StringHelper.isEmpty(b.bid)) {
-                            return -1;
-                        }
-
-                        double priceA = Double.parseDouble(a.bid);
-                        double priceB = Double.parseDouble(b.bid);
-
-                        CoinItem coinA = getDataHolder().getCoinBySymbol(a.symbol.replace("BTC", ""));
-                        CoinItem coinB = getDataHolder().getCoinBySymbol(b.symbol.replace("BTC", ""));
-
-                        if (coinA == null) {
-                            return coinB == null ? 0 : 1;
-                        }
-
-                        if (coinB == null) {
-                            return -1;
-                        }
-
-                        return priceA > priceB ? 1 : -1;
-                    }
-                });
-
-                List<CoinItemModel> items = ObjectHelper.convert(response, new ObjectConverter<CoinItemModel, HitCurrencyTicker>() {
-                    @Override
-                    public CoinItemModel convert(HitCurrencyTicker object) {
-
-                        CoinItem coin = getDataHolder().getCoinBySymbol(object.symbol.replace("BTC", ""));
-
-                        if (coin == null) {
-                            return null;
-                        }
-
-                        CoinItemModel itemModel = new CoinItemModel(coin);
-
-                        return itemModel;
-                    }
-                });
-
-                items.removeAll(Collections.singleton(null));
-
-                //setModel(new CoinsAdapterModel(getContext(), items));
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        */
     }
 
     @Override

@@ -147,6 +147,17 @@ public class DataHolder {
         return null;
     }
 
+    public CoinItemModel getCoinItem(String id) {
+
+        for (CoinItemModel coin : coinItems) {
+            if (coin.coin.id.equals(id)) {
+                return coin;
+            }
+        }
+
+        return null;
+    }
+
     @Nullable
     public CoinItem getCoinBySymbol(String symbol) {
 
