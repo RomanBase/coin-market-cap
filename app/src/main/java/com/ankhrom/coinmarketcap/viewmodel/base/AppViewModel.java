@@ -7,6 +7,7 @@ import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.base.viewmodel.BaseViewModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.data.DataHolder;
+import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
 /**
@@ -30,6 +31,11 @@ public abstract class AppViewModel<S extends ViewDataBinding, T extends Model> e
     protected UserPrefs getUserPrefs() {
 
         return getFactory().get(UserPrefs.class);
+    }
+
+    protected ExchangePrefs getExchangePrefs() {
+
+        return getFactory().get(ExchangePrefs.class);
     }
 
     @Override

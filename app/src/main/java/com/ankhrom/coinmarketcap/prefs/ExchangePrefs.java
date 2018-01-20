@@ -2,10 +2,12 @@ package com.ankhrom.coinmarketcap.prefs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
+import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.google.gson.Gson;
 
 /**
@@ -16,6 +18,8 @@ public class ExchangePrefs extends BasePrefs {
 
     private static final String PREFS = "exchange";
 
+    private OnExchangeAuthChangedListener listener;
+
     public ExchangePrefs(@NonNull Context context) {
         super(context);
     }
@@ -25,11 +29,13 @@ public class ExchangePrefs extends BasePrefs {
         return PREFS;
     }
 
-    public void setAuth(ExchangeType type, AuthCredentials credentials) {
+    public void setAuth(ExchangeType type, @Nullable AuthCredentials credentials) {
 
-        //todo listeners
+        if (listener != null) {
+            listener.onExchangeAuthChanged(type, credentials);
+        }
 
-        if (!credentials.persist) {
+        if (credentials != null && !credentials.persist) {
             credentials = null;
         }
 

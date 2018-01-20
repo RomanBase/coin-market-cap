@@ -24,9 +24,6 @@ public class DataFetcher {
 
     private List<DataLoadingListener> listeners;
 
-    private int index;
-    private boolean hasNext;
-
     private boolean loadingCoins;
     private boolean loadingMarket;
 

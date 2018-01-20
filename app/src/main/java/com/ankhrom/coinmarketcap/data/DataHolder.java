@@ -20,21 +20,20 @@ import java.util.List;
  * Created by R' on 12/31/2017.
  */
 
-public class DataHolder {
+public class DataHolder { //todo cache
 
-    private List<CoinItem> coins;
     private MarketData market;
-
+    private List<CoinItem> coins;
     private List<CoinItemModel> coinItems;
 
     private final ObjectFactory factory;
     private final DataFetcher fetcher;
 
     private DataHolder(ObjectFactory factory) {
+        this.factory = factory;
 
         coins = new ArrayList<>();
         fetcher = new DataFetcher(factory);
-        this.factory = factory;
     }
 
     public static DataHolder init(ObjectFactory factory) {
