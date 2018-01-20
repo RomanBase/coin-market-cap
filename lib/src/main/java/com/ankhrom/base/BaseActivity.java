@@ -252,11 +252,22 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        boolean handled = false;
+
         ActivityEventListener eventListener = getEventListener();
         if (eventListener != null) {
-            if (!eventListener.onBaseActivityResult(requestCode, resultCode, data)) {
-                super.onActivityResult(requestCode, resultCode, data);
+            handled = eventListener.onBaseActivityResult(requestCode, resultCode, data);
+        }
+
+        if (!handled) {
+            ViewModel vm = mvm.getCurrentViewModel();
+            if (vm != null) {
+                handled = vm.onBaseActivityResult(requestCode, resultCode, data);
             }
+        }
+
+        if (!handled) {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

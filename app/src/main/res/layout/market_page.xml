@@ -153,13 +153,15 @@
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="96dp"
-                        android:background="@color/colorAccent">
+                        android:layout_height="56dp"
+                        android:layout_marginTop="@dimen/base_padding"
+                        android:background="@color/tint_light_color">
 
                         <android.support.v7.widget.AppCompatButton
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
+                            android:background="?attr/selectableItemBackground"
                             android:onClick="@{VM::onSearchPressed}"
                             android:text="add to favs" />
 

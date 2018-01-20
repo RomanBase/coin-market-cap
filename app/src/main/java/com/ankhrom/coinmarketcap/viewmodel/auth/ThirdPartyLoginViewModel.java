@@ -1,7 +1,13 @@
 package com.ankhrom.coinmarketcap.viewmodel.auth;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.ankhrom.base.GlobalCode;
+import com.ankhrom.base.common.BaseCamera;
+import com.ankhrom.base.common.BasePermission;
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.ScreenHelper;
 import com.ankhrom.base.custom.args.InitArgs;
@@ -26,6 +32,8 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
 
     private ExchangeType type;
     private AuthCredentials credentials;
+
+    private int qrField;
 
     @Override
     public void init(InitArgs args) {
@@ -71,14 +79,40 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         }
     }
 
+    private boolean isCameraAvailable() {
+
+        if (BaseCamera.isCameraAvailable(getContext())) {
+            if (BasePermission.isAvailable(getContext(), Manifest.permission.CAMERA)) {
+                return true;
+            } else {
+                BasePermission.with(getContext())
+                        .requestCode(GlobalCode.CAMERA_REQUEST)
+                        .require(Manifest.permission.CAMERA);
+            }
+        }
+
+        return false;
+    }
+
+    private void openCamera(int qrField) {
+
+        this.qrField = qrField;
+
+        if (!isCameraAvailable()) {
+            return;
+        }
+
+        addViewModel(QRViewModel.class, qrField, this);
+    }
+
     public void onKeyCameraPressed(View view) {
 
-        addViewModel(QRViewModel.class, QR_KEY, this);
+        openCamera(QR_KEY);
     }
 
     public void onSecretCameraPressed(View view) {
 
-        addViewModel(QRViewModel.class, QR_SECRET, this);
+        openCamera(QR_SECRET);
     }
 
     public void onLoginPressed(View view) {
@@ -127,6 +161,17 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
 
         FragmentHelper.removePage(getContext(), this);
         getNavigation().setPreviousViewModel();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == GlobalCode.CAMERA_REQUEST) {
+
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && qrField > 0) {
+                openCamera(qrField);
+            }
+        }
     }
 
     @Override
