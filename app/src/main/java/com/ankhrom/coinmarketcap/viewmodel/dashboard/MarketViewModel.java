@@ -1,5 +1,8 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
@@ -10,6 +13,7 @@ import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.AppCode;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
@@ -23,7 +27,6 @@ import com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
-import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
 
 import java.util.Date;
@@ -135,7 +138,16 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
         @Override
         public void onItemSelected(View view, CoinItemModel model) {
-            openViewModel(CoinDetailViewModel.class, model.coin);
+
+            try {
+                new CustomTabsIntent.Builder()
+                        .setToolbarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary))
+                        .setShowTitle(true)
+                        .build()
+                        .launchUrl(getContext(), Uri.parse(ApiUrl.COIN_MARKET_CAP_CURRECY + model.coin.id));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     };
 
