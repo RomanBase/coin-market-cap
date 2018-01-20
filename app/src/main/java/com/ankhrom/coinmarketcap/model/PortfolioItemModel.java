@@ -69,16 +69,19 @@ public class PortfolioItemModel extends SelectableItemModel {
             profit100 = -(1.0f - profit) * 100.0;
         }
 
+        double profitAmount = profit100 / 100.0 * invested;
+
         invested = item.unitPrice * item.amount;
         current = invested * profit;
 
-        investedValue.set(ApiFormat.toDigitFormat(invested) + " $");
-        currentValue.set(ApiFormat.toDigitFormat(current) + " $");
-        amount.set(ApiFormat.toDigitFormat(item.amount));
+        investedValue.set(ApiFormat.toPriceFormat(invested) + " $");
+        currentValue.set(ApiFormat.toPriceFormat(current) + " $");
+        amount.set(ApiFormat.toPriceFormat(item.amount));
 
-        avgPrice.set(ApiFormat.toDigitFormat(item.unitPrice));
+        avgPrice.set(ApiFormat.toPriceFormat(item.unitPrice));
         profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
-        profitLossAmount.set(ApiFormat.toDigitFormat(profit100 / 100.0 * invested));
+
+        profitLossAmount.set(Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount));
     }
 
     public void updateData(List<PortfolioItem> items) {
@@ -95,16 +98,19 @@ public class PortfolioItemModel extends SelectableItemModel {
             profit100 = -(1.0f - profit) * 100.0;
         }
 
+        double profitAmount = profit100 / 100.0 * priceSum;
+
         invested = priceSum;
         current = invested * profit;
 
-        investedValue.set(ApiFormat.toDigitFormat(invested) + " $");
-        currentValue.set(ApiFormat.toDigitFormat(current) + " $");
-        amount.set(ApiFormat.toDigitFormat(amountSum));
+        investedValue.set(ApiFormat.toPriceFormat(invested) + " $");
+        currentValue.set(ApiFormat.toPriceFormat(current) + " $");
+        amount.set(ApiFormat.toPriceFormat(amountSum));
 
-        avgPrice.set(ApiFormat.toDigitFormat(averagePrice));
+        avgPrice.set(ApiFormat.toPriceFormat(averagePrice));
         profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
-        profitLossAmount.set(ApiFormat.toDigitFormat(profit100 / 100.0 * priceSum));
+
+        profitLossAmount.set(Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount));
     }
 
     private double priceSum(List<PortfolioItem> items) {
