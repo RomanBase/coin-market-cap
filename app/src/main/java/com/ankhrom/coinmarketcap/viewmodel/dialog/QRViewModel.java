@@ -6,11 +6,10 @@ import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.model.Model;
-import com.ankhrom.base.viewmodel.BaseViewModel;
-import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.databinding.QrScannerPageBinding;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
+import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -19,7 +18,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * Created by R' on 1/20/2018.
  */
 
-public class QRViewModel extends BaseViewModel<QrScannerPageBinding, Model> implements ZXingScannerView.ResultHandler {
+public class QRViewModel extends AppViewModel<QrScannerPageBinding, Model> implements ZXingScannerView.ResultHandler {
 
     private boolean isStarted;
 
@@ -101,10 +100,5 @@ public class QRViewModel extends BaseViewModel<QrScannerPageBinding, Model> impl
     @Override
     public int getLayoutResource() {
         return R.layout.qr_scanner_page;
-    }
-
-    @Override
-    public int getBindingResource() {
-        return BR.VM;
     }
 }

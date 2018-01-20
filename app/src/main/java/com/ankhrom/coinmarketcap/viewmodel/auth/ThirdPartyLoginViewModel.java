@@ -17,7 +17,6 @@ import com.ankhrom.coinmarketcap.databinding.ThirdPartyLoginBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
 import com.ankhrom.coinmarketcap.model.auth.ThirdPartyLoginModel;
-import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.QRViewModel;
 
@@ -46,7 +45,7 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
     public void onInit() {
         super.onInit();
 
-        credentials = getFactory().get(ExchangePrefs.class).getAuth(type);
+        credentials = getExchangePrefs().getAuth(type);
 
         ThirdPartyLoginModel model = new ThirdPartyLoginModel(type);
 
@@ -140,7 +139,7 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         credentials.persist = !model.dontStore.get();
 
         if (relogin) {
-            getFactory().get(ExchangePrefs.class).setAuth(type, credentials);
+            getExchangePrefs().setAuth(type, credentials);
         }
 
         close();
@@ -149,7 +148,7 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
     public void onCancelPressed(View view) {
 
         if (model.edit.get()) {
-            getFactory().get(ExchangePrefs.class).setAuth(type, null);
+            getExchangePrefs().setAuth(type, null);
         }
 
         close();

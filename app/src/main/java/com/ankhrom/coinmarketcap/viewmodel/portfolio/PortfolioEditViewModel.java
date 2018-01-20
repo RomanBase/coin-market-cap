@@ -65,7 +65,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
     protected void reloadParentModel() {
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
         PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
 
         if (portfolio == null) {
@@ -89,7 +89,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
     protected void reloadModel() {
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
         PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
 
         if (portfolio == null) {
@@ -157,11 +157,14 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
         PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
-        portfolio.items.remove(index);
 
-        UserPrefs prefs = getFactory().get(UserPrefs.class);
+        if (portfolio != null) {
+            portfolio.items.remove(index);
+        }
+
+        UserPrefs prefs = getUserPrefs();
         prefs.updatePortfolioItem(portfolio);
 
         model.adapter.remove(index);

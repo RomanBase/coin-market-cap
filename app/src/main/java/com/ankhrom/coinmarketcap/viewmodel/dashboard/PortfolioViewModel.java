@@ -36,10 +36,10 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         headerTitle.set("Portfolio");
         isLoading.set(true);
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);
 
-        UserPrefs prefs = getFactory().get(UserPrefs.class);
+        UserPrefs prefs = getUserPrefs();
         prefs.setPortfolioChangedListener(this);
     }
 
@@ -54,11 +54,9 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         double invested = 0.0;
         double current = 0.0;
 
-        DataHolder holder = getFactory().get(DataHolder.class);
-
         for (PortfolioCoin item : portfolio) {
 
-            CoinItem coin = holder.getCoin(item.coinId);
+            CoinItem coin = getDataHolder().getCoin(item.coinId);
 
             if (coin != null) {
 
@@ -123,7 +121,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         this.isLoading.set(isLoading);
 
         if (!isLoading) {
-            updatePortfolio(getFactory().get(UserPrefs.class).getPortfolio());
+            updatePortfolio(getUserPrefs().getPortfolio());
         }
     }
 

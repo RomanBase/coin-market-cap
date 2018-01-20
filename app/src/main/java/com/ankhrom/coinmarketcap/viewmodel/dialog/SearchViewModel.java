@@ -11,7 +11,6 @@ import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
-import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.databinding.SearchPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
@@ -41,7 +40,7 @@ public class SearchViewModel extends AppViewModel<SearchPageBinding, SearchAdapt
     @Override
     public void loadModel() {
 
-        items = ObjectHelper.convert(getFactory().get(DataHolder.class).getCoins(), new ObjectConverter<SearchItemModel, CoinItem>() {
+        items = ObjectHelper.convert(getDataHolder().getCoins(), new ObjectConverter<SearchItemModel, CoinItem>() {
             @Override
             public SearchItemModel convert(CoinItem object) {
                 return new SearchItemModel(object, SearchViewModel.this);

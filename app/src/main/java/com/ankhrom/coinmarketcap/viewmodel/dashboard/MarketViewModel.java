@@ -66,7 +66,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);
     }
 
@@ -85,7 +85,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         binding.pullToRefresh.setRefreshing(false);
         model.adapter.clear();
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
         holder.reload();
     }
 
@@ -124,7 +124,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         this.state = state;
 
-        DataHolder holder = getFactory().get(DataHolder.class);
+        DataHolder holder = getDataHolder();
 
         if (holder.isMarketAvailable() && holder.isCoinListAvailable()) {
             updateModel(holder);
