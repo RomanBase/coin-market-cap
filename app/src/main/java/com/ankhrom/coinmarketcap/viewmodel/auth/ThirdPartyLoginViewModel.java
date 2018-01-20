@@ -99,6 +99,12 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
             relogin = true;
         }
 
+        if (model.dontStore.get()) {
+            relogin = true;
+        }
+
+        credentials.persist = !model.dontStore.get();
+
         if (relogin) {
             getFactory().get(ExchangePrefs.class).setAuth(type, credentials);
         }

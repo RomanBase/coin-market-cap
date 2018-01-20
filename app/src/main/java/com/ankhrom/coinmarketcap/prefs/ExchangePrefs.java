@@ -27,6 +27,12 @@ public class ExchangePrefs extends BasePrefs {
 
     public void setAuth(ExchangeType type, AuthCredentials credentials) {
 
+        //todo listeners
+
+        if (!credentials.persist) {
+            credentials = null;
+        }
+
         if (credentials == null) {
             edit().putString(type.name(), null).apply();
             return;
