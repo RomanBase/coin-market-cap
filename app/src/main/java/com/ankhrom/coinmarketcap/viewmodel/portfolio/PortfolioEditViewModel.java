@@ -162,7 +162,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
         portfolio.items.remove(index);
 
         UserPrefs prefs = getFactory().get(UserPrefs.class);
-        prefs.updatePorfolioItem(portfolio);
+        prefs.updatePortfolioItem(portfolio);
 
         model.adapter.remove(index);
 

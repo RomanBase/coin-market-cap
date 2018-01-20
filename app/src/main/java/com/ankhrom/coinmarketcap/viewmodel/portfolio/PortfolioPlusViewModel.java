@@ -197,7 +197,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         item.unitPrice = parseDouble(model.unitPrice.get());
 
         UserPrefs prefs = getUserPrefs();
-        prefs.addPorfolioItem(item);
+        prefs.addPortfolioItem(item);
 
         if (listener != null) {
             listener.onPortfolioChanged(prefs.getPortfolio());

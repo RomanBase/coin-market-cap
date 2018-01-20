@@ -130,7 +130,7 @@ public class UserPrefs extends BasePrefs {
         return new Gson().fromJson(getPrefs().getString(PORTFOLIO, DEFAULT_JSON_LIST), type);
     }
 
-    public void addPorfolioItem(PortfolioItem item) {
+    public void addPortfolioItem(PortfolioItem item) {
 
         List<PortfolioCoin> portfolio = getPortfolio();
 
@@ -157,7 +157,7 @@ public class UserPrefs extends BasePrefs {
         notifyPortfolioChanged(portfolio);
     }
 
-    public void updatePorfolioItem(PortfolioCoin coin) {
+    public void updatePortfolioItem(PortfolioCoin coin) {
 
         List<PortfolioCoin> portfolio = getPortfolio();
 
