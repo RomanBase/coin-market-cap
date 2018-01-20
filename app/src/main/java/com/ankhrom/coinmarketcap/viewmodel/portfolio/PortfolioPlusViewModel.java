@@ -76,19 +76,25 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             value = ensureFormat(value);
 
+            double amount = parseDouble(value);
+            double btcPrice = parseDouble(bitcoin.priceUsd);
+
+            if (!(amount > 0)) {
+                return;
+            }
+
             boolean sumAvailable = !StringHelper.isEmpty(model.sumPrice.get());
             boolean unitAvailable = !StringHelper.isEmpty(model.unitPrice.get());
-            double btcPrice = parseDouble(bitcoin.priceUsd);
 
             if (sumAvailable) {
                 double price = parseDouble(model.sumPrice.get());
-                double unitPrice = price / parseDouble(value);
+                double unitPrice = price / amount;
                 model.unitPrice.setValue(ApiFormat.toPriceFormat(unitPrice));
                 model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(price / btcPrice));
                 model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
             } else if (unitAvailable) {
                 double unitPrice = parseDouble(model.unitPrice.get());
-                double price = unitPrice * parseDouble(value);
+                double price = unitPrice * amount;
                 model.sumPrice.setValue(ApiFormat.toPriceFormat(price));
                 model.bitcoinUnits.setValue(ApiFormat.toPriceFormat(price / btcPrice));
                 model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(unitPrice / btcPrice));
@@ -135,6 +141,11 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
             double price = parseDouble(value);
             double amount = parseDouble(model.units.get());
+
+            if (!(amount > 0)) {
+                return;
+            }
+
             double unitPrice = price / amount;
             double btcPrice = parseDouble(bitcoin.priceUsd);
 
@@ -157,6 +168,10 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
             double btcUnits = parseDouble(value);
             double amount = parseDouble(model.units.get());
             double btcPrice = parseDouble(bitcoin.priceUsd);
+
+            if (!(amount > 0)) {
+                return;
+            }
 
             double price = btcUnits * btcPrice;
             double unitPrice = price / amount;

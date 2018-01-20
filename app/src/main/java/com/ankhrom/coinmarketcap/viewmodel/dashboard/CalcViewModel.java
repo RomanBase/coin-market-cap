@@ -74,7 +74,6 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             double units = parseDouble(value);
             double unitPrice = parseDouble(coin.priceUsd);
             double btcPrice = parseDouble(bitcoin.priceUsd);
-
             double sumPrice = unitPrice * units;
 
             model.sumPrice.setValue(ApiFormat.toPriceFormat(sumPrice));
@@ -100,6 +99,10 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             double unitPrice = parseDouble(coin.priceUsd);
             double btcPrice = parseDouble(bitcoin.priceUsd);
 
+            if (!(unitPrice > 0)) {
+                return;
+            }
+
             double units = sumPrice / unitPrice;
 
             model.units.setValue(ApiFormat.toPriceFormat(units));
@@ -124,8 +127,11 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             double btcUnits = parseDouble(value);
             double unitPrice = parseDouble(coin.priceUsd);
             double btcPrice = parseDouble(bitcoin.priceUsd);
-
             double sumPrice = btcUnits * btcPrice;
+
+            if (!(unitPrice > 0)) {
+                return;
+            }
 
             model.units.setValue(ApiFormat.toPriceFormat(sumPrice / unitPrice));
             model.sumPrice.setValue(ApiFormat.toPriceFormat(sumPrice));
