@@ -16,6 +16,10 @@ public class CalcModel extends PortfolioPlusModel {
     public final SeekBarObservable profit = new SeekBarObservable(0.1f);
     public final ObservableString profitLabel = new ObservableString();
 
+
+    public final ObservableString marketCap = new ObservableString();
+    public final ObservableString marketCapGrow = new ObservableString();
+
     public CalcModel() {
 
     }

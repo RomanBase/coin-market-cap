@@ -53,6 +53,23 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/base_padding"
             android:layout_marginRight="@dimen/base_padding"
+            android:hint="market cap"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                app:text="@{M.marketCap}" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_padding"
+            android:layout_marginRight="@dimen/base_padding"
             android:hint="units">
 
             <android.support.v7.widget.AppCompatEditText
@@ -199,6 +216,22 @@
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_padding"
+            android:layout_marginRight="@dimen/base_padding"
+            android:hint="market cap grow">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                app:text="@{M.marketCapGrow}" />
+
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 

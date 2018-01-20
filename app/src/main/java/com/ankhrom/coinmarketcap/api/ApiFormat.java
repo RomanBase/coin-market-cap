@@ -39,7 +39,7 @@ public class ApiFormat {
 
     public static String toPriceFormat(String number) {
 
-        if(StringHelper.isEmpty(number)){
+        if (StringHelper.isEmpty(number)) {
             return "0";
         }
 
@@ -69,7 +69,12 @@ public class ApiFormat {
             return "0";
         }
 
-        double value = Double.parseDouble(number);
+        return toShortFormat(Double.parseDouble(number));
+    }
+
+    public static String toShortFormat(double value) {
+
+        String number;
 
         if (value > ApiFormat.BILLION) {
             value /= ApiFormat.BILLION;

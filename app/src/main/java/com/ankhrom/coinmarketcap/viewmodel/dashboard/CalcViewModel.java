@@ -10,10 +10,13 @@ import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.CalcPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
+import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.model.CalcModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
+
+import java.util.Date;
 
 /**
  * Created by R' on 1/8/2018.
@@ -36,6 +39,10 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
     private void createModel(DataHolder holder) {
 
+        if (model != null) {
+            return;
+        }
+
         bitcoin = holder.getCoin("bitcoin");
 
         if (bitcoin == null) {
@@ -46,7 +53,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
         model.units.setOnValueChangedListener(onUnitsChanged);
         model.sumPrice.setOnValueChangedListener(onSumPriceChanged);
-        model.bitcoinUnits.setOnValueChangedListener(onBitcionUnitsChanged);
+        model.bitcoinUnits.setOnValueChangedListener(onBitcoinUnitsChanged);
         model.profit.setOnValueChangedListener(onProfitChanged);
 
         onCoinSelected(bitcoin);
@@ -102,7 +109,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         }
     };
 
-    private final OnValueChangedListener<String> onBitcionUnitsChanged = new OnValueChangedListener<String>() {
+    private final OnValueChangedListener<String> onBitcoinUnitsChanged = new OnValueChangedListener<String>() {
         @Override
         public void onValueChanged(String value) {
 
@@ -140,9 +147,11 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
             double sumPrice = parseDouble(model.sumPrice.get());
             double unitPrice = parseDouble(coin.priceUsd);
+            double marketCap = parseDouble(coin.marketCap);
 
             model.profitSumPrice.set(ApiFormat.toPriceFormat(sumPrice + sumPrice * profit));
             model.profitUnitPrice.set(ApiFormat.toPriceFormat(unitPrice + unitPrice * profit));
+            model.marketCapGrow.set(ApiFormat.toShortFormat(marketCap + marketCap * profit));
         }
     };
 
@@ -156,6 +165,10 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
         this.coin = coin;
 
+        if (model == null) {
+            return;
+        }
+
         if (coin == null) {
             model.currency.set("-");
             model.units.set(null);
@@ -168,9 +181,17 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         model.currency.set(coin.toString());
         model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd));
         model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(coin.priceBtc));
+        model.marketCap.set(ApiFormat.toShortFormat(coin.marketCap));
 
         model.sumPrice.set(ApiFormat.toPriceFormat(100));
         onSumPriceChanged.onValueChanged(model.sumPrice.get());
+    }
+
+    protected void setMarketData(MarketData market) {
+
+        headerSubTitle.set(new Date(market.timestamp * 1000).toLocaleString());
+        headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
+        headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " | " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }
 
     @Override
@@ -179,6 +200,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         this.isLoading.set(isLoading);
 
         if (!isLoading) {
+            setMarketData(holder.getMarket());
             createModel(holder);
         }
     }
