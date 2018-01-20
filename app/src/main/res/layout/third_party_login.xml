@@ -32,52 +32,92 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/extended_padding"
-                android:paddingLeft="@dimen/base_padding"
-                android:paddingRight="@dimen/base_padding"
-                android:paddingTop="@dimen/extended_padding">
+                android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="128dp"
                     android:layout_height="128dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/base_padding"
-                    android:background="#AA00" />
+                    android:scaleType="fitCenter"
+                    app:imageResource="@{M.icon}" />
 
-                <android.support.design.widget.TextInputLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="key">
+                    android:paddingLeft="@dimen/base_padding"
+                    android:paddingRight="@dimen/base_padding">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        app:text="@{M.key}" />
+                        android:hint="key">
 
-                </android.support.design.widget.TextInputLayout>
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:maxLines="1"
+                            app:text="@{M.key}" />
 
-                <android.support.design.widget.TextInputLayout
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginTop="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:onClick="@{VM::onKeyCameraPressed}"
+                        android:padding="@dimen/base_half_padding"
+                        android:src="@drawable/ic_camera" />
+
+                </FrameLayout>
+
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="secret">
+                    android:paddingLeft="@dimen/base_padding"
+                    android:paddingRight="@dimen/base_padding">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        app:text="@{M.secret}" />
+                        android:hint="secret">
 
-                </android.support.design.widget.TextInputLayout>
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            app:text="@{M.secret}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginTop="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:onClick="@{VM::onSecretCameraPressed}"
+                        android:padding="@dimen/base_half_padding"
+                        android:src="@drawable/ic_camera" />
+
+                </FrameLayout>
+
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/base_padding"
+                    android:text="Don't store data (one time synchronization)"
+                    app:checked="@{M.dontStore}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="@dimen/base_padding">
+                    android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatButton
                         android:layout_width="0dp"
@@ -90,7 +130,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="login"
+                        android:hint="connect"
                         android:onClick="@{VM::onLoginPressed}" />
 
                 </LinearLayout>
