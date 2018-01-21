@@ -92,7 +92,7 @@ public class DataHolder { //todo cache
     public List<CoinItemModel> getCoinItems() {
 
         if (coinItems == null) {
-            coinItems = ObjectHelper.convert(coins, new CoinItemConverter());
+            coinItems = ObjectHelper.convert(coins.subList(0, Math.min(coins.size(), 100)), new CoinItemConverter());
 
             List<String> favs = factory.get(UserPrefs.class).getFavourites();
 

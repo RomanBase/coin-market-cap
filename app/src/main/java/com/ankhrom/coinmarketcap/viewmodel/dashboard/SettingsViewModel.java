@@ -16,6 +16,8 @@ public class SettingsViewModel extends AppViewModel {
     public void onInit() {
         super.onInit();
 
+        headerTitle.set("Account");
+
         if (model != null) {
             return;
         }
