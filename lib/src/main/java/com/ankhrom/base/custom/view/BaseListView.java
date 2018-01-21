@@ -30,6 +30,8 @@ public class BaseListView extends RecyclerView {
 
     private void init(Context context, AttributeSet attrs) {
 
+        setNestedScrollingEnabled(false);
+
         int spacing = 0;
         boolean includeEdges = false;
 

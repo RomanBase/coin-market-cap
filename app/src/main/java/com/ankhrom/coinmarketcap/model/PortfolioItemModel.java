@@ -11,6 +11,7 @@ import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class PortfolioItemModel extends SelectableItemModel {
     public final CoinItem coin;
     public final String marketPrice;
 
+    public List<PortfolioItem> items;
     public double invested;
     public double current;
 
@@ -56,8 +58,11 @@ public class PortfolioItemModel extends SelectableItemModel {
 
     public void updateData(PortfolioItem item) {
 
+        items = new ArrayList<>();
+        items.add(item);
+
         if (!(item.unitPrice < 0.0f)) {
-            item.unitPrice = Double.parseDouble(coin.priceUsd) - 0.000001;
+            item.unitPrice = Double.parseDouble(coin.priceUsd);
         }
 
         double profit = Double.parseDouble(coin.priceUsd) / item.unitPrice;
@@ -86,6 +91,8 @@ public class PortfolioItemModel extends SelectableItemModel {
 
     public void updateData(List<PortfolioItem> items) {
 
+        this.items = items;
+
         double priceSum = priceSum(items);
         double amountSum = amountSum(items);
         double averagePrice = priceSum / amountSum;
@@ -108,9 +115,14 @@ public class PortfolioItemModel extends SelectableItemModel {
         amount.set(ApiFormat.toPriceFormat(amountSum));
 
         avgPrice.set(ApiFormat.toPriceFormat(averagePrice));
-        profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
 
-        profitLossAmount.set(Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount));
+        if (Math.abs(profitAmount) < 0.1) {
+            profitLoss.set("-");
+            profitLossAmount.set("-");
+        } else {
+            profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
+            profitLossAmount.set(Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount));
+        }
     }
 
     private double priceSum(List<PortfolioItem> items) {
@@ -120,7 +132,7 @@ public class PortfolioItemModel extends SelectableItemModel {
         for (PortfolioItem item : items) {
 
             if (!(item.unitPrice < 0.0f)) {
-                item.unitPrice = Double.parseDouble(coin.priceUsd) - 0.000001;
+                item.unitPrice = Double.parseDouble(coin.priceUsd);
             }
 
             sum += item.unitPrice * item.amount;

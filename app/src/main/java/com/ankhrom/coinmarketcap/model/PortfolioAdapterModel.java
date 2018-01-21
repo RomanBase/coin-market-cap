@@ -16,6 +16,12 @@ public class PortfolioAdapterModel extends AdapterModel<PortfolioItemModel> {
 
     public ObservableBoolean isEmpty = new ObservableBoolean();
 
+    public PortfolioAdapterModel(Context context) {
+        super(context);
+
+        isEmpty.set(true);
+    }
+
     public PortfolioAdapterModel(Context context, Collection<PortfolioItemModel> collection) {
         super(context, collection);
 

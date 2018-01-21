@@ -178,8 +178,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                 model.adapter.remove(item);
             }
         }
-
-        prefs.notifyFavouriteItemChanged(item);
     }
 
     @Override

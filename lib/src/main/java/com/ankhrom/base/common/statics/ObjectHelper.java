@@ -14,25 +14,31 @@ public final class ObjectHelper {
         return (o == null) ? (t == null) : o.equals(t);
     }
 
-    public static <T, E> List<T> convert(List<E> items, ObjectConverter<T, E> convertor) {
+    public static <T, E> List<T> convert(List<E> items, ObjectConverter<T, E> converter) {
 
         List<T> list = new ArrayList<>(items.size());
 
         for (E item : items) {
-            list.add(convertor.convert(item));
+            T obj = converter.convert(item);
+            if (obj != null) {
+                list.add(obj);
+            }
         }
 
         return list;
     }
 
-    public static <T, E> List<T> sortThenConvert(Comparator<E> comparator, List<E> items, ObjectConverter<T, E> convertor) {
+    public static <T, E> List<T> sortThenConvert(Comparator<E> comparator, List<E> items, ObjectConverter<T, E> converter) {
 
         Collections.sort(items, comparator);
 
         List<T> list = new ArrayList<>(items.size());
 
         for (E item : items) {
-            list.add(convertor.convert(item));
+            T obj = converter.convert(item);
+            if (obj != null) {
+                list.add(obj);
+            }
         }
 
         return list;

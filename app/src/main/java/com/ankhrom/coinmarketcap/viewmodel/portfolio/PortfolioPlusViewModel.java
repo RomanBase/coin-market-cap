@@ -9,6 +9,7 @@ import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPlusPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
@@ -210,6 +211,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         item.coinId = coin.id;
         item.amount = parseDouble(model.units.get());
         item.unitPrice = parseDouble(model.unitPrice.get());
+        item.exchange = ExchangeType.NONE;
 
         UserPrefs prefs = getUserPrefs();
         prefs.addPortfolioItem(item);

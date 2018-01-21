@@ -5,6 +5,7 @@ package com.ankhrom.coinmarketcap.common;
  */
 
 public enum ExchangeType {
+    NONE,
     HIT_BTC,
     ETORO
 }

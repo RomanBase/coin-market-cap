@@ -18,7 +18,7 @@ public final class HitFilter {
         while (iterator.hasNext()) {
 
             HitBalance balance = iterator.next();
-            if (balance.available.equals("0") && balance.reserved.equals("0")) {
+            if (!(Double.parseDouble(balance.available) > 0.0 || Double.parseDouble(balance.reserved) > 0.0)) {
                 iterator.remove();
             }
         }

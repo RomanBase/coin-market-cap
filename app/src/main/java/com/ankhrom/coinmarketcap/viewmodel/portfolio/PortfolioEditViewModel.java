@@ -8,7 +8,7 @@ import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
-import com.ankhrom.coinmarketcap.data.DataHolder;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.PortfolioEditPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
@@ -17,10 +17,10 @@ import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
-import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +34,9 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
     private PortfolioItemModel activeItem;
     private boolean itemActivated;
+
+    private ItemSwipeListener itemSwipeListener;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     public void init(InitArgs args) {
@@ -51,6 +54,8 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
+        itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
+
         reloadParentModel();
         reloadHeader();
         reloadModel();
@@ -60,26 +65,39 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     protected void onCreateViewBinding(PortfolioEditPageBinding binding) {
         super.onCreateViewBinding(binding);
 
-        new ItemTouchHelper(new ItemSwipeListener(getContext(), R.id.item_foreground, this)).attachToRecyclerView(binding.itemsContainer);
+        attachSwipeListener();
+    }
+
+    private void attachSwipeListener() {
+
+        if (binding == null) {
+            return;
+        }
+
+        if (itemTouchHelper == null) {
+            itemTouchHelper = new ItemTouchHelper(itemSwipeListener);
+        }
+
+        itemTouchHelper.attachToRecyclerView(binding.itemsContainer);
     }
 
     protected void reloadParentModel() {
 
-        DataHolder holder = getDataHolder();
-        PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
-
-        if (portfolio == null) {
-            return;
-        }
-
         if (parentModel == null) {
             parentModel = new PortfolioItemModel(coin);
-        }
 
-        parentModel.updateData(portfolio.items);
+            PortfolioCoin portfolio = getDataHolder().getPortfolioCoin(coin.id);
+            if (portfolio != null) {
+                parentModel.updateData(portfolio.items);
+            }
+        }
     }
 
     protected void reloadHeader() {
+
+        if (parentModel == null) {
+            return;
+        }
 
         headerTitle.set(coin.symbol + " - " + coin.name + " - " + parentModel.amount.get());
         headerSubTitle.set(parentModel.profitLossAmount.get() + " / " + parentModel.profitLoss.get());
@@ -89,14 +107,11 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
     protected void reloadModel() {
 
-        DataHolder holder = getDataHolder();
-        PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
-
-        if (portfolio == null) {
+        if (parentModel == null || parentModel.items == null) {
             return;
         }
 
-        List<PortfolioItemModel> items = ObjectHelper.convert(portfolio.items, new ObjectConverter<PortfolioItemModel, PortfolioItem>() {
+        List<PortfolioItemModel> items = ObjectHelper.convert(parentModel.items, new ObjectConverter<PortfolioItemModel, PortfolioItem>() {
             @Override
             public PortfolioItemModel convert(PortfolioItem object) {
                 return new PortfolioItemModel(coin, object);
@@ -110,6 +125,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     public void onSelectedItemChanged(int index) {
 
         itemActivated = false;
+        itemSwipeListener.swipeBack = true;
 
         if (index < 0) {
 
@@ -136,8 +152,10 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        activeItem.swipeProgress.set(progress);
-        activeItem.swipeDirectionLeft.set(directionToLeft);
+        if (ObjectHelper.equals(activeItem.items.get(0).exchange, ExchangeType.NONE)) {
+            activeItem.swipeProgress.set(progress);
+            activeItem.swipeDirectionLeft.set(directionToLeft);
+        }
 
         boolean activate = progress >= 1.0f;
 
@@ -157,25 +175,42 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        DataHolder holder = getDataHolder();
-        PortfolioCoin portfolio = holder.getPortfolioCoin(coin.id);
+        PortfolioItem item = itemModel.items.get(0);
 
-        if (portfolio != null) {
-            portfolio.items.remove(index);
+        if (ObjectHelper.equals(item.exchange, ExchangeType.NONE)) {
+
+            if (parentModel.items.remove(item)) {
+
+                PortfolioCoin portfolio = getDataHolder().getPortfolioCoin(coin.id);
+                if (portfolio != null) {
+                    portfolio.items = getPortfolioItems();
+                    getUserPrefs().updatePortfolioItem(portfolio);
+                }
+            }
+
+            model.adapter.remove(index);
+
+            if (model.adapter.getItemCount() == 0) {
+                getNavigation().navigateBack();
+                return;
+            }
+
+            reloadParentModel();
+            reloadHeader();
+        }
+    }
+
+    private List<PortfolioItem> getPortfolioItems() {
+
+        List<PortfolioItem> items = new ArrayList<>();
+
+        for (PortfolioItem item : parentModel.items) {
+            if (ObjectHelper.equals(item.exchange, ExchangeType.NONE)) {
+                items.add(item);
+            }
         }
 
-        UserPrefs prefs = getUserPrefs();
-        prefs.updatePortfolioItem(portfolio);
-
-        model.adapter.remove(index);
-
-        if (model.adapter.getItemCount() == 0) {
-            getNavigation().navigateBack();
-            return;
-        }
-
-        reloadParentModel();
-        reloadHeader();
+        return items;
     }
 
     public void onAddPressed(View view) {

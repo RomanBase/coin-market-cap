@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
-import com.ankhrom.coinmarketcap.listener.OnFavouriteItemChangedListener;
+import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
-import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,44 +29,32 @@ public class UserPrefs extends BasePrefs {
     private static final String FAVOURITES = "favourites";
     private static final String PORTFOLIO = "portfolio";
 
-    private List<OnFavouriteItemChangedListener> favouriteItemChangedListeners;
     private OnPortfolioChangedListener portfolioChangedListener;
+    private OnExchangePortfolioChangedListener portfolioExchangeListener;
 
     public UserPrefs(@NonNull Context context) {
         super(context);
-
-        favouriteItemChangedListeners = new ArrayList<>();
-    }
-
-    public void addFavouriteItemChangedListener(OnFavouriteItemChangedListener listener) {
-
-        if (!favouriteItemChangedListeners.contains(listener)) {
-            favouriteItemChangedListeners.add(listener);
-        }
-    }
-
-    public void removeFavouriteItemChangedListener(OnFavouriteItemChangedListener listener) {
-
-        if (favouriteItemChangedListeners.contains(listener)) {
-            favouriteItemChangedListeners.remove(listener);
-        }
     }
 
     public void setPortfolioChangedListener(OnPortfolioChangedListener portfolioChangedListener) {
         this.portfolioChangedListener = portfolioChangedListener;
     }
 
-    public void notifyFavouriteItemChanged(CoinItemModel item) {
-
-        for (OnFavouriteItemChangedListener listener : favouriteItemChangedListeners) {
-            listener.onFavouriteItemPrefsChanged(item);
-        }
+    public void setExchangePortfolioListener(OnExchangePortfolioChangedListener portfolioExchangeListener) {
+        this.portfolioExchangeListener = portfolioExchangeListener;
     }
 
     public void notifyPortfolioChanged(List<PortfolioCoin> portfolio) {
 
         if (portfolioChangedListener != null) {
             portfolioChangedListener.onPortfolioChanged(portfolio);
+        }
+    }
+
+    public void notifyExchangePortfolioChanged(ExchangeType exchange) {
+
+        if (portfolioExchangeListener != null) {
+            portfolioExchangeListener.onPortfolioChanged(exchange, getPortfolio(exchange));
         }
     }
 
@@ -176,6 +164,55 @@ public class UserPrefs extends BasePrefs {
 
         setPortfolio(portfolio);
         notifyPortfolioChanged(portfolio);
+    }
+
+    public void setPortfolio(ExchangeType exchange, List<PortfolioCoin> portfolio) {
+
+        if (portfolio == null || portfolio.isEmpty()) {
+            edit().putString(getExchangePrefKey(exchange), null).apply();
+        } else {
+            edit().putString(getExchangePrefKey(exchange), new Gson().toJson(portfolio)).apply();
+        }
+    }
+
+    public List<PortfolioCoin> getPortfolio(ExchangeType exchange) {
+
+        Type type = new TypeToken<List<PortfolioCoin>>() {
+        }.getType();
+
+        return new Gson().fromJson(getPrefs().getString(getExchangePrefKey(exchange), DEFAULT_JSON_LIST), type);
+    }
+
+    public void addPortfolioCoin(PortfolioCoin coin, ExchangeType exchange) {
+
+        List<PortfolioCoin> portfolio = getPortfolio(exchange);
+
+        boolean updated = false;
+
+        Iterator<PortfolioCoin> iterator = portfolio.iterator();
+        while (iterator.hasNext()) {
+            PortfolioCoin item = iterator.next();
+            if (item.coinId.equals(coin.coinId)) {
+                updated = true;
+                item.items.addAll(coin.items);
+                break;
+            }
+        }
+
+        if (!updated) {
+            portfolio.add(coin);
+        }
+
+        if (portfolioExchangeListener != null) {
+            portfolioExchangeListener.onPortfolioChanged(exchange, portfolio);
+        }
+
+        setPortfolio(exchange, portfolio);
+    }
+
+    private String getExchangePrefKey(ExchangeType exchange) {
+
+        return PORTFOLIO + "_" + exchange;
     }
 
     @Override
