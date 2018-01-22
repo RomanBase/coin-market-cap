@@ -5,7 +5,6 @@ import com.ankhrom.base.Base;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
-import com.ankhrom.coinmarketcap.BuildConfig;
 import com.ankhrom.coinmarketcap.api.ApiParam;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
@@ -108,12 +107,21 @@ public class DataFetcher {
 
     public void requestExchangePortfolio(ExchangeType exchange) {
 
+        requestExchangePortfolio(exchange, factory.get(ExchangePrefs.class).getAuth(exchange));
+    }
+
+    public void requestExchangePortfolio(ExchangeType exchange, AuthCredentials credentials) {
+
+        if (credentials == null || !credentials.isValid()) {
+            return;
+        }
+
         switch (exchange) {
             case ETORO:
                 requestEtoroPortfolio();
                 break;
             case HIT_BTC:
-                requestHitBTCPortfolio();
+                requestHitBTCPortfolio(credentials);
                 break;
         }
     }
@@ -123,25 +131,13 @@ public class DataFetcher {
         // TODO: 1/21/2018 waiting for keys
     }
 
-    private void requestHitBTCPortfolio() {
+    private void requestHitBTCPortfolio(AuthCredentials credentials) { // 252d13df5fb7d277c6c6de185c18bb65:6c60036d5a2655be6e988af8fa385be0
 
         if (loadingHitBTC) {
             return;
         }
 
         loadingHitBTC = true;
-
-        AuthCredentials credentials = factory.get(ExchangePrefs.class).getAuth(ExchangeType.HIT_BTC);
-
-        if (BuildConfig.DEBUG) {
-            credentials = new AuthCredentials();
-            credentials.key = "252d13df5fb7d277c6c6de185c18bb65";
-            credentials.secret = "6c60036d5a2655be6e988af8fa385be0";
-        }
-
-        if (credentials == null || !credentials.isValid()) {
-            return;
-        }
 
         HitBTC hitBTC = HitBTC.init(factory.getRequestQueue()).auth(credentials.key, credentials.secret);
 

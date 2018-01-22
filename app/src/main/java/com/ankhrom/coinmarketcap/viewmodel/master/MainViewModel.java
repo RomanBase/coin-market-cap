@@ -104,6 +104,11 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
         viewModels.add(getFactory().getViewModel(PortfolioViewModel.class));
         viewModels.add(getFactory().getViewModel(SettingsViewModel.class));
 
+        for (AppViewModel viewModel : viewModels) {
+            viewModel.setNavigation(getNavigation());
+            viewModel.onInit();
+        }
+
         return viewModels;
     }
 

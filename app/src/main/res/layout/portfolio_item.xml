@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{M.onItemSelected}"
+            android:onClick="@{M::onItemSelected}"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/base_half_padding"
             android:paddingLeft="@dimen/base_padding"

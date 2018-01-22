@@ -19,6 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/popup_background_color"
+            android:padding="@dimen/base_padding">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="scan each field separately or at once with colon separator (key:secret) "
+                android:textAlignment="center"
+                android:textColor="@color/text_light_color" />
+
+        </FrameLayout>
+
         <android.support.v7.widget.AppCompatImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

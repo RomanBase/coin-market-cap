@@ -3,6 +3,9 @@
 
     <string name="default_currency">USD</string>
 
+    <string name="cancel">cancel</string>
+    <string name="delete">delete</string>
+
     <string-array name="currency">
         <item>USD</item>
         <item>EUR</item>

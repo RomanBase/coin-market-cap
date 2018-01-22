@@ -59,6 +59,8 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
     @Override
     public void onQRHandled(int requestCode, String result) {
 
+        result = result.replace(" ", "");
+
         if (result.contains(":")) {
 
             String[] data = result.split(":");

@@ -126,8 +126,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
-                        android:text="cancel"
-                        android:onClick="@{VM::onCancelPressed}" />
+                        android:onClick="@{VM::onCancelPressed}"
+                        android:text="@{M.edit ? @string/delete : @string/cancel}"
+                        android:textColor="@{M.edit ? @color/favourite_remove_color : @color/text_color}" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -136,8 +137,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
-                        android:text="connect"
-                        android:onClick="@{VM::onLoginPressed}" />
+                        android:onClick="@{VM::onLoginPressed}"
+                        android:text="connect" />
 
                 </LinearLayout>
 

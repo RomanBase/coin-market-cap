@@ -1,5 +1,6 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
@@ -10,9 +11,11 @@ import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.data.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPageBinding;
+import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
@@ -31,7 +34,7 @@ import java.util.List;
  * Created by R' on 1/1/2018.
  */
 
-public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel> {
+public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener {
 
     @Override
     public void onInit() {
@@ -50,6 +53,8 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         UserPrefs prefs = getUserPrefs();
         prefs.setPortfolioChangedListener(this);
         prefs.setExchangePortfolioListener(this);
+
+        getExchangePrefs().setExchangeAuthListener(this);
     }
 
     public void onAddPressed(View view) {
@@ -216,6 +221,17 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(false);
+    }
+
+    @Override
+    public void onExchangeAuthChanged(ExchangeType type, @Nullable AuthCredentials credentials) {
+
+        if (credentials == null) {
+            getUserPrefs().setPortfolio(type, null);
+            onPortfolioChanged(type, null);
+        } else {
+            getDataHolder().getFetcher().requestExchangePortfolio(type, credentials);
+        }
     }
 
     @Override

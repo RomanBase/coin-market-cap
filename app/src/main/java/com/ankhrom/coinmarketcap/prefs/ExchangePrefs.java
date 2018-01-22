@@ -3,6 +3,7 @@ package com.ankhrom.coinmarketcap.prefs;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
@@ -24,6 +25,10 @@ public class ExchangePrefs extends BasePrefs {
         super(context);
     }
 
+    public void setExchangeAuthListener(OnExchangeAuthChangedListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     protected String getPrefsName() {
         return PREFS;
@@ -40,16 +45,15 @@ public class ExchangePrefs extends BasePrefs {
         }
 
         if (credentials == null) {
-            edit().putString(type.name(), null).apply();
+            edit().putString(Base64.encodeToString(type.name().getBytes(), Base64.DEFAULT), null).apply();
             return;
         }
 
-        edit().putString(type.name(), new Gson().toJson(credentials)).apply();
+        edit().putString(Base64.encodeToString(type.name().getBytes(), Base64.DEFAULT), Base64.encodeToString(new Gson().toJson(credentials).getBytes(), Base64.DEFAULT)).apply();
     }
 
     public AuthCredentials getAuth(ExchangeType type) {
 
-        return new Gson().fromJson(getPrefs().getString(type.name(), DEFAULT_JSON), AuthCredentials.class);
+        return new Gson().fromJson(new String(Base64.decode(getPrefs().getString(Base64.encodeToString(type.name().getBytes(), Base64.DEFAULT), Base64.encodeToString(DEFAULT_JSON.getBytes(), Base64.DEFAULT)), Base64.DEFAULT)), AuthCredentials.class);
     }
-
 }
