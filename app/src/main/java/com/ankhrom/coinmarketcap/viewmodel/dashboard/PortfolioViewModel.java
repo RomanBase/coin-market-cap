@@ -95,13 +95,14 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             }
 
             double profit = current / invested;
-            double profitAmount = invested * profit;
 
             if (profit > 1.0f) {
                 profit -= 1.0;
             } else {
                 profit = -(1.0f - profit);
             }
+
+            double profitAmount = invested * profit;
 
             if (Math.abs(profitAmount) < 0.1) {
                 headerSubTitle.set("- / -");
