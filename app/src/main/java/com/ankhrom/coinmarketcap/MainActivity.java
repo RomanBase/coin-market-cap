@@ -44,4 +44,9 @@ public class MainActivity extends BaseActivity {
     protected Toolbar getToolbar() {
         return null;
     }
+
+    @Override
+    protected int getAppTheme() {
+        return R.style.AppTheme;
+    }
 }

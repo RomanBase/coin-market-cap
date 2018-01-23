@@ -1,14 +1,23 @@
 <resources>
 
+    <style name="AppTheme.Splash" parent="AppTheme">
+
+        <item name="android:windowBackground">@drawable/splashscreen</item>
+
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:textColor">@color/text_color</item>
         <item name="android:textColorPrimary">@color/text_color</item>
+
         <item name="android:colorForeground">@color/background_color</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.CoinItem" parent="TextAppearance.AppCompat">
