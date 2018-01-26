@@ -156,6 +156,11 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         close();
     }
 
+    public void onClosePressed(View view) {
+
+        close();
+    }
+
     private void close() {
 
         ScreenHelper.hideSoftKeyboard(getBaseActivity());

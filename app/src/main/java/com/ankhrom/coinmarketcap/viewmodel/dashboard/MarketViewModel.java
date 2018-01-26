@@ -66,7 +66,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             return;
         }
 
-        headerTitle.set(getContext().getString(R.string.app_name));
+        headerTitle.set("Coin Market Cap");
         isLoading.set(true);
 
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
@@ -324,7 +324,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                     changeState(state);
                     isLoading.set(false);
                 }
-            }, 25);
+            }, 1);
         }
     }
 

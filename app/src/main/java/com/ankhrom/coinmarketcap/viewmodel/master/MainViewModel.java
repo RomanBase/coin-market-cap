@@ -125,11 +125,6 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
             index = viewModels.size() - 1;
         }
 
-        if (index == 0) { // TODO: 1/5/2018 item swipe listener / fragment state workaround
-            viewModels.remove(0);
-            viewModels.add(0, getFactory().getViewModel(MarketViewModel.class, args));
-        }
-
         AppViewModel vm = viewModels.get(currentPageIndex = index);
 
         currentViewModel.set(vm);
