@@ -38,7 +38,7 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
     public void init(InitArgs args) {
         super.init(args);
 
-        type = args.getArg(ExchangeType.class, ExchangeType.HIT_BTC);
+        type = args.getArg(ExchangeType.class, ExchangeType.NONE);
     }
 
     @Override

@@ -14,16 +14,17 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="settings" />
-
         <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{VM::onHitBTCPressed}"
             android:text="HitBTC" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{VM::onBinancePressed}"
+            android:text="Binance" />
 
     </LinearLayout>
 </layout>

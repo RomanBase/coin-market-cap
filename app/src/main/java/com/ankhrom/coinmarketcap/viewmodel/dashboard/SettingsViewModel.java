@@ -3,6 +3,7 @@ package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 import android.view.View;
 
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
@@ -25,7 +26,12 @@ public class SettingsViewModel extends AppViewModel {
 
     public void onHitBTCPressed(View view) {
 
-        addViewModel(ThirdPartyLoginViewModel.class);
+        addViewModel(ThirdPartyLoginViewModel.class, ExchangeType.HIT_BTC);
+    }
+
+    public void onBinancePressed(View view){
+
+        addViewModel(ThirdPartyLoginViewModel.class, ExchangeType.BINANCE);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.util.Base64;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.ankhrom.base.common.statics.StringHelper;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
@@ -135,9 +136,22 @@ public class RequestBuilder {
         return this;
     }
 
+    public RequestBuilder queryUrl() {
+
+        url = getUrl(true);
+        params = null;
+
+        return this;
+    }
+
     public String getUrl() {
 
-        if (modifyRequired() && params != null) {
+        return getUrl(false);
+    }
+
+    public String getUrl(boolean queryParams) {
+
+        if ((modifyRequired() || queryParams) && params != null) {
             StringBuilder builder = new StringBuilder(url);
             builder.append(url.contains("?") ? "&" : "?");
             for (Map.Entry<String, String> param : params.entrySet()) {
@@ -157,6 +171,13 @@ public class RequestBuilder {
     public Map<String, String> getParams() {
 
         return modifyRequired() ? null : params;
+    }
+
+    public String queryParams() {
+
+        String url = getUrl();
+
+        return (params == null || !url.contains("?")) ? StringHelper.EMPTY : url.substring(url.indexOf("?") + 1);
     }
 
     private boolean isForm() {

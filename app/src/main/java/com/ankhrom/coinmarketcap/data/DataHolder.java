@@ -5,10 +5,14 @@ import android.support.annotation.Nullable;
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
+import com.ankhrom.coinmarketcap.BuildConfig;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
+import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
+import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
 import java.util.ArrayList;
@@ -38,10 +42,21 @@ public class DataHolder { //todo cache
 
     public static DataHolder init(ObjectFactory factory) {
 
+        debugExchanges(factory.get(ExchangePrefs.class));
+
         DataHolder holder = new DataHolder(factory);
         holder.fetchData();
 
         return holder;
+    }
+
+    private static void debugExchanges(ExchangePrefs prefs) {
+
+        if (BuildConfig.DEBUG) {
+
+            prefs.setAuth(ExchangeType.HIT_BTC, new AuthCredentials("252d13df5fb7d277c6c6de185c18bb65:6c60036d5a2655be6e988af8fa385be0"));
+            prefs.setAuth(ExchangeType.BINANCE, new AuthCredentials("dqCaO566NUtorPE0IR6IdeSY8TY1F49AOTHqqfb4vA2SAh5oadMxzzpW4ooPjHG4:yl5rlhffiPqcA2c1TahjfABYJs2FkQzsHijJozBuYYog6hnLulbdWGH11rJXvgNA"));
+        }
     }
 
     protected void fetchData() {

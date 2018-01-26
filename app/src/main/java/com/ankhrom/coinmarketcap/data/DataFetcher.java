@@ -1,10 +1,16 @@
 package com.ankhrom.coinmarketcap.data;
 
+import android.support.annotation.Nullable;
+
 import com.android.volley.VolleyError;
 import com.ankhrom.base.Base;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
+import com.ankhrom.binance.BinFilter;
+import com.ankhrom.binance.Binance;
+import com.ankhrom.binance.entity.BinAccount;
+import com.ankhrom.binance.entity.BinBalance;
 import com.ankhrom.coinmarketcap.api.ApiParam;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
@@ -37,6 +43,7 @@ public class DataFetcher {
     private boolean loadingMarket;
 
     private boolean loadingHitBTC;
+    private boolean loadingBinance;
 
     public DataFetcher(ObjectFactory factory) {
         this.factory = factory;
@@ -123,6 +130,9 @@ public class DataFetcher {
             case HIT_BTC:
                 requestHitBTCPortfolio(credentials);
                 break;
+            case BINANCE:
+                requestBinancePortfolio(credentials);
+                break;
         }
     }
 
@@ -131,7 +141,7 @@ public class DataFetcher {
         // TODO: 1/21/2018 waiting for keys
     }
 
-    private void requestHitBTCPortfolio(AuthCredentials credentials) { // 252d13df5fb7d277c6c6de185c18bb65:6c60036d5a2655be6e988af8fa385be0
+    private void requestHitBTCPortfolio(AuthCredentials credentials) {
 
         if (loadingHitBTC) {
             return;
@@ -145,6 +155,21 @@ public class DataFetcher {
 
         hitBTC.balanceAccount(hitBalanceListener);
         hitBTC.balanceTrading(hitBalanceListener);
+    }
+
+    private void requestBinancePortfolio(AuthCredentials credentials) {
+
+        if (loadingBinance) {
+            return;
+        }
+
+        loadingBinance = true;
+
+        Binance binance = Binance.init(factory.getContext()).auth(credentials.key, credentials.secret);
+
+        factory.get(UserPrefs.class).setPortfolio(ExchangeType.BINANCE, null);
+
+        binance.getAccountData(binanceAcountListener);
     }
 
     private void notifyListeners(boolean isValid) {
@@ -225,6 +250,7 @@ public class DataFetcher {
             response = HitFilter.filterZeroBalance(response);
 
             if (response.isEmpty()) {
+                loadingHitBTC = false;
                 return;
             }
 
@@ -233,23 +259,7 @@ public class DataFetcher {
 
             for (HitBalance balance : response) {
 
-                CoinItem coin = holder.getCoinBySymbol(balance.currency);
-
-                if (coin == null) {
-                    continue;
-                }
-
-                PortfolioItem item = new PortfolioItem();
-                item.coinId = coin.id;
-                item.amount = Double.parseDouble(balance.available) + Double.parseDouble(balance.reserved);
-                item.exchange = ExchangeType.HIT_BTC;
-
-                PortfolioCoin portfolio = new PortfolioCoin();
-                portfolio.coinId = coin.id;
-                portfolio.items = new ArrayList<>();
-                portfolio.items.add(item);
-
-                prefs.addPortfolioCoin(portfolio, ExchangeType.HIT_BTC);
+                addPortfolioCurrency(prefs, holder.getCoinBySymbol(balance.currency), Double.parseDouble(balance.available) + Double.parseDouble(balance.reserved));
             }
 
             loadingHitBTC = false;
@@ -261,4 +271,53 @@ public class DataFetcher {
             loadingHitBTC = false;
         }
     };
+
+    private final ResponseListener<BinAccount> binanceAcountListener = new ResponseListener<BinAccount>() {
+        @Override
+        public void onResponse(BinAccount response) {
+
+            List<BinBalance> balances = BinFilter.filterZeroBalance(response.balances);
+
+            if (balances.isEmpty()) {
+                loadingBinance = false;
+                return;
+            }
+
+            final DataHolder holder = factory.get(DataHolder.class);
+            final UserPrefs prefs = factory.get(UserPrefs.class);
+
+            for (BinBalance balance : balances) {
+
+                addPortfolioCurrency(prefs, holder.getCoinBySymbol(balance.currency), Double.parseDouble(balance.available));
+            }
+
+            loadingBinance = false;
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            loadingBinance = false;
+        }
+    };
+
+    private void addPortfolioCurrency(UserPrefs prefs, @Nullable CoinItem coin, double amount) {
+
+        if (coin == null) {
+            return;
+        }
+
+        PortfolioItem item = new PortfolioItem();
+        item.coinId = coin.id;
+        item.amount = amount;
+        item.exchange = ExchangeType.HIT_BTC;
+
+        PortfolioCoin portfolio = new PortfolioCoin();
+        portfolio.coinId = coin.id;
+        portfolio.items = new ArrayList<>();
+        portfolio.items.add(item);
+
+        prefs.addPortfolioCoin(portfolio, ExchangeType.HIT_BTC);
+    }
+
 }
