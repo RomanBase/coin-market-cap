@@ -17,7 +17,7 @@ import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
-import com.ankhrom.coinmarketcap.data.DataLoadingListener;
+import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;

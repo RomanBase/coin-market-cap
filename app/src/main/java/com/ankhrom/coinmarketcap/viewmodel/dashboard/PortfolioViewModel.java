@@ -9,7 +9,7 @@ import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.data.DataHolder;
-import com.ankhrom.coinmarketcap.data.DataLoadingListener;
+import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPageBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.entity.CoinItem;

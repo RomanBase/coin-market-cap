@@ -1,4 +1,6 @@
-package com.ankhrom.coinmarketcap.data;
+package com.ankhrom.coinmarketcap.listener;
+
+import com.ankhrom.coinmarketcap.data.DataHolder;
 
 /**
  * Created by R' on 12/31/2017.

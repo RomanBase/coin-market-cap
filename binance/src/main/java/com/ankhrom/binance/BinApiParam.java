@@ -12,5 +12,5 @@ public class BinApiParam {
     public static final String VALID_DELAY = "recvWindow";
     public static final String SIGNATURE = "signature";
 
-    public static final String MAX_DELAY = "7500";
+    public static final String MAX_DELAY = "100000";
 }

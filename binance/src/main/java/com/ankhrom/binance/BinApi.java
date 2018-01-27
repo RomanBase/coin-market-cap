@@ -33,7 +33,7 @@ public class BinApi {
 
         return builder
                 .header(BinApiParam.API_KEY, apiKey)
-                .param(BinApiParam.TIMESTAMP, String.valueOf(System.currentTimeMillis() - 1500))
+                .param(BinApiParam.TIMESTAMP, String.valueOf(System.currentTimeMillis() - 1000))
                 .param(BinApiParam.VALID_DELAY, BinApiParam.MAX_DELAY)
                 .param(BinApiParam.SIGNATURE, getSignature(builder.queryParams()));
     }

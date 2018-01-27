@@ -19,6 +19,8 @@ import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.listener.DataExchangeLoadingListener;
+import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.hitbtc.HitBTC;
@@ -38,6 +40,7 @@ public class DataFetcher {
     private final ObjectFactory factory;
 
     private List<DataLoadingListener> listeners;
+    private List<DataExchangeLoadingListener> exchangeListeners;
 
     private boolean loadingCoins;
     private boolean loadingMarket;
@@ -49,6 +52,7 @@ public class DataFetcher {
         this.factory = factory;
 
         listeners = new ArrayList<>();
+        exchangeListeners = new ArrayList<>();
     }
 
     private UserPrefs getUserPrefs() {
@@ -91,6 +95,24 @@ public class DataFetcher {
         }
 
         listeners.remove(listener);
+    }
+
+    public void addExchangeListener(DataExchangeLoadingListener listener) {
+
+        if (exchangeListeners.contains(listener)) {
+            return;
+        }
+
+        exchangeListeners.add(listener);
+    }
+
+    public void removeExchangeListener(DataExchangeLoadingListener listener) {
+
+        if (!exchangeListeners.contains(listener)) {
+            return;
+        }
+
+        exchangeListeners.remove(listener);
     }
 
     public void requestCoins() {
@@ -148,9 +170,21 @@ public class DataFetcher {
         }
     }
 
-    private void requestEtoroPortfolio() {
+    public boolean isLoading() {
 
-        // TODO: 1/21/2018 waiting for keys
+        return loadingMarket || loadingCoins;
+    }
+
+    public boolean isLoading(ExchangeType exchange) {
+
+        switch (exchange) {
+            case HIT_BTC:
+                return loadingHitBTC;
+            case BINANCE:
+                return loadingBinance;
+            default:
+                return loadingCoins || loadingMarket;
+        }
     }
 
     private void requestHitBTCPortfolio(AuthCredentials credentials) {
@@ -160,6 +194,7 @@ public class DataFetcher {
         }
 
         loadingHitBTC = true;
+        notifyExchangeListeners(ExchangeType.HIT_BTC, true, false);
 
         HitBTC hitBTC = HitBTC.init(factory.getRequestQueue()).auth(credentials.key, credentials.secret);
 
@@ -176,6 +211,7 @@ public class DataFetcher {
         }
 
         loadingBinance = true;
+        notifyExchangeListeners(ExchangeType.BINANCE, true, false);
 
         Binance binance = Binance.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
@@ -200,6 +236,14 @@ public class DataFetcher {
             } else {
                 listener.onDataLoadingFailed(isLoading, holder);
             }
+        }
+    }
+
+    private void notifyExchangeListeners(ExchangeType exchange, boolean isLoading, boolean isValid) {
+
+        for (DataExchangeLoadingListener listener : exchangeListeners) {
+
+            listener.onExchangeLoading(exchange, isLoading, isValid);
         }
     }
 
@@ -265,6 +309,7 @@ public class DataFetcher {
 
             if (response.isEmpty()) {
                 loadingHitBTC = false;
+                notifyExchangeListeners(ExchangeType.HIT_BTC, false, true);
                 return;
             }
 
@@ -277,12 +322,14 @@ public class DataFetcher {
             }
 
             loadingHitBTC = false;
+            notifyExchangeListeners(ExchangeType.HIT_BTC, false, true);
         }
 
         @Override
         public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
             loadingHitBTC = false;
+            notifyExchangeListeners(ExchangeType.HIT_BTC, false, false);
         }
     };
 
@@ -296,6 +343,7 @@ public class DataFetcher {
 
             if (balances.isEmpty()) {
                 loadingBinance = false;
+                notifyExchangeListeners(ExchangeType.BINANCE, false, true);
                 return;
             }
 
@@ -308,12 +356,15 @@ public class DataFetcher {
             }
 
             loadingBinance = false;
+            notifyExchangeListeners(ExchangeType.BINANCE, false, true);
         }
 
         @Override
         public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
+            Base.logE(new String(error.networkResponse.data));
             loadingBinance = false;
+            notifyExchangeListeners(ExchangeType.BINANCE, false, false);
         }
     };
 
