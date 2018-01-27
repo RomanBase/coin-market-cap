@@ -6,6 +6,8 @@
         <variable
             name="VM"
             type="com.ankhrom.coinmarketcap.viewmodel.dialog.QRViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
@@ -23,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/popup_background_color"
-            android:padding="@dimen/base_padding">
+            android:padding="@dimen/base_padding"
+            android:visibility="@{VM.showTooltip ? View.VISIBLE : View.GONE}">
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"

@@ -49,8 +49,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
-                    android:onClick="@{VM::onRequestFreaturePressed}"
-                    android:text="request feature" />
+                    android:onClick="@{VM::onFeatureRequestPressed}"
+                    android:text="feature request" />
 
                 <include layout="@layout/horizontal_separator" />
 

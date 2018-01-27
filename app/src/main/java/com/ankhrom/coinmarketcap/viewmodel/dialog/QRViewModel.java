@@ -1,5 +1,6 @@
 package com.ankhrom.coinmarketcap.viewmodel.dialog;
 
+import android.databinding.ObservableBoolean;
 import android.view.View;
 
 import com.ankhrom.base.common.statics.FragmentHelper;
@@ -25,6 +26,8 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, Model> imple
     private int requestCode;
     private OnQRHandledListener listener;
 
+    public final ObservableBoolean showTooltip = new ObservableBoolean();
+
     @Override
     public void init(InitArgs args) {
         super.init(args);
@@ -32,6 +35,8 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, Model> imple
         Integer code = args.getArg(Integer.class);
         requestCode = code == null ? -1 : code;
         listener = args.getArg(OnQRHandledListener.class);
+
+        showTooltip.set(requestCode > -1);
     }
 
     public void setOnQRHandledListener(int requestCode, OnQRHandledListener listener) {

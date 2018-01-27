@@ -14,6 +14,7 @@ import com.ankhrom.coinmarketcap.model.settings.SettingsExchangeItemModel;
 import com.ankhrom.coinmarketcap.model.settings.SettingsModel;
 import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dialog.FeatureRequestViewModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,8 +106,9 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
         addViewModel(ThirdPartyLoginViewModel.class, model.type);
     }
 
-    public void onRequestFreaturePressed(View view) {
+    public void onFeatureRequestPressed(View view) {
 
+        addViewModel(FeatureRequestViewModel.class);
     }
 
     public void onDonatePressed(View view) {

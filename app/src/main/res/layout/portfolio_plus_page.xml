@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/base_padding"
-            app:cardCornerRadius="@dimen/popup_corner_cadius"
+            app:cardCornerRadius="@dimen/popup_corner_radius"
             app:cardElevation="0dp">
 
             <LinearLayout
