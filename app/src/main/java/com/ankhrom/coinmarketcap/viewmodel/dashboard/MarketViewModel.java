@@ -189,6 +189,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             return;
         }
 
+        model.setOnItemSelectedListener(itemSelectedListener);
+
         this.model.adapter.add(model);
 
         toggleItemFavouriteState(model);

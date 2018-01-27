@@ -114,6 +114,14 @@ public class DataHolder { //todo cache
             for (CoinItemModel item : coinItems) {
                 item.isFavourite.set(favs.contains(item.coin.id));
             }
+
+            List<CoinItemModel> favItems = getFavouriteCoinItems();
+
+            for (CoinItemModel item : favItems) {
+                if (!coinItems.contains(item)) {
+                    coinItems.add(item);
+                }
+            }
         }
 
         return coinItems;
@@ -127,10 +135,22 @@ public class DataHolder { //todo cache
         List<CoinItemModel> output = new ArrayList<>();
 
         for (String id : favs) {
+
+            boolean found = false;
+
             for (CoinItemModel coin : items) {
                 if (coin.coin.id.equals(id)) {
                     output.add(coin);
+                    found = true;
                     break;
+                }
+            }
+
+            if (!found) {
+                CoinItemModel coin = getCoinItem(id);
+                if (coin != null) {
+                    coin.isFavourite.set(true);
+                    output.add(coin);
                 }
             }
         }
@@ -161,12 +181,19 @@ public class DataHolder { //todo cache
         return null;
     }
 
+    @Nullable
     public CoinItemModel getCoinItem(String id) {
 
         for (CoinItemModel coin : coinItems) {
             if (coin.coin.id.equals(id)) {
                 return coin;
             }
+        }
+
+        CoinItem coin = getCoin(id);
+
+        if (coin != null) {
+            return new CoinItemModel(coin);
         }
 
         return null;
