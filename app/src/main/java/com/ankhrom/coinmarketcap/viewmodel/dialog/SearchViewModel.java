@@ -86,6 +86,7 @@ public class SearchViewModel extends AppViewModel<SearchPageBinding, SearchAdapt
     public void onClosePressed(View view) {
 
         ScreenHelper.hideSoftKeyboard(getBaseActivity());
+
         getNavigation().setPreviousViewModel();
         FragmentHelper.removePage(getContext(), this);
     }

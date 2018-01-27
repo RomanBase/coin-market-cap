@@ -185,6 +185,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
     public void onSearchPressed(View view) {
 
+        ScreenHelper.hideSoftKeyboard(getBaseActivity());
         addViewModel(SearchViewModel.class, this);
     }
 

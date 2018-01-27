@@ -2,6 +2,7 @@ package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
 import android.view.View;
 
+import com.ankhrom.base.common.statics.ScreenHelper;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
@@ -162,6 +163,8 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
     };
 
     public void onSearchPressed(View view) {
+
+        ScreenHelper.hideSoftKeyboard(getBaseActivity());
 
         addViewModel(SearchViewModel.class, this);
     }
