@@ -17,8 +17,6 @@ public final class ExchangeTypeRes {
                 return R.drawable.ic_hit_btc;
             case BINANCE:
                 return R.drawable.ic_binance;
-            case ETORO:
-                return R.drawable.ic_logo;
             default:
                 return R.drawable.ic_logo;
         }

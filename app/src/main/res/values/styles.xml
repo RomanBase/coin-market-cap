@@ -27,4 +27,13 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="AppTheme.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+
+        <item name="android:textColor">@color/text_hint_color</item>
+        <item name="android:color">@color/text_hint_color</item>
+        <item name="colorControlNormal">@color/text_hint_color</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+
+    </style>
+
 </resources>

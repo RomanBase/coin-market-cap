@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="M"
+            type="com.ankhrom.coinmarketcap.model.settings.SettingsExchangeItemModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{M::onItemSelected}"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/base_half_padding"
+        android:paddingTop="@dimen/base_half_padding">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="128dp"
+            android:layout_height="56dp"
+            android:scaleType="center"
+            app:imageResource="@{M.icon}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/base_padding"
+            android:paddingRight="@dimen/base_padding">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Sync Time"
+                android:textColor="@color/text_hint_color"
+                android:textSize="@dimen/text_size_small" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="asdfasdf"
+                android:textColor="@color/text_hint_color" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

@@ -183,7 +183,7 @@ public class UserPrefs extends BasePrefs {
         return new Gson().fromJson(getPrefs().getString(getExchangePrefKey(exchange), DEFAULT_JSON_LIST), type);
     }
 
-    public void addPortfolioCoin(PortfolioCoin coin, ExchangeType exchange) {
+    public void addPortfolioCoin(PortfolioCoin coin, ExchangeType exchange) { // TODO: 1/26/2018 performance
 
         List<PortfolioCoin> portfolio = getPortfolio(exchange);
 

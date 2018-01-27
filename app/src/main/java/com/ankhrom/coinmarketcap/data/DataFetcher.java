@@ -124,9 +124,6 @@ public class DataFetcher {
         }
 
         switch (exchange) {
-            case ETORO:
-                requestEtoroPortfolio();
-                break;
             case HIT_BTC:
                 requestHitBTCPortfolio(credentials);
                 break;
@@ -153,7 +150,7 @@ public class DataFetcher {
 
         factory.get(UserPrefs.class).setPortfolio(ExchangeType.HIT_BTC, null);
 
-        hitBTC.balanceAccount(hitBalanceListener);
+        //hitBTC.balanceAccount(hitBalanceListener);
         hitBTC.balanceTrading(hitBalanceListener);
     }
 
