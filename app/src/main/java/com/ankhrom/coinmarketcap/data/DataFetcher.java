@@ -51,6 +51,21 @@ public class DataFetcher {
         listeners = new ArrayList<>();
     }
 
+    private UserPrefs getUserPrefs() {
+
+        return factory.get(UserPrefs.class);
+    }
+
+    private ExchangePrefs getExchangePrefs() {
+
+        return factory.get(ExchangePrefs.class);
+    }
+
+    private DataHolder getDataHolder() {
+
+        return factory.get(DataHolder.class);
+    }
+
     public void addListener(final DataLoadingListener listener) {
 
         if (!loadingCoins && !loadingMarket) {
@@ -59,7 +74,7 @@ public class DataFetcher {
                 public void run() {
                     listener.onDataLoading(false, factory.get(DataHolder.class));
                 }
-            }, 25);
+            }, 1);
         }
 
         if (listeners.contains(listener)) {
@@ -84,7 +99,7 @@ public class DataFetcher {
         notifyListeners(true);
 
         RequestBuilder.get(ApiUrl.TICKER)
-                .param(ApiParam.CURRENCY, factory.get(UserPrefs.class).getCurrency())
+                .param(ApiParam.CURRENCY, getUserPrefs().getCurrency())
                 .param(ApiParam.COUNT, ApiParam.COUNT_VALUE)
                 .listener(coinsListener)
                 .asGson(new TypeToken<List<CoinItem>>() {
@@ -98,7 +113,7 @@ public class DataFetcher {
         notifyListeners(true);
 
         RequestBuilder.get(ApiUrl.GLOBAL)
-                .param(ApiParam.CURRENCY, factory.get(UserPrefs.class).getCurrency())
+                .param(ApiParam.CURRENCY, getUserPrefs().getCurrency())
                 .param(ApiParam.COUNT, ApiParam.COUNT_VALUE)
                 .listener(marketListener)
                 .asGson(MarketData.class)
@@ -114,7 +129,7 @@ public class DataFetcher {
 
     public void requestExchangePortfolio(ExchangeType exchange) {
 
-        requestExchangePortfolio(exchange, factory.get(ExchangePrefs.class).getAuth(exchange));
+        requestExchangePortfolio(exchange, getExchangePrefs().getAuth(exchange));
     }
 
     public void requestExchangePortfolio(ExchangeType exchange, AuthCredentials credentials) {
@@ -148,7 +163,7 @@ public class DataFetcher {
 
         HitBTC hitBTC = HitBTC.init(factory.getRequestQueue()).auth(credentials.key, credentials.secret);
 
-        factory.get(UserPrefs.class).setPortfolio(ExchangeType.HIT_BTC, null);
+        getUserPrefs().setPortfolio(ExchangeType.HIT_BTC, null);
 
         //hitBTC.balanceAccount(hitBalanceListener);
         hitBTC.balanceTrading(hitBalanceListener);
@@ -164,7 +179,7 @@ public class DataFetcher {
 
         Binance binance = Binance.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
-        factory.get(UserPrefs.class).setPortfolio(ExchangeType.BINANCE, null);
+        getUserPrefs().setPortfolio(ExchangeType.BINANCE, null);
 
         binance.getAccountData(binanceAcountListener);
     }
@@ -199,7 +214,7 @@ public class DataFetcher {
                 return;
             }
 
-            factory.get(DataHolder.class).updateCoins(response);
+            getDataHolder().updateCoins(response);
 
             notifyListeners(true);
 
@@ -226,7 +241,7 @@ public class DataFetcher {
                 return;
             }
 
-            factory.get(DataHolder.class).updateMarket(response);
+            getDataHolder().updateMarket(response);
 
             notifyListeners(true);
         }
@@ -244,6 +259,8 @@ public class DataFetcher {
         @Override
         public void onResponse(List<HitBalance> response) {
 
+            getExchangePrefs().setTimestamp(ExchangeType.HIT_BTC, System.currentTimeMillis());
+
             response = HitFilter.filterZeroBalance(response);
 
             if (response.isEmpty()) {
@@ -251,8 +268,8 @@ public class DataFetcher {
                 return;
             }
 
-            final DataHolder holder = factory.get(DataHolder.class);
-            final UserPrefs prefs = factory.get(UserPrefs.class);
+            final DataHolder holder = getDataHolder();
+            final UserPrefs prefs = getUserPrefs();
 
             for (HitBalance balance : response) {
 
@@ -273,6 +290,8 @@ public class DataFetcher {
         @Override
         public void onResponse(BinAccount response) {
 
+            getExchangePrefs().setTimestamp(ExchangeType.BINANCE, System.currentTimeMillis());
+
             List<BinBalance> balances = BinFilter.filterZeroBalance(response.balances);
 
             if (balances.isEmpty()) {
@@ -280,8 +299,8 @@ public class DataFetcher {
                 return;
             }
 
-            final DataHolder holder = factory.get(DataHolder.class);
-            final UserPrefs prefs = factory.get(UserPrefs.class);
+            final DataHolder holder = getDataHolder();
+            final UserPrefs prefs = getUserPrefs();
 
             for (BinBalance balance : balances) {
 

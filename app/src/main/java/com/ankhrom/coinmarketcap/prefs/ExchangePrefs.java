@@ -56,4 +56,14 @@ public class ExchangePrefs extends BasePrefs {
 
         return new Gson().fromJson(new String(Base64.decode(getPrefs().getString(Base64.encodeToString(type.name().getBytes(), Base64.DEFAULT), Base64.encodeToString(DEFAULT_JSON.getBytes(), Base64.DEFAULT)), Base64.DEFAULT)), AuthCredentials.class);
     }
+
+    public void setTimestamp(ExchangeType type, long timestamp) {
+
+        edit().putLong(type.name(), timestamp).apply();
+    }
+
+    public long getTimestamp(ExchangeType type) {
+
+        return getPrefs().getLong(type.name(), -1);
+    }
 }

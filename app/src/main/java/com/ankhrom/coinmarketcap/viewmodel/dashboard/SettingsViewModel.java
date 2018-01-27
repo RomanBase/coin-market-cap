@@ -7,13 +7,16 @@ import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.SettingsPageBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
+import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.model.settings.SettingsExchangeItemModel;
 import com.ankhrom.coinmarketcap.model.settings.SettingsModel;
 import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by R' on 1/1/2018.
@@ -36,16 +39,28 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
         System.arraycopy(ExchangeType.values(), 1, types, 0, types.length);
 
         for (ExchangeType type : types) {
+
             AuthCredentials credentials = getExchangePrefs().getAuth(type);
+            List<PortfolioCoin> coins = getUserPrefs().getPortfolio(type);
 
             SettingsExchangeItemModel item = new SettingsExchangeItemModel(type);
             item.setOnItemSelectedListener(this);
 
-            if (credentials.isValid()) {
-                item.state.set("last sync time");
-                item.note.set("");
-            } else {
+            long timestamp = getExchangePrefs().getTimestamp(type);
 
+            if (timestamp > 0) {
+
+                item.note.set(new Date(timestamp).toLocaleString());
+
+                if (credentials.isValid()) {
+                    item.state.set(String.format(Locale.US, "active (%s)", coins.size()));
+                } else {
+                    item.state.set(String.format(Locale.US, "sync once (%s)", coins.size()));
+                }
+
+            } else {
+                item.state.set("inactive");
+                item.note.set("CONNECT");
             }
 
             exchanges.add(item);
