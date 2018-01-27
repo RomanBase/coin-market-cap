@@ -128,6 +128,7 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
         AppViewModel vm = viewModels.get(currentPageIndex = index);
 
         currentViewModel.set(vm);
+        currentViewModel.get().onReceiveArgs(AppCode.STATE, args);
 
         getNavigation().replaceViewModel(vm, R.id.content_container);
     }

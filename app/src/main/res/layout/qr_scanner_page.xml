@@ -28,7 +28,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="scan each field separately or at once with colon separator (key:secret) "
+                android:text="convert text to QR code and then scan each field separately or at once with colon separator (key:secret) "
                 android:textAlignment="center"
                 android:textColor="@color/text_light_color" />
 

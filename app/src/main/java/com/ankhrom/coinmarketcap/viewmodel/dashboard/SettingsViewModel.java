@@ -105,6 +105,14 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
         addViewModel(ThirdPartyLoginViewModel.class, model.type);
     }
 
+    public void onRequestFreaturePressed(View view) {
+
+    }
+
+    public void onDonatePressed(View view) {
+
+    }
+
     @Override
     public int getLayoutResource() {
         return R.layout.settings_page;

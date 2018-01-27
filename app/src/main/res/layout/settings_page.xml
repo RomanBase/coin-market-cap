@@ -24,8 +24,47 @@
 
             <com.ankhrom.base.custom.view.BaseListView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:adapter="@{M.adapter}" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/base_padding"
+                android:layout_marginTop="@dimen/base_padding"
+                android:background="@color/tint_light_color"
+                android:padding="@dimen/base_padding"
+                android:text="Lorem ipsum"
+                android:textAlignment="center" />
+
+            <include layout="@layout/vertical_separator" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{VM::onRequestFreaturePressed}"
+                    android:text="request feature" />
+
+                <include layout="@layout/horizontal_separator" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{VM::onDonatePressed}"
+                    android:text="donate" />
+
+            </LinearLayout>
+
+            <include layout="@layout/vertical_separator" />
 
         </LinearLayout>
 
