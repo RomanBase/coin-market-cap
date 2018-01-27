@@ -30,10 +30,10 @@ public class DonationViewModel extends AppViewModel<DonationPageBinding, Donatio
 
         List<DonationWalletItemModel> items = new ArrayList<>();
 
-        items.add(new DonationWalletItemModel(this, onItemExpandListener, "BTC", getContext().getString(R.string.btc_wallet), R.drawable.ic_logo));
-        items.add(new DonationWalletItemModel(this, onItemExpandListener, "BCH", getContext().getString(R.string.bch_wallet), R.drawable.ic_logo));
-        items.add(new DonationWalletItemModel(this, onItemExpandListener, "ETH", getContext().getString(R.string.eth_wallet), R.drawable.ic_logo));
-        items.add(new DonationWalletItemModel(this, onItemExpandListener, "LTC", getContext().getString(R.string.ltc_wallet), R.drawable.ic_logo));
+        items.add(new DonationWalletItemModel(this, onItemExpandListener, "BTC", getContext().getString(R.string.btc_wallet)));
+        items.add(new DonationWalletItemModel(this, onItemExpandListener, "BCH", getContext().getString(R.string.bch_wallet)));
+        items.add(new DonationWalletItemModel(this, onItemExpandListener, "ETH", getContext().getString(R.string.eth_wallet)));
+        items.add(new DonationWalletItemModel(this, onItemExpandListener, "LTC", getContext().getString(R.string.ltc_wallet)));
 
         setModel(new DonationAdapterModel(getContext(), items));
     }

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:onClick="@{M.onExpandPressed}"
+        android:onClick="@{M::onExpandPressed}"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/base_half_padding"
         android:paddingLeft="@dimen/base_padding"
@@ -44,8 +44,7 @@
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:tint="@color/colorAccent"
-                    app:imageResource="@{M.qr}" />
+                    app:imageBitmap="@{M.qr}" />
 
             </com.ankhrom.coinmarketcap.view.ExpandableFrameLayout>
 
@@ -61,7 +60,7 @@
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{M.onItemSelected}"
+            android:onClick="@{M::onItemSelected}"
             android:src="@drawable/ic_content_copy"
             android:tint="@color/text_hint_color" />
 
