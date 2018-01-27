@@ -14,6 +14,7 @@ import com.ankhrom.coinmarketcap.model.settings.SettingsExchangeItemModel;
 import com.ankhrom.coinmarketcap.model.settings.SettingsModel;
 import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.dialog.DonationViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.FeatureRequestViewModel;
 
 import java.util.ArrayList;
@@ -113,6 +114,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
 
     public void onDonatePressed(View view) {
 
+        addViewModel(DonationViewModel.class);
     }
 
     @Override

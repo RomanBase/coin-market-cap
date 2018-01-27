@@ -133,7 +133,7 @@ public class BaseAnim {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        ? /*ViewGroup.LayoutParams.WRAP_CONTENT*/ targetHeight
                         : (int) (targetHeight * interpolatedTime);
                 v.requestLayout();
             }

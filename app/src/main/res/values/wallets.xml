@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btc_wallet">16DV2VDYdCHvN1xv5YXUwfjNV13gYGotJN</string>
+    <string name="bch_wallet">1DJJTE3tRdLeE4hyj7pYmh3eB76Rf6W16S</string>
+    <string name="eth_wallet">0x28281697eCd0659779A47F599aD236b115Ba4a2F</string>
+    <string name="ltc_wallet">LPdeN7CdN6CuWxa7d9rnFAseFecfpVPnfr</string>
+</resources>
