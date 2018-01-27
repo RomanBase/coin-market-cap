@@ -133,9 +133,14 @@ public class BaseViewModelObserver implements ViewModelObserver, ViewModelNaviga
 
     private void initViewModel(ViewModel viewModel) {
 
-        viewModel.setNavigation(this);
-        viewModel.onInit();
-        viewModel.loadModel();
+        if (!viewModel.isInitialized()) {
+            viewModel.setNavigation(this);
+            viewModel.onInit();
+        }
+
+        if (!viewModel.isModelAvailable()) {
+            viewModel.loadModel();
+        }
     }
 
     private void commitViewModel(FragmentTransactioner.FragmentCommitAnim fragment, ViewModel viewModel, boolean clearBackStack) {
@@ -235,7 +240,7 @@ public class BaseViewModelObserver implements ViewModelObserver, ViewModelNaviga
 
         currentViewModel.onViewStackChanged(false, true);
 
-        if (!currentViewModel.isModelLoaded()) {
+        if (!currentViewModel.isModelAvailable()) {
             currentViewModel.loadModel();
         }
 

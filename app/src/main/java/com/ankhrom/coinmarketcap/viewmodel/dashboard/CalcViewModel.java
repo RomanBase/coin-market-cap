@@ -215,7 +215,6 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
     public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(false);
-        onModelError();
     }
 
     private double parseDouble(String value) {

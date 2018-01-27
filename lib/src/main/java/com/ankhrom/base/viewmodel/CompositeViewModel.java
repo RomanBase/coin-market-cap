@@ -3,7 +3,6 @@ package com.ankhrom.base.viewmodel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +45,13 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
     protected ViewPager.PageTransformer getPageTransformer() {
 
         return new DepthPageRollTransformer();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initViewModels();
     }
 
     public void setCurrentPage(int index) {
@@ -163,9 +169,7 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
         }
     }
 
-    @Override
-    @CallSuper
-    protected void onModelCreated() {
+    protected void initViewModels() {
 
         if (viewModels == null) {
             viewModels = initViews();
@@ -174,7 +178,7 @@ public abstract class CompositeViewModel<S extends ViewDataBinding, T extends Mo
             } else {
                 for (BaseViewModel vm : viewModels) {
                     vm.setNavigation(getNavigation());
-                    if (!vm.isModelLoaded() && !vm.isLoading.get()) {
+                    if (!vm.isModelAvailable() && !vm.isLoading.get()) {
                         vm.onInit();
                         vm.loadModel();
                     }

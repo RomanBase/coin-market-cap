@@ -11,14 +11,19 @@ public interface ViewModel {
     void onInit();
 
     /**
+     * return true if model is initialized
+     * */
+    boolean isInitialized();
+
+    /**
      * loads model structure
      */
     void loadModel();
 
     /**
-     * @return true if model is loaded
-     */
-    boolean isModelLoaded();
+     * return true if model is available
+     * */
+    boolean isModelAvailable();
 
     /**
      * set to true if model is in back stack or false if model is on top of stack
