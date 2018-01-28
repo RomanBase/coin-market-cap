@@ -323,6 +323,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                     }
                 }
             }
+
+            model.adapter.scrollUp();
         }
     }
 

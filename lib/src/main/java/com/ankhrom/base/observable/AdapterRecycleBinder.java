@@ -146,6 +146,25 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         });
     }
 
+    public void scrollTo(int index) {
+
+        if (view == null) {
+            return;
+        }
+
+        view.scrollToPosition(index);
+    }
+
+    public void scrollUp() {
+
+        scrollTo(0);
+    }
+
+    public void scrollDown() {
+
+        scrollTo(getItemCount() - 1);
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
