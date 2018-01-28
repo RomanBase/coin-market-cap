@@ -324,7 +324,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
                 }
             }
 
-            model.adapter.scrollUp();
+            model.adapter.scrollUp(false);
         }
     }
 
@@ -351,8 +351,11 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         super.onReceiveArgs(requestCode, args);
 
         if (requestCode == AppCode.STATE) {
-
             changeState(ArgsHelper.getArg(ListState.class, args, ListState.NORMAL));
+        } else if (requestCode == AppCode.NOTIFY) {
+            if (isModelAvailable()) {
+                model.adapter.scrollUp(false);
+            }
         }
     }
 

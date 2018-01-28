@@ -7,4 +7,5 @@ package com.ankhrom.coinmarketcap;
 public final class AppCode {
 
     public static final int STATE = 9901;
+    public static final int NOTIFY = 9902;
 }

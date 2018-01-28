@@ -70,6 +70,9 @@ public class MainViewModel extends AppViewModel<ActivityMainPageBinding, Model> 
     @Override
     public void onNavigationItemReselected(@NonNull MenuItem item) {
 
+        if (currentViewModel.get() != null) {
+            currentViewModel.get().onReceiveArgs(AppCode.NOTIFY, null);
+        }
     }
 
     @Override

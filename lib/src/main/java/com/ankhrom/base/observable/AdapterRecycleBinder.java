@@ -147,23 +147,27 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         });
     }
 
-    public void scrollTo(int index) {
+    public void scrollTo(int index, boolean animate) {
 
         if (view == null) {
             return;
         }
 
-        view.scrollToPosition(index);
+        if (animate) {
+            view.smoothScrollToPosition(index);
+        } else {
+            view.scrollToPosition(index);
+        }
     }
 
-    public void scrollUp() {
+    public void scrollUp(boolean animate) {
 
-        scrollTo(0);
+        scrollTo(0, animate);
     }
 
-    public void scrollDown() {
+    public void scrollDown(boolean animate) {
 
-        scrollTo(getItemCount() - 1);
+        scrollTo(getItemCount() - 1, animate);
     }
 
     public void addOnDataSetChangedListener(ObservableList.OnListChangedCallback<ObservableList<T>> listener) {
