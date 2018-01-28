@@ -3,6 +3,7 @@ package com.ankhrom.base;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -32,6 +33,37 @@ public class Base {
     public static boolean runOnUiThread(Runnable action, long millisecDelay) {
 
         return new Handler(Looper.getMainLooper()).postAtTime(action, SystemClock.uptimeMillis() + millisecDelay);
+    }
+
+    public static void runInBackground(final Runnable action) {
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                action.run();
+
+                return null;
+            }
+        }.execute();
+    }
+
+    public static void runInBackground(final Runnable action, final Runnable uiAction) {
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                action.run();
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                uiAction.run();
+            }
+        }.execute();
     }
 
     public static void log(Object... args) {

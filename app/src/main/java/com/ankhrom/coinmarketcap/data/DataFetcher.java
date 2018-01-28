@@ -73,12 +73,7 @@ public class DataFetcher {
     public void addListener(final DataLoadingListener listener) {
 
         if (!loadingCoins && !loadingMarket) {
-            Base.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onDataLoading(false, factory.get(DataHolder.class));
-                }
-            }, 1);
+            listener.onDataLoading(false, factory.get(DataHolder.class));
         }
 
         if (listeners.contains(listener)) {
@@ -220,7 +215,7 @@ public class DataFetcher {
         binance.getAccountData(binanceAcountListener);
     }
 
-    private void notifyListeners(boolean isValid) {
+    private void notifyListeners(final boolean isValid) {
 
         if (listeners.size() == 0) {
             return;

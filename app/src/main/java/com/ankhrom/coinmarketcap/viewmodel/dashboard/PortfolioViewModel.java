@@ -1,6 +1,7 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
@@ -34,7 +35,7 @@ import java.util.List;
  * Created by R' on 1/1/2018.
  */
 
-public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener {
+public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Override
     public void onInit() {
@@ -55,6 +56,18 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         prefs.setExchangePortfolioListener(this);
 
         getExchangePrefs().addExchangeAuthListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+
+        isLoading.set(true);
+
+        binding.pullToRefresh.setRefreshing(false);
+        model.adapter.clear();
+
+        DataHolder holder = getDataHolder();
+        holder.reload();
     }
 
     public void onAddPressed(View view) {
@@ -210,12 +223,12 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     @Override
     public void onDataLoading(boolean isLoading, DataHolder holder) {
 
-        this.isLoading.set(isLoading);
-
         if (!isLoading) {
             updatePortfolio(ExchangeType.NONE, getUserPrefs().getPortfolio());
             updateExchanges();
         }
+
+        this.isLoading.set(isLoading);
     }
 
     @Override

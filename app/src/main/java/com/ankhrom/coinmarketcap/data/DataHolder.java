@@ -33,6 +33,8 @@ public class DataHolder { //todo cache
     private final ObjectFactory factory;
     private final DataFetcher fetcher;
 
+    private int itemsCount = 300;
+
     private DataHolder(ObjectFactory factory) {
         this.factory = factory;
 
@@ -107,7 +109,7 @@ public class DataHolder { //todo cache
     public List<CoinItemModel> getCoinItems() {
 
         if (coinItems == null) {
-            coinItems = ObjectHelper.convert(coins.subList(0, Math.min(coins.size(), 100)), new CoinItemConverter());
+            coinItems = ObjectHelper.convert(coins.subList(0, Math.min(coins.size(), itemsCount)), new CoinItemConverter());
 
             List<String> favs = factory.get(UserPrefs.class).getFavourites();
 

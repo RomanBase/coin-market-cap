@@ -2,6 +2,7 @@ package com.ankhrom.coinmarketcap.model.coin;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableFloat;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
@@ -33,7 +34,7 @@ public class CoinItemModel extends SelectableItemModel {
 
     private OnItemSelectedListener<CoinItemModel> itemSelectedLongListener;
 
-    public CoinItemModel(CoinItem item) {
+    public CoinItemModel(@NonNull CoinItem item) {
 
         coin = item;
 

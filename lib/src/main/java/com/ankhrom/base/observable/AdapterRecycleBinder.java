@@ -2,6 +2,7 @@ package com.ankhrom.base.observable;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.ankhrom.base.model.ItemModel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,10 +21,12 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
     private final LayoutInflater inflater;
     private final List<T> items;
 
+    private RecyclerView view;
+
     public AdapterRecycleBinder(Context context) {
 
         inflater = LayoutInflater.from(context);
-        items = new ArrayList<>();
+        items = new ObservableArrayList<>();
     }
 
     public AdapterRecycleBinder(Context context, List<T> items) {
@@ -33,10 +35,17 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         this.items.addAll(items);
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        view = recyclerView;
+    }
+
     public void add(T item) {
 
         items.add(item);
-        notifyItemInserted(items.size() - 1);
+        notifyItemInserted(getItemCount() - 1);
     }
 
     public void add(int index, T item) {
@@ -88,6 +97,53 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
     public List<T> getItems() {
 
         return items;
+    }
+
+    public void post(Runnable runnable) {
+
+        if (view != null) {
+            view.post(runnable);
+        }
+    }
+
+    public void postDataSetChanged() {
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void postItemRemoved(final int index) {
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRemoved(index);
+            }
+        });
+    }
+
+    public void postItemInserted(final int index) {
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemInserted(index);
+            }
+        });
+    }
+
+    public void postItemChanged(final int index) {
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(index);
+            }
+        });
     }
 
     @Override

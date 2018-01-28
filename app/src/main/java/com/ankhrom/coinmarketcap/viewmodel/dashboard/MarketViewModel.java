@@ -7,22 +7,23 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.ankhrom.base.Base;
 import com.ankhrom.base.common.statics.ArgsHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
+import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.AppCode;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
-import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
+import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
+import com.ankhrom.coinmarketcap.model.coin.CoinAdapterFooterItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
@@ -66,6 +67,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             return;
         }
 
+        setModel(new CoinsAdapterModel(getContext()));
+
         headerTitle.set("Coin Market Cap");
         isLoading.set(true);
 
@@ -98,6 +101,13 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         addViewModel(SearchViewModel.class, this);
     }
+
+    private final OnItemSelectedListener onSearchSelected = new OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(View view, ItemModel model) {
+            onSearchPressed(view);
+        }
+    };
 
     private void attachSwipeListener() {
 
@@ -191,7 +201,23 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         model.setOnItemSelectedListener(itemSelectedListener);
 
-        this.model.adapter.add(model);
+        List<ItemModel> items = this.model.adapter.getItems();
+        int count = items.size();
+
+        for (int i = 0; i < count; i++) {
+
+            ItemModel item = items.get(i);
+
+            if (item instanceof CoinItemModel) {
+                if (Integer.parseInt(coin.rank) < Integer.parseInt(((CoinItemModel) item).coin.rank)) {
+                    this.model.adapter.add(i, model);
+                    break;
+                }
+            } else {
+                this.model.adapter.add(i, model);
+                break;
+            }
+        }
 
         toggleItemFavouriteState(model);
     }
@@ -204,7 +230,13 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         if (index > -1) {
 
-            activeItem = model.adapter.get(index);
+            ItemModel item = model.adapter.get(index);
+
+            if (item instanceof CoinItemModel) {
+
+                activeItem = (CoinItemModel) item;
+            }
+
             return;
         }
 
@@ -240,14 +272,14 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
     }
 
-    protected void setMarketData(MarketData market) {
+    protected void setMarketData(final MarketData market) {
 
         headerSubTitle.set(new Date(market.timestamp * 1000).toLocaleString());
         headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
         headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " | " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }
 
-    protected void updateModel(DataHolder holder) {
+    protected void updateModel(final DataHolder holder) {
 
         List<CoinItemModel> items = holder.getCoinItems();
         List<CoinItemModel> favs = holder.getFavouriteCoinItems();
@@ -264,8 +296,10 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             }
 
             setModel(new CoinsAdapterModel(getContext(), items));
-        } else {
 
+            model.adapter.add(new CoinAdapterFooterItemModel(onSearchSelected));
+
+        } else {
             int count = items.size();
             for (int i = 0; i < count; i++) {
                 CoinItemModel item = items.get(i);
@@ -295,13 +329,13 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     @Override
     public void onDataLoading(boolean isLoading, DataHolder holder) {
 
-        this.isLoading.set(isLoading);
-
         if (!isLoading) {
 
             setMarketData(holder.getMarket());
             updateModel(holder);
         }
+
+        this.isLoading.set(isLoading);
     }
 
     @Override
@@ -314,19 +348,9 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     public void onReceiveArgs(int requestCode, Object[] args) {
         super.onReceiveArgs(requestCode, args);
 
-        final ListState state = ArgsHelper.getArg(ListState.class, args, ListState.NORMAL);
-
         if (requestCode == AppCode.STATE) {
 
-            isLoading.set(true);
-
-            Base.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    changeState(state);
-                    isLoading.set(false);
-                }
-            }, 1);
+            changeState(ArgsHelper.getArg(ListState.class, args, ListState.NORMAL));
         }
     }
 

@@ -29,33 +29,43 @@
 
             <include layout="@layout/portfolio_header_view" />
 
-            <android.support.v4.widget.NestedScrollView
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/pull_to_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:onRefreshListener="@{VM}">
 
-                <LinearLayout
+                <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
 
-                    <com.ankhrom.base.custom.view.BaseListView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:adapter="@{M.adapter}" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                    <android.support.v4.widget.Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="96dp" />
+                        <com.ankhrom.base.custom.view.BaseListView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:adapter="@{M.adapter}" />
 
-                </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
+                        <android.support.v4.widget.Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="96dp" />
+
+                    </LinearLayout>
+                </android.support.v4.widget.NestedScrollView>
+            </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Start with +"
+            android:padding="@dimen/extended_padding"
+            android:text="Add virtual portfolio or connect to Exchange."
+            android:textAlignment="center"
+            android:textColor="@color/text_hint_color"
             android:visibility="@{M.isEmpty ? View.VISIBLE : View.GONE}" />
 
         <android.support.design.widget.FloatingActionButton
