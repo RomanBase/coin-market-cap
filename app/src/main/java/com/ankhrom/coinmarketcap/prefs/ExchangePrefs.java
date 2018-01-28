@@ -11,6 +11,9 @@ import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by romanhornak on 1/4/18.
  */
@@ -19,24 +22,35 @@ public class ExchangePrefs extends BasePrefs {
 
     private static final String PREFS = "exchange";
 
-    private OnExchangeAuthChangedListener listener;
+    private List<OnExchangeAuthChangedListener> listeners;
 
     public ExchangePrefs(@NonNull Context context) {
         super(context);
+
+        listeners = new ArrayList<>();
     }
 
-    public void setExchangeAuthListener(OnExchangeAuthChangedListener listener) {
-        this.listener = listener;
+    public void addExchangeAuthListener(OnExchangeAuthChangedListener listener) {
+
+        if (listeners.contains(listener)) {
+            return;
+        }
+
+        listeners.add(listener);
     }
 
-    @Override
-    protected String getPrefsName() {
-        return PREFS;
+    public void removeExchangeAuthListener(OnExchangeAuthChangedListener listener) {
+
+        listeners.remove(listener);
     }
 
     public void setAuth(ExchangeType type, @Nullable AuthCredentials credentials) {
 
-        if (listener != null) {
+        if (credentials == null) {
+            setTimestamp(type, -1);
+        }
+
+        for (OnExchangeAuthChangedListener listener : listeners) {
             listener.onExchangeAuthChanged(type, credentials);
         }
 
@@ -65,5 +79,10 @@ public class ExchangePrefs extends BasePrefs {
     public long getTimestamp(ExchangeType type) {
 
         return getPrefs().getLong(type.name(), -1);
+    }
+
+    @Override
+    protected String getPrefsName() {
+        return PREFS;
     }
 }

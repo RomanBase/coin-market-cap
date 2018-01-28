@@ -54,7 +54,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         prefs.setPortfolioChangedListener(this);
         prefs.setExchangePortfolioListener(this);
 
-        getExchangePrefs().setExchangeAuthListener(this);
+        getExchangePrefs().addExchangeAuthListener(this);
     }
 
     public void onAddPressed(View view) {

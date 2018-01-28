@@ -1,5 +1,6 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
@@ -10,6 +11,7 @@ import com.ankhrom.coinmarketcap.databinding.SettingsPageBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.listener.DataExchangeLoadingListener;
+import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.ankhrom.coinmarketcap.model.settings.SettingsExchangeItemModel;
 import com.ankhrom.coinmarketcap.model.settings.SettingsModel;
 import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
@@ -26,7 +28,7 @@ import java.util.Locale;
  * Created by R' on 1/1/2018.
  */
 
-public class SettingsViewModel extends AppViewModel<SettingsPageBinding, SettingsModel> implements OnItemSelectedListener<SettingsExchangeItemModel>, DataExchangeLoadingListener {
+public class SettingsViewModel extends AppViewModel<SettingsPageBinding, SettingsModel> implements OnItemSelectedListener<SettingsExchangeItemModel>, DataExchangeLoadingListener, OnExchangeAuthChangedListener {
 
     @Override
     public void onInit() {
@@ -37,6 +39,8 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
         if (model != null) {
             return;
         }
+
+        getExchangePrefs().addExchangeAuthListener(this);
 
         DataFetcher fetcher = getDataHolder().getFetcher();
         fetcher.addExchangeListener(this);
@@ -93,6 +97,25 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
                 if (item.type.equals(exchange)) {
 
                     item.isLoading.set(isLoading);
+                    setExchangeState(item);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onExchangeAuthChanged(ExchangeType type, @Nullable AuthCredentials credentials) {
+
+        if (credentials == null) { //remove
+
+            List<SettingsExchangeItemModel> items = model.adapter.getItems();
+
+            for (SettingsExchangeItemModel item : items) {
+                if (item.type.equals(type)) {
+
+                    item.isLoading.set(false);
                     setExchangeState(item);
 
                     break;
