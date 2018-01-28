@@ -3,6 +3,7 @@ package com.ankhrom.base.observable;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -163,6 +164,16 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
     public void scrollDown() {
 
         scrollTo(getItemCount() - 1);
+    }
+
+    public void addOnDataSetChangedListener(ObservableList.OnListChangedCallback<ObservableList<T>> listener) {
+
+        ((ObservableList<T>) items).addOnListChangedCallback(listener);
+    }
+
+    public void removeOnDataSetChangedListener(ObservableList.OnListChangedCallback<ObservableList<T>> listener) {
+
+        ((ObservableList<T>) items).addOnListChangedCallback(listener);
     }
 
     @Override

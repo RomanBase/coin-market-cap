@@ -11,6 +11,8 @@
         <variable
             name="M"
             type="com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -130,19 +132,55 @@
 
         </LinearLayout>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/pull_to_refresh"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:onRefreshListener="@{VM}">
+            android:animateLayoutChanges="true">
 
-            <com.ankhrom.base.custom.view.BaseListView
-                android:id="@+id/items_container"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/pull_to_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:adapter="@{M.adapter}" />
+                android:visibility="@{M.isEmpty ? View.GONE : View.VISIBLE}"
+                app:onRefreshListener="@{VM}">
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <com.ankhrom.base.custom.view.BaseListView
+                    android:id="@+id/items_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:adapter="@{M.adapter}" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:visibility="@{M.isEmpty ? View.VISIBLE : View.GONE}">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/extended_padding"
+                    android:text="Add your favourite coins on Market page by swiping them or press button bellow to find your prefered ones."
+                    android:textAlignment="center" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tint_selectable_background"
+                    android:onClick="@{VM::onSearchPressed}"
+                    android:padding="@dimen/base_padding"
+                    android:text="+"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_hint_color"
+                    android:textSize="@dimen/text_size_highlight"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </FrameLayout>
     </LinearLayout>
 
 </layout>
