@@ -7,6 +7,7 @@ import com.ankhrom.base.common.statics.ScreenHelper;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.common.CameraRequest;
 import com.ankhrom.coinmarketcap.databinding.FeatureRequestPageBinding;
 import com.ankhrom.coinmarketcap.entity.FeatureRequest;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
@@ -27,6 +28,10 @@ public class FeatureRequestViewModel extends AppViewModel<FeatureRequestPageBind
     }
 
     public void onCameraPressed(View view) {
+
+        if (!CameraRequest.isAvailable(getContext())) {
+            return;
+        }
 
         addViewModel(QRViewModel.class, this);
     }

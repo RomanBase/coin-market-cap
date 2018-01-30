@@ -1,17 +1,15 @@
 package com.ankhrom.coinmarketcap.viewmodel.auth;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.ankhrom.base.GlobalCode;
-import com.ankhrom.base.common.BaseCamera;
-import com.ankhrom.base.common.BasePermission;
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.ScreenHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.common.CameraRequest;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.ThirdPartyLoginBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
@@ -80,26 +78,12 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         }
     }
 
-    private boolean isCameraAvailable() {
-
-        if (BaseCamera.isCameraAvailable(getContext())) {
-            if (BasePermission.isAvailable(getContext(), Manifest.permission.CAMERA)) {
-                return true;
-            } else {
-                BasePermission.with(getContext())
-                        .requestCode(GlobalCode.CAMERA_REQUEST)
-                        .require(Manifest.permission.CAMERA);
-            }
-        }
-
-        return false;
-    }
 
     private void openCamera(int qrField) {
 
         this.qrField = qrField;
 
-        if (!isCameraAvailable()) {
+        if (!CameraRequest.isAvailable(getContext())) {
             return;
         }
 
