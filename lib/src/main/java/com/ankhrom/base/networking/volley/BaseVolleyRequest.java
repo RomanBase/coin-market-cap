@@ -18,7 +18,7 @@ public abstract class BaseVolleyRequest<T> extends Request<T> {
     private final Map<String, String> header;
     private final Map<String, String> params;
     private final byte[] body;
-    private final CacheType cacheType;
+    private CacheType cacheType;
 
     private RequestQueue queue;
 
@@ -90,25 +90,8 @@ public abstract class BaseVolleyRequest<T> extends Request<T> {
             return;
         }
 
-        if (shouldCache()) {
-            Cache.Entry cache = getCache(queue);
-
-            if (cache != null) {
-
-                if (listener instanceof ResponseCacheListener) {
-                    if (((ResponseCacheListener) listener).onCacheResponse(cache, getCacheData(cache))) {
-                        return;
-                    }
-                } else if (cacheType == CacheType.FORCE) {
-
-                    T data = getCacheData(cache);
-
-                    if (data != null) {
-                        listener.onResponse(data);
-                        return;
-                    }
-                }
-            }
+        if (cacheType != CacheType.NONE && notifyCacheListener()) {
+            return;
         }
 
         listener.onErrorResponse(error);
@@ -141,21 +124,38 @@ public abstract class BaseVolleyRequest<T> extends Request<T> {
         return queue.getCache().get(getUrl());
     }
 
+    protected boolean notifyCacheListener() {
+
+        Cache.Entry cache = getCache(queue);
+
+        if (cache != null) {
+
+            if (listener instanceof ResponseCacheListener) {
+                if (((ResponseCacheListener<T>) listener).onCacheResponse(cache, getCacheData(cache))) {
+                    return true;
+                }
+            } else if (cacheType == CacheType.FORCE) {
+
+                T data = getCacheData(cache);
+
+                if (data != null) {
+                    listener.onResponse(data);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void cacheAndQueue(RequestQueue queue) {
 
         this.queue = queue;
 
         if (listener != null) {
 
-            Cache.Entry cache = getCache(queue);
-
-            if (cache != null) {
-                if (listener instanceof ResponseCacheListener) {
-                    ((ResponseCacheListener<T>) listener).onCacheResponse(cache, getCacheData(cache));
-                } else {
-                    listener.onResponse(getCacheData(cache));
-                }
-            }
+            notifyCacheListener();
+            cacheType = CacheType.NONE; // prevent second cache call during error
         }
 
         queue.add(this);
