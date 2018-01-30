@@ -2,10 +2,11 @@ package com.ankhrom.coinmarketcap.data;
 
 import android.support.annotation.Nullable;
 
+import com.android.volley.Cache;
 import com.android.volley.VolleyError;
-import com.ankhrom.base.Base;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.base.networking.volley.RequestBuilder;
+import com.ankhrom.base.networking.volley.ResponseCacheListener;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.binance.BinFilter;
 import com.ankhrom.binance.Binance;
@@ -121,7 +122,7 @@ public class DataFetcher {
                 .listener(coinsListener)
                 .asGson(new TypeToken<List<CoinItem>>() {
                 }.getType())
-                .queue(factory);
+                .queue(factory.getRequestQueue());
     }
 
     public void requestMarket() {
@@ -134,7 +135,7 @@ public class DataFetcher {
                 .param(ApiParam.COUNT, ApiParam.COUNT_VALUE)
                 .listener(marketListener)
                 .asGson(MarketData.class)
-                .queue(factory);
+                .queue(factory.getRequestQueue());
     }
 
     public void requestExchanges() {
@@ -242,7 +243,15 @@ public class DataFetcher {
         }
     }
 
-    private final ResponseListener<List<CoinItem>> coinsListener = new ResponseListener<List<CoinItem>>() {
+    private final ResponseListener<List<CoinItem>> coinsListener = new ResponseCacheListener<List<CoinItem>>() {
+
+        @Override
+        public boolean onCacheResponse(Cache.Entry cache, @Nullable List<CoinItem> response) {
+
+            onResponse(response);
+            return true;
+        }
+
         @Override
         public void onResponse(List<CoinItem> response) {
 
@@ -269,7 +278,15 @@ public class DataFetcher {
         }
     };
 
-    private final ResponseListener<MarketData> marketListener = new ResponseListener<MarketData>() {
+    private final ResponseListener<MarketData> marketListener = new ResponseCacheListener<MarketData>() {
+
+        @Override
+        public boolean onCacheResponse(Cache.Entry cache, @Nullable MarketData response) {
+
+            onResponse(response);
+            return true;
+        }
+
         @Override
         public void onResponse(MarketData response) {
 
@@ -357,7 +374,6 @@ public class DataFetcher {
         @Override
         public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
-            Base.logE(new String(error.networkResponse.data));
             loadingBinance = false;
             notifyExchangeListeners(ExchangeType.BINANCE, false, false);
         }

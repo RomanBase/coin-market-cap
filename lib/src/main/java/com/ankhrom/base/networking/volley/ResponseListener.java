@@ -1,11 +1,13 @@
 package com.ankhrom.base.networking.volley;
 
 
+import android.support.annotation.Nullable;
+
 import com.android.volley.VolleyError;
 
 public interface ResponseListener<T> {
 
-    abstract void onResponse(T response);
+    void onResponse(@Nullable T response);
 
-    abstract void onErrorResponse(VolleyError error);
+    void onErrorResponse(VolleyError error);
 }

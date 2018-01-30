@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.google.gson.Gson;
 
@@ -21,8 +19,8 @@ public class RequestBuilder {
     private String contentType;
     private Map<String, String> header;
     private Map<String, String> params;
-    private Response.Listener listener;
-    private Response.ErrorListener errorListener;
+    private ResponseListener listener;
+    private CacheType cache;
 
     private RequestBuilder() {
 
@@ -30,6 +28,8 @@ public class RequestBuilder {
 
         header = new LinkedHashMap<>();
         header.put("accept", "*/*");
+
+        cache = CacheType.FORCE;
     }
 
     public static RequestBuilder get(String url) {
@@ -103,36 +103,15 @@ public class RequestBuilder {
         return this;
     }
 
-    public RequestBuilder listener(Response.Listener listener) {
+    public RequestBuilder cache(CacheType cache) {
+
+        this.cache = cache;
+        return this;
+    }
+
+    public <T> RequestBuilder listener(final ResponseListener<T> listener) {
 
         this.listener = listener;
-        return this;
-    }
-
-    public RequestBuilder errorListener(Response.ErrorListener errorListener) {
-
-        this.errorListener = errorListener;
-        return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public RequestBuilder listener(final ResponseListener listener) {
-
-        RequestListener container = new RequestListener() {
-            @Override
-            protected void onResponse(Object response) {
-                listener.onResponse(response);
-            }
-
-            @Override
-            protected void onErrorResponse(VolleyError error) {
-                listener.onErrorResponse(error);
-            }
-        };
-
-        this.listener = container.getListener();
-        this.errorListener = container.getErrorListener();
-
         return this;
     }
 
@@ -193,18 +172,18 @@ public class RequestBuilder {
     @SuppressWarnings("unchecked")
     public <T> BaseVolleyRequest<T> asGson(@NonNull Type type) {
 
-        return new GsonRequest<T>(type, method, getUrl(), contentType, header, getParams(), body, listener, errorListener);
+        return new GsonRequest<T>(type, method, getUrl(), contentType, header, getParams(), body, cache, listener);
     }
 
     @SuppressWarnings("unchecked")
     public BaseVolleyRequest<String> asString() {
 
-        return new StringRequest(method, getUrl(), contentType, header, getParams(), body, listener, errorListener);
+        return new StringRequest(method, getUrl(), contentType, header, getParams(), body, cache, listener);
     }
 
     @SuppressWarnings("unchecked")
     public BaseVolleyRequest<byte[]> asBytes() {
 
-        return new ByteRequest(method, getUrl(), contentType, header, getParams(), body, listener, errorListener);
+        return new ByteRequest(method, getUrl(), contentType, header, getParams(), body, cache, listener);
     }
 }

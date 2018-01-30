@@ -1,5 +1,6 @@
 package com.ankhrom.base.networking.volley;
 
+import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -15,8 +16,8 @@ public class GsonRequest<T> extends BaseVolleyRequest<T> {
 
     private final Type type;
 
-    public GsonRequest(Type type, int method, String url, String contentType, Map<String, String> header, Map<String, String> params, byte[] body, Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        super(method, url, contentType, header, params, body, listener, errorListener);
+    public GsonRequest(Type type, int method, String url, String contentType, Map<String, String> header, Map<String, String> params, byte[] body, CacheType cache, ResponseListener<T> listener) {
+        super(method, url, contentType, header, params, body, cache, listener);
 
         this.type = type;
     }
@@ -33,5 +34,11 @@ public class GsonRequest<T> extends BaseVolleyRequest<T> {
         } catch (JsonSyntaxException e) {
             return Response.error(new ParseError(e));
         }
+    }
+
+    @Override
+    protected T parseCache(Cache.Entry cache) {
+
+        return new Gson().fromJson(new String(cache.data), type);
     }
 }
