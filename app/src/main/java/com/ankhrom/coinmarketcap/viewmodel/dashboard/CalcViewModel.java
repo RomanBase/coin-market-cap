@@ -36,6 +36,8 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             return;
         }
 
+        isLoading.set(true);
+
         headerTitle.set("Calculator");
         isLoading.set(true);
 

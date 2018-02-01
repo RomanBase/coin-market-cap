@@ -45,8 +45,9 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             return;
         }
 
-        headerTitle.set("Portfolio");
         isLoading.set(true);
+
+        headerTitle.set("Portfolio");
 
         DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);

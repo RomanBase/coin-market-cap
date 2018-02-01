@@ -34,11 +34,11 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
     public void onInit() {
         super.onInit();
 
-        headerTitle.set("Account");
-
         if (model != null) {
             return;
         }
+
+        headerTitle.set("Account");
 
         getExchangePrefs().addExchangeAuthListener(this);
 
