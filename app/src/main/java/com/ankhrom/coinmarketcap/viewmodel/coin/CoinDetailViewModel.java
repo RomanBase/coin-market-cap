@@ -14,6 +14,7 @@ import com.ankhrom.coincap.CoinCap;
 import com.ankhrom.coincap.entity.CapHistory;
 import com.ankhrom.coincap.entity.CapHistoryItem;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.databinding.CoinDetailPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
@@ -39,7 +40,8 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
         coin = args.getArg(CoinItem.class);
         headerTitle.set(coin.symbol + " - " + coin.name);
         headerSubTitle.set(new Date(Long.parseLong(coin.timestamp) * 1000).toLocaleString());
-        headerInfo.set(coin.rank);
+        headerInfo.set(ApiFormat.toShortFormat(coin.marketCap));
+        headerSubInfo.set(ApiFormat.toShortFormat(coin.volumeUsd));
     }
 
     @Override
