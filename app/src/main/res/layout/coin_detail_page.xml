@@ -27,7 +27,14 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_color">
+            android:background="@color/background_color"
+            android:padding="@dimen/base_padding">
+
+            <com.robinhood.spark.SparkView
+                android:id="@+id/sparkline"
+                android:layout_width="match_parent"
+                android:layout_height="192dp"
+                app:spark_scrubEnabled="true" />
 
         </FrameLayout>
 

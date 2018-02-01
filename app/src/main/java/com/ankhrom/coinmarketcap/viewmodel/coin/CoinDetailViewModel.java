@@ -20,6 +20,8 @@ import com.ankhrom.coinmarketcap.databinding.CoinDetailPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.model.coin.CoinDetailModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.robinhood.spark.SparkAdapter;
+import com.robinhood.spark.SparkView;
 
 import java.util.Date;
 
@@ -47,7 +49,7 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
     @Override
     public void loadModel() {
 
-        CoinCap.init(getContext()).getHistory(coin.symbol, CapHistoryTimeFrame.D_1, this);
+        CoinCap.init(getContext()).getHistory(coin.symbol, CapHistoryTimeFrame.Y_1, this);
     }
 
     @Override
@@ -57,9 +59,39 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
             return;
         }
 
+        final float[] prices = new float[response.price.size()];
+
         response.price.iterate(new CapHistoryItem.Iterator() {
+
+            int i = 0;
+
             @Override
             protected void onNext(double timestamp, double value) {
+                prices[i++] = (float) value;
+            }
+        });
+
+        binding.sparkline.setAdapter(new SparkAdapter() {
+
+            @Override
+            public int getCount() {
+                return prices.length;
+            }
+
+            @Override
+            public Object getItem(int index) {
+                return prices[index];
+            }
+
+            @Override
+            public float getY(int index) {
+                return prices[index];
+            }
+        });
+
+        binding.sparkline.setScrubListener(new SparkView.OnScrubListener() {
+            @Override
+            public void onScrubbed(Object value) {
 
             }
         });
