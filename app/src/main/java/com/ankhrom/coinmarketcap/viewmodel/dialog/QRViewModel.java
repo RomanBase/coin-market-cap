@@ -44,6 +44,20 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, QRModel> imp
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        startZXing();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        stopZXing();
+    }
+
     public void setOnQRHandledListener(int requestCode, OnQRHandledListener listener) {
 
         this.requestCode = requestCode;
