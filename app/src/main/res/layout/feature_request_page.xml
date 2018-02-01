@@ -76,7 +76,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="donation address (optional)">
+                        android:hint="donation (optional)">
 
                         <android.support.v7.widget.AppCompatEditText
                             android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                     android:layout_marginLeft="@dimen/base_padding"
                     android:layout_marginRight="@dimen/base_padding"
                     android:layout_marginTop="@dimen/base_padding"
-                    android:text="Please provide your wallet address to pair this request with donations. Don't worry if you not donate yet, we are glad for any feedback or good idea."
+                    android:text="Please provide your wallet address or transaction ID to pair this request with donations. Don't worry if you not donated yet, we are glad for any feedback or good idea."
                     android:textColor="@color/text_hint_color" />
 
                 <FrameLayout

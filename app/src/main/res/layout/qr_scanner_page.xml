@@ -7,6 +7,10 @@
             name="VM"
             type="com.ankhrom.coinmarketcap.viewmodel.dialog.QRViewModel" />
 
+        <variable
+            name="M"
+            type="com.ankhrom.coinmarketcap.model.dialog.QRModel" />
+
         <import type="android.view.View" />
     </data>
 
@@ -26,12 +30,12 @@
             android:layout_height="wrap_content"
             android:background="@color/popup_background_color"
             android:padding="@dimen/base_padding"
-            android:visibility="@{VM.showTooltip ? View.VISIBLE : View.GONE}">
+            android:visibility="@{M.showTooltip ? View.VISIBLE : View.GONE}">
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="convert text to QR code and then scan each field separately or at once with colon separator (key:secret) "
+                android:text="@{M.tooltip}"
                 android:textAlignment="center"
                 android:textColor="@color/text_light_color" />
 

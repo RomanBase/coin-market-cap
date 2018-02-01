@@ -1,15 +1,14 @@
 package com.ankhrom.coinmarketcap.viewmodel.dialog;
 
-import android.databinding.ObservableBoolean;
 import android.view.View;
 
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.args.InitArgs;
-import com.ankhrom.base.model.Model;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.databinding.QrScannerPageBinding;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
+import com.ankhrom.coinmarketcap.model.dialog.QRModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.google.zxing.Result;
 
@@ -19,14 +18,12 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * Created by R' on 1/20/2018.
  */
 
-public class QRViewModel extends AppViewModel<QrScannerPageBinding, Model> implements ZXingScannerView.ResultHandler {
+public class QRViewModel extends AppViewModel<QrScannerPageBinding, QRModel> implements ZXingScannerView.ResultHandler {
 
     private boolean isStarted;
 
     private int requestCode;
     private OnQRHandledListener listener;
-
-    public final ObservableBoolean showTooltip = new ObservableBoolean();
 
     @Override
     public void init(InitArgs args) {
@@ -36,7 +33,15 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, Model> imple
         requestCode = code == null ? -1 : code;
         listener = args.getArg(OnQRHandledListener.class);
 
-        showTooltip.set(requestCode > -1);
+        setModel(new QRModel());
+
+        model.showTooltip.set(true);
+
+        if (requestCode < 0) {
+            model.tooltip.set("convert wallet address or transaction ID to QR and then scan");
+        } else {
+            model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret)");
+        }
     }
 
     public void setOnQRHandledListener(int requestCode, OnQRHandledListener listener) {
