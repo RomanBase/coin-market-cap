@@ -1,9 +1,13 @@
 package com.ankhrom.hitbtc;
 
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
 import com.android.volley.RequestQueue;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
+import com.ankhrom.base.networking.volley.VolleyBuilder;
 import com.ankhrom.hitbtc.entity.HitBalance;
 import com.google.gson.reflect.TypeToken;
 
@@ -27,9 +31,9 @@ public class HitBTC {
         this.trading = new HitApiTrading(requestQueue);
     }
 
-    public static HitBTC init(RequestQueue requestQueue) {
+    public static HitBTC init(@NonNull Context context) {
 
-        return new HitBTC(requestQueue);
+        return new HitBTC(new VolleyBuilder(context).build());
     }
 
     public HitBTC auth(String key, String secret) {

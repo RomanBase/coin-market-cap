@@ -5,21 +5,31 @@
     <data>
 
         <variable
+            name="VM"
+            type="com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel" />
+
+        <variable
             name="M"
             type="com.ankhrom.coinmarketcap.model.coin.CoinDetailModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
 
-        <include layout="@layout/activity_toolbar_view" />
+        <include
+            layout="@layout/activity_toolbar_view"
+            app:VM="@{VM.ref}" />
 
-        <com.ankhrom.base.custom.view.InternalWebView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:js_enable="true"
-            app:loadUrl="@{M.url}" />
+            android:background="@color/background_color">
+
+        </FrameLayout>
 
     </LinearLayout>
 

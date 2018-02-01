@@ -192,7 +192,7 @@ public class DataFetcher {
         loadingHitBTC = true;
         notifyExchangeListeners(ExchangeType.HIT_BTC, true, false);
 
-        HitBTC hitBTC = HitBTC.init(factory.getRequestQueue()).auth(credentials.key, credentials.secret);
+        HitBTC hitBTC = HitBTC.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
         getUserPrefs().setPortfolio(ExchangeType.HIT_BTC, null);
 
