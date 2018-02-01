@@ -185,6 +185,8 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             model.unitPrice.set(null);
             model.bitcoinUnits.set(null);
             model.bitcoinUnitValue.set(null);
+
+            return;
         }
 
         model.currency.set(coin.toString());
