@@ -156,8 +156,8 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             double unitPrice = parseDouble(coin.priceUsd);
             double marketCap = parseDouble(coin.marketCap);
 
-            model.profitSumPrice.set(ApiFormat.toPriceFormat(sumPrice + sumPrice * profit));
-            model.profitUnitPrice.set(ApiFormat.toPriceFormat(unitPrice + unitPrice * profit));
+            model.profitSumPrice.set(ApiFormat.toPriceFormat(sumPrice + sumPrice * profit) + " $");
+            model.profitUnitPrice.set(ApiFormat.toPriceFormat(unitPrice + unitPrice * profit) + " $");
             model.marketCapGrow.set(ApiFormat.toShortFormat(marketCap + marketCap * profit));
         }
     };
@@ -188,9 +188,11 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         }
 
         model.currency.set(coin.toString());
-        model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd));
+        model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd) + " $");
         model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(coin.priceBtc));
         model.marketCap.set(ApiFormat.toShortFormat(coin.marketCap));
+
+        model.setPercenageChange(coin);
 
         model.sumPrice.set(ApiFormat.toPriceFormat(100));
         onSumPriceChanged.onValueChanged(model.sumPrice.get());

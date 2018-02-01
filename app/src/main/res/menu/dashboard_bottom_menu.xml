@@ -18,8 +18,8 @@
     <item
         android:id="@+id/menu_search"
         android:enabled="true"
-        android:icon="@drawable/ic_straighten"
-        android:title="Calculator"
+        android:icon="@drawable/ic_copyright"
+        android:title="Coin"
         app:showAsAction="ifRoom" />
 
     <item

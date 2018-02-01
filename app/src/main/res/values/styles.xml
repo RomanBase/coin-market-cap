@@ -36,4 +36,10 @@
 
     </style>
 
+    <style name="AppTheme.SeekBar" parent="Widget.AppCompat.SeekBar">
+
+        <item name="colorControlNormal">@color/text_hint_color</item>
+
+    </style>
+
 </resources>

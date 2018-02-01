@@ -65,11 +65,14 @@
 
                 </FrameLayout>
 
+                <include layout="@layout/vertical_separator" />
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/base_padding"
                     android:layout_marginRight="@dimen/base_padding"
+                    android:layout_marginTop="@dimen/base_half_padding"
                     android:hint="units">
 
                     <android.support.v7.widget.AppCompatEditText
@@ -171,8 +174,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
-                        android:text="cancel"
-                        android:onClick="@{VM::onCancelPressed}" />
+                        android:onClick="@{VM::onCancelPressed}"
+                        android:text="cancel" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -181,8 +184,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
-                        android:text="create"
-                        android:onClick="@{VM::onCreatePressed}" />
+                        android:onClick="@{VM::onCreatePressed}"
+                        android:text="create" />
 
                 </LinearLayout>
             </LinearLayout>
