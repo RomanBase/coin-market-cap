@@ -68,10 +68,9 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
 
         isLoading.set(true);
+        headerTitle.set("Coin Market Cap");
 
         setModel(new CoinsAdapterModel(getContext()));
-
-        headerTitle.set("Coin Market Cap");
 
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
 

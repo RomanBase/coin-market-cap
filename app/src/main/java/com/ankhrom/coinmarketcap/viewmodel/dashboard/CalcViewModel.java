@@ -37,9 +37,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         }
 
         isLoading.set(true);
-
         headerTitle.set("Calculator");
-        isLoading.set(true);
 
         getDataHolder().getFetcher().addListener(this);
     }
