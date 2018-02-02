@@ -11,33 +11,391 @@
         <variable
             name="M"
             type="com.ankhrom.coinmarketcap.model.coin.CoinDetailModel" />
+
+        <import type="android.view.View" />
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical">
+        android:background="@color/background_color">
 
-        <include
-            layout="@layout/activity_toolbar_view"
-            app:VM="@{VM.ref}" />
-
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_color"
-            android:padding="@dimen/base_padding">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.robinhood.spark.SparkView
-                android:id="@+id/sparkline"
+            <include
+                layout="@layout/activity_toolbar_view"
+                app:VM="@{VM.ref}" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="192dp"
-                app:spark_scrubEnabled="true" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </FrameLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/base_padding"
+                    android:layout_marginRight="@dimen/base_padding"
+                    android:layout_marginTop="@dimen/base_padding"
+                    android:orientation="horizontal">
 
-    </LinearLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:hint="market cap">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:inputType="numberDecimal"
+                            app:text="@{M.marketCap}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:hint="unit price">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:inputType="numberDecimal"
+                            app:text="@{M.unitPrice}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:hint="btc unit value">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:inputType="numberDecimal"
+                            app:text="@{M.bitcoinUnitValue}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/base_padding"
+                    android:layout_marginRight="@dimen/base_padding"
+                    android:layout_marginTop="@dimen/base_padding"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:hint="current supply">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:inputType="numberDecimal"
+                            app:text="@{M.supplyCurrent}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:hint="maximum supply">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:inputType="numberDecimal"
+                            app:text="@{M.supplyMax}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <include
+                    layout="@layout/vertical_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/base_padding"
+                    android:layout_marginTop="@dimen/base_quad_padding" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/base_padding"
+                    android:paddingRight="@dimen/base_padding">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Change 24h/1h/7d"
+                        android:textColor="@color/text_hint_color" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <com.ankhrom.coinmarketcap.view.AppTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{M.change24h}" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" / "
+                        android:textColor="@color/text_hint_color" />
+
+                    <com.ankhrom.coinmarketcap.view.AppTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{M.change1h}" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" / "
+                        android:textColor="@color/text_hint_color" />
+
+                    <com.ankhrom.coinmarketcap.view.AppTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{M.change7d}" />
+
+                </LinearLayout>
+
+                <include
+                    layout="@layout/vertical_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/base_padding" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:background="@color/tint_light_color">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="@{VM.isLoading ? View.INVISIBLE : View.VISIBLE}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/base_padding"
+                            android:layout_marginRight="@dimen/base_padding"
+                            android:layout_marginTop="@dimen/base_padding"
+                            android:orientation="horizontal">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:hint="min">
+
+                                <android.support.v7.widget.AppCompatEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:enabled="false"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="numberDecimal"
+                                    app:text="@{M.minPrice}" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:hint="@{M.midTime}">
+
+                                <android.support.v7.widget.AppCompatEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:enabled="false"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="numberDecimal"
+                                    app:text="@{M.midPrice}" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:hint="max">
+
+                                <android.support.v7.widget.AppCompatEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:enabled="false"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="numberDecimal"
+                                    app:text="@{M.maxPrice}" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <com.robinhood.spark.SparkView
+                            android:id="@+id/sparkline"
+                            android:layout_width="match_parent"
+                            android:layout_height="192dp"
+                            android:layout_marginBottom="@dimen/base_padding"
+                            android:layout_marginLeft="@dimen/base_padding"
+                            android:layout_marginRight="@dimen/base_padding"
+                            android:layout_marginTop="@dimen/base_quad_padding"
+                            app:adapter="@{M.adapter}"
+                            app:scrubListener="@{VM}"
+                            app:spark_lineColor="@color/colorAccent"
+                            app:spark_scrubEnabled="true"
+                            app:spark_scrubLineColor="@color/text_hint_color" />
+
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="@{VM.isLoading ? View.VISIBLE : View.GONE}" />
+
+                </FrameLayout>
+
+                <include layout="@layout/vertical_separator" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed1H}"
+                        android:text="1 hour"
+                        android:textColor="@color/text_hint_color" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed3H}"
+                        android:text="3 hours"
+                        android:textColor="@color/text_hint_color" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:id="@+id/selected_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed1D}"
+                        android:text="1 day"
+                        android:textColor="@color/text_hint_color"
+                        app:itemSelected="@{true}" />
+
+                </LinearLayout>
+
+                <include layout="@layout/vertical_separator" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed7D}"
+                        android:text="7 days"
+                        android:textColor="@color/text_hint_color" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed30D}"
+                        android:text="30 days"
+                        android:textColor="@color/text_hint_color" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed90D}"
+                        android:text="90 days"
+                        android:textColor="@color/text_hint_color" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed180D}"
+                        android:text="180 days"
+                        android:textColor="@color/text_hint_color" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <com.ankhrom.coinmarketcap.view.SelectableButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="@{VM::onPressed1Y}"
+                        android:text="1 year"
+                        android:textColor="@color/text_hint_color" />
+
+                </LinearLayout>
+
+                <include layout="@layout/vertical_separator" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </layout>

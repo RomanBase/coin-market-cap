@@ -29,7 +29,10 @@ public class CoinItem {
     public String supply;
 
     @SerializedName("total_supply")
-    public String supply_total;
+    public String supplyTotal;
+
+    @SerializedName("max_supply")
+    public String supplyMax;
 
     @SerializedName("percent_change_1h")
     public String percentChange1h;
