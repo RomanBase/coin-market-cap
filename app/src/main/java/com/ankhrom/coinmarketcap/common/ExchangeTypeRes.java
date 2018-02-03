@@ -12,7 +12,21 @@ public final class ExchangeTypeRes {
 
         switch (type) {
             case NONE:
+                return R.mipmap.ic_launcher;
+            case HIT_BTC:
+                return R.drawable.ic_hit_btc;
+            case BINANCE:
+                return R.drawable.ic_binance;
+            default:
                 return R.drawable.ic_logo;
+        }
+    }
+
+    public static int getIconSmall(ExchangeType type) { // TODO: 2/3/2018 icons
+
+        switch (type) {
+            case NONE:
+                return R.mipmap.ic_launcher;
             case HIT_BTC:
                 return R.drawable.ic_hit_btc;
             case BINANCE:
