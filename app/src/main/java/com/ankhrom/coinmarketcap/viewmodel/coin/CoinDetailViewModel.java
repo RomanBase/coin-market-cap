@@ -24,7 +24,6 @@ import com.ankhrom.coinmarketcap.model.coin.CoinDetailModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.robinhood.spark.SparkView;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
 
         coin = args.getArg(CoinItem.class);
         headerTitle.set(coin.symbol + " - " + coin.name);
-        headerSubTitle.set(new Date(Long.parseLong(coin.timestamp) * 1000).toLocaleString());
+        headerSubTitle.set(ApiFormat.toTimeFormat(coin.timestamp + "000"));
         headerInfo.set(ApiFormat.toShortFormat(coin.marketCap));
         headerSubInfo.set(ApiFormat.toShortFormat(coin.volumeUsd));
     }
@@ -127,7 +126,7 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
             List<Double> values = (List<Double>) value;
 
             model.midPrice.set(ApiFormat.toPriceFormat(values.get(1)) + " $");
-            model.midTime.set(new Date((long) (double) values.get(0)).toLocaleString());
+            model.midTime.set(ApiFormat.toTimeShortFormat((long) (double) values.get(0)));
         }
     }
 
@@ -150,19 +149,6 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
         }
     }
 
-    public void onPressed1H(View view) {
-
-        if (isLoading.get()) {
-            return;
-        }
-
-        isLoading.set(true);
-        timeframe = 1;
-        toggleItem(view);
-
-        CoinCap.init(getContext()).getHistory(coin.symbol, CapHistoryTimeFrame.D_1, this);
-    }
-
     public void onPressed3H(View view) {
 
         if (isLoading.get()) {
@@ -176,7 +162,20 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
         CoinCap.init(getContext()).getHistory(coin.symbol, CapHistoryTimeFrame.D_1, this);
     }
 
-    public void onPressed1D(View view) {
+    public void onPressed12H(View view) {
+
+        if (isLoading.get()) {
+            return;
+        }
+
+        isLoading.set(true);
+        timeframe = 12;
+        toggleItem(view);
+
+        CoinCap.init(getContext()).getHistory(coin.symbol, CapHistoryTimeFrame.D_1, this);
+    }
+
+    public void onPressed24H(View view) {
 
         if (isLoading.get()) {
             return;

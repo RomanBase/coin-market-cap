@@ -28,7 +28,6 @@ import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -263,7 +262,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
     protected void setMarketData(final MarketData market) {
 
-        headerSubTitle.set(new Date(market.timestamp * 1000).toLocaleString());
+        headerSubTitle.set(ApiFormat.toTimeFormat(market.timestamp * 1000));
         headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
         headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " | " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }

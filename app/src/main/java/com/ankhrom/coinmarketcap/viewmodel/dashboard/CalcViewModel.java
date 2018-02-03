@@ -8,16 +8,14 @@ import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.data.DataHolder;
-import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.CalcPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
+import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.model.CalcModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
-
-import java.util.Date;
 
 /**
  * Created by R' on 1/8/2018.
@@ -202,7 +200,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
     protected void setMarketData(MarketData market) {
 
-        headerSubTitle.set(new Date(market.timestamp * 1000).toLocaleString());
+        headerSubTitle.set(ApiFormat.toTimeFormat(market.timestamp * 1000));
         headerInfo.set(ApiFormat.toShortFormat(String.valueOf(market.marketCap)));
         headerSubInfo.set("BTC " + ApiFormat.toDigitFormat(market.bitcoinDominance) + "%" + " | " + ApiFormat.toShortFormat(String.valueOf(market.marketVolume)));
     }

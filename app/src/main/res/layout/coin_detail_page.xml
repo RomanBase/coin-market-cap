@@ -317,8 +317,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="@{VM::onPressed1H}"
-                        android:text="1 hour"
+                        android:onClick="@{VM::onPressed3H}"
+                        android:text="3 hours"
                         android:textColor="@color/text_hint_color" />
 
                     <include layout="@layout/horizontal_separator" />
@@ -327,8 +327,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="@{VM::onPressed3H}"
-                        android:text="3 hours"
+                        android:onClick="@{VM::onPressed12H}"
+                        android:text="12 hours"
                         android:textColor="@color/text_hint_color" />
 
                     <include layout="@layout/horizontal_separator" />
@@ -338,8 +338,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="@{VM::onPressed1D}"
-                        android:text="1 day"
+                        android:onClick="@{VM::onPressed24H}"
+                        android:text="24 hours"
                         android:textColor="@color/text_hint_color"
                         app:itemSelected="@{true}" />
 

@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.data.DataFetcher;
 import com.ankhrom.coinmarketcap.databinding.SettingsPageBinding;
@@ -20,7 +21,6 @@ import com.ankhrom.coinmarketcap.viewmodel.dialog.DonationViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.FeatureRequestViewModel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,7 +72,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
 
         if (timestamp > 0) {
 
-            item.note.set(new Date(timestamp).toLocaleString());
+            item.note.set(ApiFormat.toTimeFormat(timestamp));
 
             if (credentials.isValid()) {
                 item.state.set(String.format(Locale.US, "active (%s)", coins.size()));

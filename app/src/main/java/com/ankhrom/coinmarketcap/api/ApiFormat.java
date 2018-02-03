@@ -4,6 +4,10 @@ import com.ankhrom.base.common.statics.StringHelper;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by R' on 12/30/2017.
@@ -105,4 +109,28 @@ public class ApiFormat {
         return longFormat.format(number);
     }
 
+    public static String toTimeFormat(String millis) {
+
+        if (StringHelper.isEmpty(millis)) {
+            return "-";
+        }
+
+        return toTimeFormat(Long.parseLong(millis));
+    }
+
+    public static String toTimeFormat(long millis) {
+
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm a", Locale.US);
+        format.setTimeZone(TimeZone.getDefault());
+
+        return format.format(new Date(millis));
+    }
+
+    public static String toTimeShortFormat(long millis) {
+
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, HH:mm a", Locale.US);
+        format.setTimeZone(TimeZone.getDefault());
+
+        return format.format(new Date(millis));
+    }
 }
