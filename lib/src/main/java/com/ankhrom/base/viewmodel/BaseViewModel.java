@@ -27,6 +27,7 @@ public abstract class BaseViewModel<S extends ViewDataBinding, T extends Model> 
 
     public final ObservableBoolean isLoading = new ObservableBoolean(false);
     public final ObservableBoolean cacheOnly = new ObservableBoolean(false);
+    public final ObservableBoolean error = new ObservableBoolean(false);
 
     protected T model;
     protected S binding;

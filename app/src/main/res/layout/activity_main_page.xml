@@ -32,6 +32,17 @@
                 android:clickable="false"
                 android:visibility="@{VM.currentViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="@dimen/extended_padding"
+                android:text="Oops! Something went wrong."
+                android:textAlignment="center"
+                android:textColor="@color/text_hint_color"
+                android:textSize="@dimen/text_size_price"
+                android:visibility="@{VM.error ? View.VISIBLE : View.GONE}" />
+
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

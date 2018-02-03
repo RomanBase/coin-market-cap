@@ -223,6 +223,8 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     @Override
     public void onDataLoading(boolean isLoading, DataHolder holder) {
 
+        this.error.set(false);
+
         if (!isLoading) {
             updatePortfolio(ExchangeType.NONE, getUserPrefs().getPortfolio());
             updateExchanges();
@@ -235,6 +237,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(false);
+        this.error.set(true);
     }
 
     @Override

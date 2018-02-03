@@ -320,6 +320,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     @Override
     public void onDataLoading(boolean isLoading, DataHolder holder) {
 
+        this.error.set(false);
+
         if (!isLoading) {
 
             setMarketData(holder.getMarket());
@@ -333,6 +335,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(isLoading);
+        this.error.set(true);
     }
 
     @Override

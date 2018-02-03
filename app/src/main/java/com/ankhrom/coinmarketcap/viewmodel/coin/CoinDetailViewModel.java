@@ -70,6 +70,8 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
     public void onResponse(@Nullable CapHistory response) {
 
         if (response == null) {
+            isLoading.set(false);
+            error.set(true);
             return;
         }
 
@@ -114,10 +116,11 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
         error.printStackTrace();
 
         isLoading.set(false);
-        showCoinCapPage();
+        super.error.set(true);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onScrubbed(Object value) {
 
         if (isModelAvailable() && value != null) {

@@ -210,18 +210,21 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
     @Override
     public void onDataLoading(boolean isLoading, DataHolder holder) {
 
-        this.isLoading.set(isLoading);
+        this.error.set(false);
 
         if (!isLoading) {
             setMarketData(holder.getMarket());
             createModel(holder);
         }
+
+        this.isLoading.set(isLoading);
     }
 
     @Override
     public void onDataLoadingFailed(boolean isLoading, DataHolder holder) {
 
         this.isLoading.set(false);
+        this.error.set(true);
     }
 
     private double parseDouble(String value) {
