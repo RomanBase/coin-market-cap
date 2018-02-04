@@ -19,7 +19,7 @@
         android:id="@+id/menu_search"
         android:enabled="true"
         android:icon="@drawable/ic_copyright"
-        android:title="Coin"
+        android:title="Coin calc"
         app:showAsAction="ifRoom" />
 
     <item

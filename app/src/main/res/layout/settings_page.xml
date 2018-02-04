@@ -20,7 +20,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/base_padding"
+            android:paddingTop="@dimen/base_padding">
 
             <com.ankhrom.base.custom.view.BaseListView
                 android:layout_width="match_parent"

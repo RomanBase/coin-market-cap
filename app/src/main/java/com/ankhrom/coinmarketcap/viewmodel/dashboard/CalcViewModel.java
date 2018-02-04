@@ -35,7 +35,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         }
 
         isLoading.set(true);
-        headerTitle.set("Calculator");
+        headerTitle.set("Coin Calculator");
 
         getDataHolder().getFetcher().addListener(this);
     }

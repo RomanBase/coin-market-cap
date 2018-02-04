@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/extended_padding"
-                    android:text="Add your favourite coins on Market page by swiping them or press button bellow to find your prefered ones."
+                    android:text="Add your favourite coins on Market or Portfolio page by swiping them or press button below to find your prefered ones."
                     android:textAlignment="center" />
 
                 <android.support.v7.widget.AppCompatTextView
