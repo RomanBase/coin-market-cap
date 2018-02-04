@@ -7,7 +7,7 @@ import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
-import com.ankhrom.coinmarketcap.common.ExchangeTypeRes;
+import com.ankhrom.coinmarketcap.common.ExchangeTypeUtil;
 
 /**
  * Created by R' on 1/26/2018.
@@ -25,7 +25,7 @@ public class SettingsExchangeItemModel extends SelectableItemModel {
     public SettingsExchangeItemModel(ExchangeType type) {
 
         this.type = type;
-        this.icon = ExchangeTypeRes.getLogo(type);
+        this.icon = ExchangeTypeUtil.getLogo(type);
     }
 
     @Override

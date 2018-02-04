@@ -6,7 +6,7 @@ import com.ankhrom.coinmarketcap.R;
  * Created by R' on 1/20/2018.
  */
 
-public final class ExchangeTypeRes {
+public final class ExchangeTypeUtil {
 
     public static int getLogo(ExchangeType type) {
 
@@ -34,5 +34,10 @@ public final class ExchangeTypeRes {
             default:
                 return R.drawable.ic_logo;
         }
+    }
+
+    public static boolean isPortfolioPriceAvailable(ExchangeType type) {
+
+        return type == ExchangeType.NONE;
     }
 }

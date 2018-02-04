@@ -7,7 +7,7 @@ import com.ankhrom.base.observable.EditTextObservable;
 import com.ankhrom.base.observable.ObservableCheckbox;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
-import com.ankhrom.coinmarketcap.common.ExchangeTypeRes;
+import com.ankhrom.coinmarketcap.common.ExchangeTypeUtil;
 
 /**
  * Created by romanhornak on 1/4/18.
@@ -24,7 +24,7 @@ public class ThirdPartyLoginModel extends Model {
 
     public ThirdPartyLoginModel(ExchangeType type) {
 
-        icon = ExchangeTypeRes.getLogo(type);
+        icon = ExchangeTypeUtil.getLogo(type);
     }
 
     public void presetEdit(String key, String secret) {
