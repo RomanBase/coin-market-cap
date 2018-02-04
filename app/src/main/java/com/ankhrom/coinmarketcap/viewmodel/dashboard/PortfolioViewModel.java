@@ -2,26 +2,30 @@ package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.data.DataHolder;
-import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPageBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
+import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
+import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioEditViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioPlusViewModel;
@@ -35,7 +39,13 @@ import java.util.List;
  * Created by R' on 1/1/2018.
  */
 
-public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener, SwipeRefreshLayout.OnRefreshListener {
+public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener {
+
+    private PortfolioItemModel activeItem;
+    private boolean itemActivated;
+
+    private ItemSwipeListener itemSwipeListener;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     public void onInit() {
@@ -48,6 +58,8 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         isLoading.set(true);
         headerTitle.set("Portfolio");
 
+        itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
+
         DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);
 
@@ -56,6 +68,35 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         prefs.setExchangePortfolioListener(this);
 
         getExchangePrefs().addExchangeAuthListener(this);
+    }
+
+    @Override
+    protected void onCreateViewBinding(PortfolioPageBinding binding) {
+        super.onCreateViewBinding(binding);
+
+        attachSwipeListener();
+    }
+
+    private void attachSwipeListener() {
+
+        if (binding == null) {
+            return;
+        }
+
+        if (itemTouchHelper == null) {
+            itemTouchHelper = new ItemTouchHelper(itemSwipeListener);
+        }
+
+        itemTouchHelper.attachToRecyclerView(binding.itemsContainer);
+    }
+
+    private void dettachSwipeListener() {
+
+        if (itemTouchHelper == null) {
+            return;
+        }
+
+        itemTouchHelper.attachToRecyclerView(null);
     }
 
     @Override
@@ -68,6 +109,21 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
         DataHolder holder = getDataHolder();
         holder.reload();
+    }
+
+    protected void toggleItemFavouriteState(PortfolioItemModel item) {
+
+        item.isFavourite.set(!item.isFavourite.get());
+
+        UserPrefs prefs = getUserPrefs();
+
+        if (item.isFavourite.get()) {
+            prefs.addFavourite(item.coin.id);
+        } else {
+            prefs.removeFavourite(item.coin.id);
+        }
+
+        prefs.notifyFavouriteCoinChanged(item.coin, item.isFavourite.get());
     }
 
     public void onAddPressed(View view) {
@@ -85,12 +141,64 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         addViewModel(PortfolioEditViewModel.class, model, model.coin);
     }
 
+    @Override
+    public void onSelectedItemChanged(int index) {
+
+        itemActivated = false;
+        itemSwipeListener.swipeBack = true;
+
+        if (index > -1) {
+
+            PortfolioItemModel item = model.adapter.get(index);
+
+            if (item != null) {
+
+                activeItem = item;
+                activeItem.isFavourite.set(getUserPrefs().getFavourites().contains(activeItem.coin.id));
+            }
+
+            return;
+        }
+
+        if (activeItem == null) {
+            return;
+        }
+
+        if (activeItem.swipeProgress.get() >= 1.0f) {
+            toggleItemFavouriteState(activeItem);
+        }
+
+        activeItem.swipeProgress.set(0.0f);
+        activeItem = null;
+    }
+
+    @Override
+    public void onItemSwipeProgress(int index, float progress, boolean directionToLeft) {
+
+        if (activeItem == null) {
+            return;
+        }
+
+        activeItem.swipeProgress.set(progress);
+        activeItem.swipeDirectionLeft.set(directionToLeft);
+
+        boolean activate = progress >= 1.0f;
+
+        if (activate != itemActivated) {
+            itemActivated = activate;
+            if (itemActivated) {
+                AppVibrator.itemActivated(getContext());
+            }
+        }
+    }
+
     private void updatePortfolio(ExchangeType exchange, List<PortfolioCoin> portfolio) {
 
         if (model == null) {
             setModel(new PortfolioAdapterModel(getContext()));
         }
 
+        List<String> favs = getUserPrefs().getFavourites();
         List<PortfolioItemModel> items = removeExchange(exchange, model.adapter.getItems());
 
         if (portfolio != null && !portfolio.isEmpty()) {
@@ -105,6 +213,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             for (PortfolioItemModel item : items) {
                 invested += item.invested;
                 current += item.current;
+                item.isFavourite.set(favs.contains(item.coin.id));
             }
 
             double profit = current / invested;

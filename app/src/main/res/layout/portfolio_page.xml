@@ -45,6 +45,7 @@
                         android:orientation="vertical">
 
                         <com.ankhrom.base.custom.view.BaseListView
+                            android:id="@+id/items_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:adapter="@{M.adapter}" />

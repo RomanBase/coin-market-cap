@@ -25,6 +25,8 @@ public class PortfolioItemModel extends SelectableItemModel {
 
     public final ObservableFloat swipeProgress = new ObservableFloat();
     public final ObservableBoolean swipeDirectionLeft = new ObservableBoolean();
+    public final ObservableBoolean isEditable = new ObservableBoolean();
+    public final ObservableBoolean isFavourite = new ObservableBoolean();
 
     public final ObservableString investedValue = new ObservableString();
     public final ObservableString currentValue = new ObservableString();
@@ -63,6 +65,8 @@ public class PortfolioItemModel extends SelectableItemModel {
 
     public void updateData(PortfolioItem item) {
 
+        isEditable.set(true);
+
         items = new ArrayList<>();
         items.add(item);
         exchangeIcons.clear();
@@ -81,6 +85,8 @@ public class PortfolioItemModel extends SelectableItemModel {
     }
 
     public void updateData(List<PortfolioItem> items) {
+
+        isEditable.set(false);
 
         this.items = items;
         exchangeIcons.clear();

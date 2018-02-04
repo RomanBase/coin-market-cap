@@ -6,9 +6,11 @@ import android.support.annotation.NonNull;
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
+import com.ankhrom.coinmarketcap.listener.OnFavouriteCoinStateChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -31,6 +33,9 @@ public class UserPrefs extends BasePrefs {
 
     private OnPortfolioChangedListener portfolioChangedListener;
     private OnExchangePortfolioChangedListener portfolioExchangeListener;
+    private OnFavouriteCoinStateChangedListener favouriteCoinChangedListener;
+
+    private List<String> favourites;
 
     public UserPrefs(@NonNull Context context) {
         super(context);
@@ -42,6 +47,10 @@ public class UserPrefs extends BasePrefs {
 
     public void setExchangePortfolioListener(OnExchangePortfolioChangedListener portfolioExchangeListener) {
         this.portfolioExchangeListener = portfolioExchangeListener;
+    }
+
+    public void setFavouriteCoinStateChangedListener(OnFavouriteCoinStateChangedListener favouriteCoinChangedListener) {
+        this.favouriteCoinChangedListener = favouriteCoinChangedListener;
     }
 
     public void notifyPortfolioChanged(List<PortfolioCoin> portfolio) {
@@ -58,6 +67,13 @@ public class UserPrefs extends BasePrefs {
         }
     }
 
+    public void notifyFavouriteCoinChanged(CoinItem coin, boolean isFavourite) {
+
+        if (favouriteCoinChangedListener != null) {
+            favouriteCoinChangedListener.onFavouriteCoinStateChanged(coin, isFavourite);
+        }
+    }
+
     public void setCurrency(String currency) {
 
         edit().putString(CURRENCY, currency).apply();
@@ -70,6 +86,8 @@ public class UserPrefs extends BasePrefs {
 
     public void setFavourites(List<String> coins) {
 
+        favourites = coins;
+
         if (coins == null || coins.isEmpty()) {
             edit().putString(FAVOURITES, null).apply();
         } else {
@@ -79,10 +97,14 @@ public class UserPrefs extends BasePrefs {
 
     public List<String> getFavourites() {
 
+        if (favourites != null) {
+            return favourites;
+        }
+
         Type type = new TypeToken<List<String>>() {
         }.getType();
 
-        return new Gson().fromJson(getPrefs().getString(FAVOURITES, DEFAULT_JSON_LIST), type);
+        return favourites = new Gson().fromJson(getPrefs().getString(FAVOURITES, DEFAULT_JSON_LIST), type);
     }
 
     public void addFavourite(String id) {

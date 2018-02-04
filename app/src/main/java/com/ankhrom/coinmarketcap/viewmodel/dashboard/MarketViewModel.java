@@ -18,6 +18,7 @@ import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
+import com.ankhrom.coinmarketcap.listener.OnFavouriteCoinStateChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
 import com.ankhrom.coinmarketcap.model.coin.CoinAdapterFooterItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
@@ -34,7 +35,7 @@ import java.util.List;
  * Created by R' on 12/30/2017.
  */
 
-public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener, OnCoinSelectedListener {
+public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapterModel> implements DataLoadingListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener, OnCoinSelectedListener, OnFavouriteCoinStateChangedListener {
 
     public enum ListState {
         NORMAL,
@@ -72,6 +73,8 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);
+
+        getUserPrefs().setFavouriteCoinStateChangedListener(this);
     }
 
     @Override
@@ -189,23 +192,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         model.setOnItemSelectedListener(itemSelectedListener);
 
-        List<ItemModel> items = this.model.adapter.getItems();
-        int count = items.size();
-
-        for (int i = 0; i < count; i++) {
-
-            ItemModel item = items.get(i);
-
-            if (item instanceof CoinItemModel) {
-                if (Integer.parseInt(coin.rank) < Integer.parseInt(((CoinItemModel) item).coin.rank)) {
-                    this.model.adapter.add(i, model);
-                    break;
-                }
-            } else {
-                this.model.adapter.add(i, model);
-                break;
-            }
-        }
+        insertItemIntoAdapter(model);
 
         toggleItemFavouriteState(model);
     }
@@ -313,6 +300,65 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
             }
 
             model.adapter.scrollUp(false);
+        }
+    }
+
+    private void insertItemIntoAdapter(CoinItemModel model) {
+
+        List<ItemModel> items = this.model.adapter.getItems();
+        int count = items.size();
+
+        for (int i = 0; i < count; i++) {
+
+            ItemModel item = items.get(i);
+
+            if (item instanceof CoinItemModel) {
+                if (Integer.parseInt(model.coin.rank) < Integer.parseInt(((CoinItemModel) item).coin.rank)) {
+                    this.model.adapter.add(i, model);
+                    break;
+                }
+            } else {
+                this.model.adapter.add(i, model);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onFavouriteCoinStateChanged(CoinItem coin, boolean isFavourite) {
+
+        if (!isModelAvailable()) {
+            return;
+        }
+
+        CoinItemModel item = getDataHolder().getCoinItem(coin.id);
+
+        if (item == null) {
+            if (isFavourite) {
+                onCoinSelected(coin);
+            }
+
+            return;
+        }
+
+        item.isFavourite.set(isFavourite);
+        
+        boolean isListed = model.adapter.getItems().contains(item);
+
+        if (state == ListState.NORMAL) {
+            if (!isListed) {
+                model.adapter.add(item);
+            }
+        } else {
+            if (isFavourite) {
+                if (!isListed) {
+                    insertItemIntoAdapter(item);
+                }
+            } else {
+                if (isListed) {
+                    model.adapter.remove(item);
+                }
+            }
         }
     }
 
