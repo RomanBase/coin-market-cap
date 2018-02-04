@@ -39,13 +39,6 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
     }
 
     @Override
-    public void onInit() {
-        super.onInit();
-
-
-    }
-
-    @Override
     public void loadModel() {
         super.loadModel();
 
@@ -185,7 +178,8 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
     public void onSearchPressed(View view) {
 
-        ScreenHelper.hideSoftKeyboard(getBaseActivity());
+        ScreenHelper.hideSoftKeyboard(getBaseActivity(), true);
+
         addViewModel(SearchViewModel.class, this);
     }
 

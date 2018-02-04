@@ -162,7 +162,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
 
     public void onSearchPressed(View view) {
 
-        ScreenHelper.hideSoftKeyboard(getBaseActivity());
+        ScreenHelper.hideSoftKeyboard(getBaseActivity(), true);
 
         addViewModel(SearchViewModel.class, this);
     }

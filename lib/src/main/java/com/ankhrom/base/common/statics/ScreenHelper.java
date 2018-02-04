@@ -75,8 +75,25 @@ public final class ScreenHelper {
 
         if (windowToken != null) {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(windowToken, 0);
+
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(windowToken, 0);
+            }
         }
+    }
+
+    public static void hideSoftKeyboard(Activity activity, boolean unfocus) {
+
+        hideSoftKeyboard(activity);
+
+        if (unfocus) {
+            ScreenHelper.unfocus(activity);
+        }
+    }
+
+    public static void unfocus(Activity activity) {
+
+        activity.getWindow().getDecorView().clearFocus();
     }
 
     public static boolean isDeviceDecorated(Context context) {

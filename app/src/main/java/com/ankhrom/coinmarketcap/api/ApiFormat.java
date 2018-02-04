@@ -54,11 +54,11 @@ public class ApiFormat {
 
         String number;
 
-        if (value > THOUSAND) {
+        if (Math.abs(value) > THOUSAND) {
             number = NumberFormat.getInstance().format(Double.valueOf(toDigitFormat(value)));
-        } else if (value > TEN) {
+        } else if (Math.abs(value) > TEN) {
             number = toShortFormatString(value);
-        } else if (value > ONE) {
+        } else if (Math.abs(value) > ONE) {
             number = toExtendedFormatString(value);
         } else {
             number = toLongFormatString(value);
@@ -80,10 +80,10 @@ public class ApiFormat {
 
         String number;
 
-        if (value > ApiFormat.BILLION) {
+        if (Math.abs(value) > ApiFormat.BILLION) {
             value /= ApiFormat.BILLION;
             number = toShortFormatString(value) + BILLION_SIGN;
-        } else if (value > ApiFormat.MILLION) {
+        } else if (Math.abs(value) > ApiFormat.MILLION) {
             value /= ApiFormat.MILLION;
             number = toShortFormatString(value) + MILLION_SIGN;
         } else {
