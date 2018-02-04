@@ -1,13 +1,16 @@
 package com.ankhrom.coinmarketcap.model;
 
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableFloat;
+import android.databinding.ObservableList;
 
 import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.common.ExchangeTypeRes;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 
@@ -29,6 +32,8 @@ public class PortfolioItemModel extends SelectableItemModel {
     public final ObservableString avgPrice = new ObservableString();
     public final ObservableString profitLoss = new ObservableString();
     public final ObservableString profitLossAmount = new ObservableString();
+
+    public final ObservableList<Integer> exchangeIcons = new ObservableArrayList<>();
 
     public final CoinItem coin;
     public final String marketPrice;
@@ -60,49 +65,48 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         items = new ArrayList<>();
         items.add(item);
+        exchangeIcons.clear();
 
-        if (!(item.unitPrice < 0.0f)) {
+        exchangeIcons.add(ExchangeTypeRes.getIcon(item.exchange));
+
+        if (!(item.unitPrice > 0.0)) {
             item.unitPrice = Double.parseDouble(coin.priceUsd);
         }
 
         double profit = Double.parseDouble(coin.priceUsd) / item.unitPrice;
-        double profit100;
 
-        if (profit > 1.0f) {
-            profit100 = profit * 100.0 - 100.0;
-        } else {
-            profit100 = -(1.0f - profit) * 100.0;
-        }
-
-        double profitAmount = profit100 / 100.0 * invested;
-
-        invested = item.unitPrice * item.amount;
-        current = invested * profit;
-
-        investedValue.set(ApiFormat.toPriceFormat(invested) + " $");
-        currentValue.set(ApiFormat.toPriceFormat(current) + " $");
-        amount.set(ApiFormat.toPriceFormat(item.amount));
-
-        avgPrice.set(ApiFormat.toPriceFormat(item.unitPrice));
-        profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
-
-        profitLossAmount.set(Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount));
+        setUpModel(profit, item.unitPrice * item.amount, item.amount, item.unitPrice);
     }
 
     public void updateData(List<PortfolioItem> items) {
 
         this.items = items;
+        exchangeIcons.clear();
+
+        for (PortfolioItem item : items) {
+
+            Integer icon = ExchangeTypeRes.getIcon(item.exchange);
+            if (!exchangeIcons.contains(icon)) {
+                exchangeIcons.add(icon);
+            }
+        }
 
         double priceSum = priceSum(items);
         double amountSum = amountSum(items);
         double averagePrice = priceSum / amountSum;
         double profit = Double.parseDouble(coin.priceUsd) / averagePrice;
+
+        setUpModel(profit, priceSum, amountSum, averagePrice);
+    }
+
+    private void setUpModel(double profit, double priceSum, double amountSum, double averagePrice) {
+
         double profit100;
 
-        if (profit > 1.0f) {
+        if (profit > 1.0) {
             profit100 = profit * 100.0 - 100.0;
         } else {
-            profit100 = -(1.0f - profit) * 100.0;
+            profit100 = -(1.0 - profit) * 100.0;
         }
 
         double profitAmount = profit100 / 100.0 * priceSum;
@@ -131,7 +135,7 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         for (PortfolioItem item : items) {
 
-            if (!(item.unitPrice < 0.0f)) {
+            if (!(item.unitPrice > 0.0)) {
                 item.unitPrice = Double.parseDouble(coin.priceUsd);
             }
 

@@ -24,7 +24,7 @@ public class ThirdPartyLoginModel extends Model {
 
     public ThirdPartyLoginModel(ExchangeType type) {
 
-        icon = ExchangeTypeRes.getIcon(type);
+        icon = ExchangeTypeRes.getLogo(type);
     }
 
     public void presetEdit(String key, String secret) {

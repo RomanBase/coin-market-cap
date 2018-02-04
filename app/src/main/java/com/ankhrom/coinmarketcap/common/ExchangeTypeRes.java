@@ -8,13 +8,13 @@ import com.ankhrom.coinmarketcap.R;
 
 public final class ExchangeTypeRes {
 
-    public static int getIcon(ExchangeType type) {
+    public static int getLogo(ExchangeType type) {
 
         switch (type) {
             case NONE:
-                return R.mipmap.ic_launcher;
+                return R.drawable.ic_virtual_icon;
             case HIT_BTC:
-                return R.drawable.ic_hit_btc;
+                return R.drawable.ic_hitbtc;
             case BINANCE:
                 return R.drawable.ic_binance;
             default:
@@ -22,15 +22,15 @@ public final class ExchangeTypeRes {
         }
     }
 
-    public static int getIconSmall(ExchangeType type) { // TODO: 2/3/2018 icons
+    public static int getIcon(ExchangeType type) {
 
         switch (type) {
             case NONE:
-                return R.mipmap.ic_launcher;
+                return R.drawable.ic_virtual_icon;
             case HIT_BTC:
-                return R.drawable.ic_hit_btc;
+                return R.drawable.ic_hitbtc_icon;
             case BINANCE:
-                return R.drawable.ic_binance;
+                return R.drawable.ic_binance_icon;
             default:
                 return R.drawable.ic_logo;
         }

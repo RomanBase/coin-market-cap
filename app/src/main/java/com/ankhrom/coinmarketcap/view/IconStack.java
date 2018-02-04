@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.ankhrom.coinmarketcap.R;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 public class IconStack extends View {
 
     private List<Drawable> icons = new ArrayList<>();
+    private Drawable backgroundDrawable;
 
     public IconStack(Context context) {
         super(context);
@@ -42,6 +45,7 @@ public class IconStack extends View {
 
     protected void init(Context context, AttributeSet attrs) {
 
+        backgroundDrawable = ContextCompat.getDrawable(context, R.drawable.icon_round_background);
     }
 
     public void setIcons(Collection<Integer> resources) {
@@ -77,7 +81,13 @@ public class IconStack extends View {
         }
 
         for (int i = 0; i < count; i++) {
-            icons.get(i).setBounds(getBounds(getPaddingLeft(), getPaddingTop() + offset + (offset + offsetSize) * i, size, size));
+
+            Rect bounds = getBounds(getPaddingLeft(), getPaddingTop() + offset + (offset + offsetSize) * i, size, size);
+
+            backgroundDrawable.setBounds(bounds);
+            backgroundDrawable.draw(canvas);
+
+            icons.get(i).setBounds(bounds);
             icons.get(i).draw(canvas);
         }
 

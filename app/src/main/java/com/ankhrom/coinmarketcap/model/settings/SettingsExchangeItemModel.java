@@ -25,7 +25,7 @@ public class SettingsExchangeItemModel extends SelectableItemModel {
     public SettingsExchangeItemModel(ExchangeType type) {
 
         this.type = type;
-        this.icon = ExchangeTypeRes.getIcon(type);
+        this.icon = ExchangeTypeRes.getLogo(type);
     }
 
     @Override
