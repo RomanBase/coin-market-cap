@@ -11,6 +11,7 @@ import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.master.MainViewModel;
+import com.ankhrom.gdax.Gdax;
 
 public class MainActivity extends BaseActivity {
 
@@ -29,6 +30,8 @@ public class MainActivity extends BaseActivity {
         factory.add(new UserPrefs(this));
         factory.add(new ExchangePrefs(this));
         factory.add(DataHolder.init(factory));
+
+        Gdax.init(this).auth("7de06ade6286e81fd8c104824e4c6840", "XwsjLm0Th32B9QAw0JY3F5layFClo2+gNTofJQnHekpbwMqMksn2USqFNjBqFGuRVhjDu3eivS+qj2/tL+/SpQ==", "ahoy").getPortfolio(null);
 
         return BaseViewModelObserver.with(factory, R.id.root_container)
                 .setViewModel(MainViewModel.class)

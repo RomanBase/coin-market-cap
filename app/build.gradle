@@ -44,6 +44,7 @@ dependencies {
     compile project(path: ':hitbtc')
     compile project(path: ':binance')
     compile project(path: ':coincap')
+    compile project(path: ':gdax')
 }
 
 apply plugin: 'com.google.gms.google-services'
