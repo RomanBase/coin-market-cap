@@ -55,7 +55,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
             item.setOnItemSelectedListener(this);
             item.isLoading.set(fetcher.isLoading(type));
 
-            setExchangeState(item);
+            setExchangeState(item, true);
 
             exchanges.add(item);
         }
@@ -63,7 +63,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
         setModel(new SettingsModel(getContext(), exchanges));
     }
 
-    private void setExchangeState(SettingsExchangeItemModel item) {
+    private void setExchangeState(SettingsExchangeItemModel item, boolean isValid) {
 
         AuthCredentials credentials = getExchangePrefs().getAuth(item.type);
         List<PortfolioCoin> coins = getUserPrefs().getPortfolio(item.type);
@@ -75,7 +75,12 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
             item.note.set(ApiFormat.toTimeFormat(timestamp));
 
             if (credentials.isValid()) {
-                item.state.set(String.format(Locale.US, "active (%s)", coins.size()));
+                if (isValid) {
+                    item.state.set(String.format(Locale.US, "active (%s)", coins.size()));
+                } else {
+                    item.state.set(String.format(Locale.US, "inactive", coins.size()));
+                    item.note.set("SYNC ERROR");
+                }
             } else {
                 item.state.set(String.format(Locale.US, "sync once (%s)", coins.size()));
             }
@@ -97,7 +102,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
                 if (item.type.equals(exchange)) {
 
                     item.isLoading.set(isLoading);
-                    setExchangeState(item);
+                    setExchangeState(item, isValid);
 
                     break;
                 }
@@ -116,7 +121,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
                 if (item.type.equals(type)) {
 
                     item.isLoading.set(false);
-                    setExchangeState(item);
+                    setExchangeState(item, true);
 
                     break;
                 }
