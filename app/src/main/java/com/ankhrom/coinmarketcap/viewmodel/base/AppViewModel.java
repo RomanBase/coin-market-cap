@@ -1,6 +1,7 @@
 package com.ankhrom.coinmarketcap.viewmodel.base;
 
 import android.databinding.ViewDataBinding;
+import android.view.View;
 
 import com.ankhrom.base.model.Model;
 import com.ankhrom.base.observable.ObservableString;
@@ -36,6 +37,11 @@ public abstract class AppViewModel<S extends ViewDataBinding, T extends Model> e
     protected ExchangePrefs getExchangePrefs() {
 
         return getFactory().get(ExchangePrefs.class);
+    }
+
+    public void onClosePressed(View view) {
+
+        getNavigation().navigateBack();
     }
 
     @Override

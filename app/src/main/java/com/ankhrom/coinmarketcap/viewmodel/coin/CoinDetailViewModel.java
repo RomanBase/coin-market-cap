@@ -9,6 +9,7 @@ import android.view.View;
 import com.android.volley.VolleyError;
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.custom.args.InitArgs;
+import com.ankhrom.base.interfaces.viewmodel.CloseableViewModel;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.coincap.CapHistoryTimeFrame;
 import com.ankhrom.coincap.CoinCap;
@@ -30,7 +31,7 @@ import java.util.List;
  * Created by R' on 1/10/2018.
  */
 
-public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, CoinDetailModel> implements ResponseListener<CapHistory>, SparkView.OnScrubListener {
+public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, CoinDetailModel> implements ResponseListener<CapHistory>, SparkView.OnScrubListener, CloseableViewModel {
 
     private CoinItem coin;
     private int timeframe = -1;
@@ -272,5 +273,10 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
     @Override
     public int getLayoutResource() {
         return R.layout.coin_detail_page;
+    }
+
+    @Override
+    public boolean isCloseable() {
+        return true;
     }
 }

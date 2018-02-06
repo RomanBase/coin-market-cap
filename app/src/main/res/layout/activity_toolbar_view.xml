@@ -7,6 +7,10 @@
         <variable
             name="VM"
             type="com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel" />
+
+        <import type="com.ankhrom.base.interfaces.viewmodel.CloseableViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -18,14 +22,26 @@
         android:minHeight="?attr/actionBarSize"
         android:orientation="horizontal">
 
+        <android.support.v7.widget.AppCompatImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{VM::onClosePressed}"
+            android:src="@drawable/ic_close"
+            android:tint="@color/background_color"
+            android:visibility="@{VM instanceof CloseableViewModel ? View.VISIBLE : View.GONE}" />
+
+        <Space
+            android:layout_width="@dimen/base_padding"
+            android:layout_height="wrap_content"
+            android:visibility="@{VM instanceof CloseableViewModel ? View.GONE : View.VISIBLE}" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:paddingBottom="@dimen/base_half_padding"
-            android:paddingLeft="@dimen/base_padding"
-            android:paddingRight="@dimen/base_padding"
             android:paddingTop="@dimen/base_half_padding">
 
             <android.support.v7.widget.AppCompatTextView

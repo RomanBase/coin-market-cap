@@ -6,6 +6,7 @@ import android.view.View;
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.ObjectConverter;
+import com.ankhrom.base.interfaces.viewmodel.CloseableViewModel;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by R' on 1/2/2018.
  */
 
-public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBinding, PortfolioAdapterModel> implements OnItemSwipeListener, OnPortfolioChangedListener {
+public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBinding, PortfolioAdapterModel> implements OnItemSwipeListener, OnPortfolioChangedListener, CloseableViewModel {
 
     private CoinItem coin;
     private PortfolioItemModel parentModel;
@@ -229,5 +230,10 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     @Override
     public int getLayoutResource() {
         return R.layout.portfolio_edit_page;
+    }
+
+    @Override
+    public boolean isCloseable() {
+        return true;
     }
 }
