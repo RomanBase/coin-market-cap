@@ -1,13 +1,20 @@
 <resources>
 
-    <style name="AppTheme.Splash" parent="AppTheme">
+    <!-- Splash application theme. -->
+    <style name="AppTheme.Splash" parent="AppTheme.Base">
 
         <item name="android:windowBackground">@drawable/splashscreen</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+
+    </style>
+
+    <!-- Base theme. -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -17,7 +24,7 @@
         <item name="android:textColorPrimary">@color/text_color</item>
 
         <item name="android:colorForeground">@color/background_color</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/tint_dark_color</item>
     </style>
 
     <style name="AppTheme.CoinItem" parent="TextAppearance.AppCompat">
@@ -29,16 +36,16 @@
 
     <style name="AppTheme.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
 
-        <item name="android:textColor">@color/text_hint_color</item>
-        <item name="android:color">@color/text_hint_color</item>
-        <item name="colorControlNormal">@color/text_hint_color</item>
+        <item name="android:textColor">@color/tint_dark_color</item>
+        <item name="android:color">@color/tint_dark_color</item>
+        <item name="colorControlNormal">@color/tint_dark_color</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
 
     </style>
 
     <style name="AppTheme.SeekBar" parent="Widget.AppCompat.SeekBar">
 
-        <item name="colorControlNormal">@color/text_hint_color</item>
+        <item name="colorControlNormal">@color/tint_dark_color</item>
 
     </style>
 

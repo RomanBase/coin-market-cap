@@ -174,7 +174,7 @@
                     android:padding="@dimen/base_padding"
                     android:text="+"
                     android:textAlignment="center"
-                    android:textColor="@color/text_hint_color"
+                    android:textColor="@color/tint_dark_color"
                     android:textSize="@dimen/text_size_highlight"
                     android:textStyle="bold" />
 

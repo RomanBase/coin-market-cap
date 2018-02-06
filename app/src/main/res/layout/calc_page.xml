@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Change 24h/1h/7d"
-                    android:textColor="@color/text_hint_color" />
+                    android:textColor="@color/tint_dark_color" />
 
                 <Space
                     android:layout_width="0dp"
@@ -152,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" / "
-                    android:textColor="@color/text_hint_color" />
+                    android:textColor="@color/tint_dark_color" />
 
                 <com.ankhrom.coinmarketcap.view.AppTextView
                     android:layout_width="wrap_content"
@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" / "
-                    android:textColor="@color/text_hint_color" />
+                    android:textColor="@color/tint_dark_color" />
 
                 <com.ankhrom.coinmarketcap.view.AppTextView
                     android:layout_width="wrap_content"

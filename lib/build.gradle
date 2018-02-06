@@ -3,12 +3,11 @@ apply plugin: 'com.android.library'
 def libVersionCode = 1
 def libVersionName = '0.0.3'
 
-def sdk_version = 26;
+def sdk_version = 26
 def appcompat_version = "$sdk_version.1.0"
 
 android {
     compileSdkVersion sdk_version
-    buildToolsVersion "$sdk_version.0.2"
 
     defaultConfig {
         minSdkVersion 15

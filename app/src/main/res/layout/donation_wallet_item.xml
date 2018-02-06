@@ -59,7 +59,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{M::onItemSelected}"
             android:src="@drawable/ic_content_copy"
-            android:tint="@color/text_hint_color" />
+            android:tint="@color/tint_dark_color" />
 
     </LinearLayout>
 

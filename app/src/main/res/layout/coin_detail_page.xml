@@ -156,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Change 24h/1h/7d"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <Space
                         android:layout_width="0dp"
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" / "
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <com.ankhrom.coinmarketcap.view.AppTextView
                         android:layout_width="wrap_content"
@@ -183,7 +183,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" / "
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <com.ankhrom.coinmarketcap.view.AppTextView
                         android:layout_width="wrap_content"
@@ -283,7 +283,7 @@
                             app:scrubListener="@{VM}"
                             app:spark_lineColor="@color/colorAccent"
                             app:spark_scrubEnabled="true"
-                            app:spark_scrubLineColor="@color/text_hint_color" />
+                            app:spark_scrubLineColor="@color/tint_dark_color" />
 
                     </LinearLayout>
 
@@ -294,7 +294,7 @@
                         android:padding="@dimen/extended_padding"
                         android:text="Oops! No data found."
                         android:textAlignment="center"
-                        android:textColor="@color/text_hint_color"
+                        android:textColor="@color/tint_dark_color"
                         android:textSize="@dimen/text_size_price"
                         android:visibility="@{VM.error ? View.VISIBLE : View.GONE}" />
 
@@ -319,7 +319,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed3H}"
                         android:text="3 hours"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -329,7 +329,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed12H}"
                         android:text="12 hours"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -340,7 +340,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed24H}"
                         android:text="24 hours"
-                        android:textColor="@color/text_hint_color"
+                        android:textColor="@color/tint_dark_color"
                         app:itemSelected="@{true}" />
 
                 </LinearLayout>
@@ -358,7 +358,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed7D}"
                         android:text="7 days"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -368,7 +368,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed30D}"
                         android:text="30 days"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -378,7 +378,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed90D}"
                         android:text="90 days"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -388,7 +388,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed180D}"
                         android:text="180 days"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                     <include layout="@layout/horizontal_separator" />
 
@@ -398,7 +398,7 @@
                         android:layout_weight="1"
                         android:onClick="@{VM::onPressed1Y}"
                         android:text="1 year"
-                        android:textColor="@color/text_hint_color" />
+                        android:textColor="@color/tint_dark_color" />
 
                 </LinearLayout>
 

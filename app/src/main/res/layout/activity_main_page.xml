@@ -39,7 +39,7 @@
                 android:padding="@dimen/extended_padding"
                 android:text="Oops! Something went wrong."
                 android:textAlignment="center"
-                android:textColor="@color/text_hint_color"
+                android:textColor="@color/tint_dark_color"
                 android:textSize="@dimen/text_size_price"
                 android:visibility="@{VM.error ? View.VISIBLE : View.GONE}" />
 

@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
     <color name="colorPrimary">#A53525</color>
     <color name="colorPrimaryDark">#952515</color>
     <color name="colorAccent">#952515</color>
     <color name="background_color">#fafafa</color>
+    -->
+
+    <color name="colorPrimary">#005577</color>
+    <color name="colorPrimaryDark">#005172</color>
+    <color name="colorAccent">#003355</color>
+    <color name="background_color">#fafafa</color>
+
+    <color name="tint_light_color">#FEEE</color>
+    <color name="tint_dark_color">#555</color>
 
     <color name="favourite_add_color">#aacc00</color>
     <color name="favourite_remove_color">#aa3500</color>
 
     <color name="text_color">#000000</color>
     <color name="text_light_color">#FFFF</color>
-    <color name="text_hint_color">#555</color>
 
     <color name="profit_color">#F0A5</color>
     <color name="loss_color">#FA11</color>
     <color name="popup_background_color">#A000</color>
-    <color name="tint_light_color">#FEEE</color>
+
 </resources>

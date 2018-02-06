@@ -66,7 +66,7 @@
             android:padding="@dimen/extended_padding"
             android:text="Add virtual portfolio or connect to Exchange."
             android:textAlignment="center"
-            android:textColor="@color/text_hint_color"
+            android:textColor="@color/tint_dark_color"
             android:visibility="@{M.isEmpty ? View.VISIBLE : View.GONE}" />
 
         <android.support.design.widget.FloatingActionButton
