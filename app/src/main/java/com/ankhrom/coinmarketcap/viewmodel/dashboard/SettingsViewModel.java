@@ -66,7 +66,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
     private void setExchangeState(SettingsExchangeItemModel item, boolean isValid) {
 
         AuthCredentials credentials = getExchangePrefs().getAuth(item.type);
-        List<PortfolioCoin> coins = getUserPrefs().getPortfolio(item.type);
+        List<PortfolioCoin> coins = getPortfolio().getExchange(item.type);
 
         long timestamp = getExchangePrefs().getTimestamp(item.type);
 
@@ -78,8 +78,7 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
                 if (isValid) {
                     item.state.set(String.format(Locale.US, "active (%s)", coins.size()));
                 } else {
-                    item.state.set(String.format(Locale.US, "inactive", coins.size()));
-                    item.note.set("SYNC ERROR");
+                    item.state.set(String.format(Locale.US, "inactive (%s)", coins.size()));
                 }
             } else {
                 item.state.set(String.format(Locale.US, "sync once (%s)", coins.size()));

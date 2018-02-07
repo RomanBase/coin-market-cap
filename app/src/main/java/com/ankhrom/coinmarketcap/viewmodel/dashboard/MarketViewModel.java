@@ -23,7 +23,6 @@ import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
 import com.ankhrom.coinmarketcap.model.coin.CoinAdapterFooterItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel;
-import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
@@ -74,7 +73,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);
 
-        getUserPrefs().setFavouriteCoinStateChangedListener(this);
+        getPortfolio().setFavouriteCoinStateChangedListener(this);
     }
 
     @Override
@@ -168,12 +167,10 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         item.isFavourite.set(!item.isFavourite.get());
 
-        UserPrefs prefs = getUserPrefs();
-
         if (item.isFavourite.get()) {
-            prefs.addFavourite(item.coin.id);
+            getDataHolder().addFavourite(item.coin.id);
         } else {
-            prefs.removeFavourite(item.coin.id);
+            getDataHolder().removeFavourite(item.coin.id);
 
             if (state == ListState.FAVOURITES) {
                 model.adapter.remove(item);

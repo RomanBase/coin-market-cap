@@ -14,8 +14,8 @@ import com.ankhrom.coinmarketcap.databinding.PortfolioEditPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
-import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
@@ -28,7 +28,7 @@ import java.util.List;
  * Created by R' on 1/2/2018.
  */
 
-public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBinding, PortfolioAdapterModel> implements OnItemSwipeListener, OnPortfolioChangedListener, CloseableViewModel {
+public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBinding, PortfolioAdapterModel> implements OnItemSwipeListener, OnExchangePortfolioChangedListener, CloseableViewModel {
 
     private CoinItem coin;
     private PortfolioItemModel parentModel;
@@ -43,8 +43,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     public void init(InitArgs args) {
         super.init(args);
 
-        parentModel = args.getArg(PortfolioItemModel.class);
-        coin = args.getArg(CoinItem.class, parentModel.coin);
+        coin = args.getArg(CoinItem.class);
     }
 
     @Override
@@ -86,11 +85,11 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
         if (parentModel == null) {
             parentModel = new PortfolioItemModel(coin);
+        }
 
-            PortfolioCoin portfolio = getDataHolder().getPortfolioCoin(coin.id);
-            if (portfolio != null) {
-                parentModel.updateData(portfolio.items);
-            }
+        List<PortfolioItem> portfolio = getPortfolio().getPortfolioItems(coin);
+        if (portfolio != null) {
+            parentModel.updateData(portfolio);
         }
     }
 
@@ -176,20 +175,23 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        PortfolioItem item = itemModel.items.get(0);
+        PortfolioItem item = itemModel.items.get(0); //one and only item
 
         if (ObjectHelper.equals(item.exchange, ExchangeType.NONE)) {
 
             if (parentModel.items.remove(item)) {
 
-                PortfolioCoin portfolio = getDataHolder().getPortfolioCoin(coin.id);
-                if (portfolio != null) {
-                    portfolio.items = getPortfolioItems();
-                    getUserPrefs().updatePortfolioItem(portfolio);
-                }
+                PortfolioCoin portfolio = new PortfolioCoin();
+                portfolio.coinId = coin.id;
+                portfolio.items = getPortfolioItems();
+
+                getPortfolio().updatePortfolioCoin(portfolio, ExchangeType.NONE);
             }
 
             model.adapter.remove(index);
+
+            getPortfolio().persist(ExchangeType.NONE);
+            getPortfolio().notifyExchangePortfolioChanged(ExchangeType.NONE);
 
             if (model.adapter.getItemCount() == 0) {
                 getNavigation().navigateBack();
@@ -220,7 +222,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     }
 
     @Override
-    public void onPortfolioChanged(List<PortfolioCoin> portfolio) {
+    public void onPortfolioChanged(ExchangeType exchange, List<PortfolioCoin> portfolio) {
 
         reloadParentModel();
         reloadHeader();
@@ -236,4 +238,6 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     public boolean isCloseable() {
         return true;
     }
+
+
 }

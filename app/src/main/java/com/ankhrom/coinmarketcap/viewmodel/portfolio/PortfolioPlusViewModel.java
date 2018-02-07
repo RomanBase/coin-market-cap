@@ -14,9 +14,8 @@ import com.ankhrom.coinmarketcap.databinding.PortfolioPlusPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
-import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
+import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioPlusModel;
-import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
 
@@ -28,14 +27,14 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
     private CoinItem coin;
     private CoinItem bitcoin;
-    private OnPortfolioChangedListener listener;
+    private OnExchangePortfolioChangedListener listener;
 
     @Override
     public void init(InitArgs args) {
         super.init(args);
 
         coin = args.getArg(CoinItem.class);
-        listener = args.getArg(OnPortfolioChangedListener.class);
+        listener = args.getArg(OnExchangePortfolioChangedListener.class);
     }
 
     @Override
@@ -208,11 +207,13 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         item.unitPrice = parseDouble(model.unitPrice.get());
         item.exchange = ExchangeType.NONE;
 
-        UserPrefs prefs = getUserPrefs();
-        prefs.addPortfolioItem(item);
+        getPortfolio().addPortfolioItem(item);
+        getPortfolio().persist(item.exchange);
+
+        getPortfolio().notifyExchangePortfolioChanged(item.exchange);
 
         if (listener != null) {
-            listener.onPortfolioChanged(prefs.getPortfolio());
+            listener.onPortfolioChanged(item.exchange, getPortfolio().getExchange(item.exchange));
         }
 
         close();
@@ -224,7 +225,8 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
     private void close() {
 
-        ScreenHelper.hideSoftKeyboard(getBaseActivity());
+        ScreenHelper.hideSoftKeyboard(getBaseActivity(), true);
+
         getNavigation().setPreviousViewModel();
         FragmentHelper.removePage(getContext(), this);
     }

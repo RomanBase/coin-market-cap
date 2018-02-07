@@ -8,6 +8,7 @@ import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.base.viewmodel.BaseViewModel;
 import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.data.DataHolder;
+import com.ankhrom.coinmarketcap.data.PortfolioHolder;
 import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
@@ -27,6 +28,11 @@ public abstract class AppViewModel<S extends ViewDataBinding, T extends Model> e
     protected DataHolder getDataHolder() {
 
         return getFactory().get(DataHolder.class);
+    }
+
+    protected PortfolioHolder getPortfolio() {
+
+        return getFactory().get(PortfolioHolder.class);
     }
 
     protected UserPrefs getUserPrefs() {

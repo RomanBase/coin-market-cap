@@ -7,7 +7,6 @@ import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
-import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
@@ -26,6 +25,8 @@ public class DataHolder { //todo cache
     private List<CoinItem> coins;
     private List<CoinItemModel> coinItems;
 
+    private List<String> favourites;
+
     private final ObjectFactory factory;
     private final DataFetcher fetcher;
 
@@ -36,6 +37,8 @@ public class DataHolder { //todo cache
 
         coins = new ArrayList<>();
         fetcher = new DataFetcher(factory);
+
+        favourites = getPrefs().getFavourites();
     }
 
     public static DataHolder init(ObjectFactory factory) {
@@ -44,6 +47,16 @@ public class DataHolder { //todo cache
         holder.fetchData();
 
         return holder;
+    }
+
+    private UserPrefs getPrefs() {
+
+        return factory.get(UserPrefs.class);
+    }
+
+    public PortfolioHolder getPortfolio() {
+
+        return factory.get(PortfolioHolder.class);
     }
 
     protected void fetchData() {
@@ -96,10 +109,8 @@ public class DataHolder { //todo cache
         if (coinItems == null) {
             coinItems = ObjectHelper.convert(coins.subList(0, Math.min(coins.size(), itemsCount)), new CoinItemConverter());
 
-            List<String> favs = factory.get(UserPrefs.class).getFavourites();
-
             for (CoinItemModel item : coinItems) {
-                item.isFavourite.set(favs.contains(item.coin.id));
+                item.isFavourite.set(favourites.contains(item.coin.id));
             }
 
             List<CoinItemModel> favItems = getFavouriteCoinItems();
@@ -116,12 +127,11 @@ public class DataHolder { //todo cache
 
     public List<CoinItemModel> getFavouriteCoinItems() {
 
-        List<String> favs = factory.get(UserPrefs.class).getFavourites();
         List<CoinItemModel> items = getCoinItems();
 
         List<CoinItemModel> output = new ArrayList<>();
 
-        for (String id : favs) {
+        for (String id : favourites) {
 
             boolean found = false;
 
@@ -198,18 +208,18 @@ public class DataHolder { //todo cache
         return null;
     }
 
-    @Nullable
-    public PortfolioCoin getPortfolioCoin(String id) {
+    public void addFavourite(String id) {
 
-        List<PortfolioCoin> portfolio = factory.get(UserPrefs.class).getPortfolio();
+        favourites.add(id);
+    }
 
-        for (PortfolioCoin coin : portfolio) {
-            if (coin.coinId.equals(id)) {
-                return coin;
-            }
-        }
+    public void removeFavourite(String id) {
 
-        return null;
+        favourites.remove(id);
+    }
+
+    public List<String> getFavourites() {
+        return favourites;
     }
 
     private class CoinItemConverter implements ObjectConverter<CoinItemModel, CoinItem> {

@@ -71,6 +71,11 @@ public class DataFetcher {
         return factory.get(DataHolder.class);
     }
 
+    private PortfolioHolder getPortfoliHolder() {
+
+        return factory.get(PortfolioHolder.class);
+    }
+
     public void addListener(final DataLoadingListener listener) {
 
         if (!loadingCoins && !loadingMarket) {
@@ -194,8 +199,6 @@ public class DataFetcher {
 
         HitBTC hitBTC = HitBTC.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
-        getUserPrefs().setPortfolio(ExchangeType.HIT_BTC, null);
-
         //hitBTC.balanceAccount(hitBalanceListener);
         hitBTC.balanceTrading(hitBalanceListener);
     }
@@ -210,8 +213,6 @@ public class DataFetcher {
         notifyExchangeListeners(ExchangeType.BINANCE, true, false);
 
         Binance binance = Binance.init(factory.getContext()).auth(credentials.key, credentials.secret);
-
-        getUserPrefs().setPortfolio(ExchangeType.BINANCE, null);
 
         binance.getAccountData(binanceAcountListener);
     }
@@ -315,6 +316,7 @@ public class DataFetcher {
         @Override
         public void onResponse(List<HitBalance> response) {
 
+            getPortfoliHolder().clear(ExchangeType.HIT_BTC, false);
             getExchangePrefs().setTimestamp(ExchangeType.HIT_BTC, System.currentTimeMillis());
 
             response = HitFilter.filterZeroBalance(response);
@@ -326,15 +328,18 @@ public class DataFetcher {
             }
 
             final DataHolder holder = getDataHolder();
-            final UserPrefs prefs = getUserPrefs();
+            final PortfolioHolder portfolio = holder.getPortfolio();
 
             for (HitBalance balance : response) {
 
-                addPortfolioCurrency(prefs, holder.getCoinBySymbol(balance.currency), Double.parseDouble(balance.available) + Double.parseDouble(balance.reserved));
+                addPortfolioCurrency(portfolio, holder.getCoinBySymbol(balance.currency), ExchangeType.HIT_BTC, Double.parseDouble(balance.available) + Double.parseDouble(balance.reserved));
             }
+
+            portfolio.persist(ExchangeType.HIT_BTC);
 
             loadingHitBTC = false;
             notifyExchangeListeners(ExchangeType.HIT_BTC, false, true);
+            getPortfoliHolder().notifyExchangePortfolioChanged(ExchangeType.HIT_BTC);
         }
 
         @Override
@@ -349,6 +354,7 @@ public class DataFetcher {
         @Override
         public void onResponse(BinAccount response) {
 
+            getPortfoliHolder().clear(ExchangeType.BINANCE, false);
             getExchangePrefs().setTimestamp(ExchangeType.BINANCE, System.currentTimeMillis());
 
             List<BinBalance> balances = BinFilter.filterZeroBalance(response.balances);
@@ -360,15 +366,18 @@ public class DataFetcher {
             }
 
             final DataHolder holder = getDataHolder();
-            final UserPrefs prefs = getUserPrefs();
+            final PortfolioHolder portfolio = holder.getPortfolio();
 
             for (BinBalance balance : balances) {
 
-                addPortfolioCurrency(prefs, holder.getCoinBySymbol(balance.currency), Double.parseDouble(balance.available));
+                addPortfolioCurrency(portfolio, holder.getCoinBySymbol(balance.currency), ExchangeType.BINANCE, Double.parseDouble(balance.available));
             }
+
+            portfolio.persist(ExchangeType.BINANCE);
 
             loadingBinance = false;
             notifyExchangeListeners(ExchangeType.BINANCE, false, true);
+            getPortfoliHolder().notifyExchangePortfolioChanged(ExchangeType.BINANCE);
         }
 
         @Override
@@ -379,7 +388,7 @@ public class DataFetcher {
         }
     };
 
-    private void addPortfolioCurrency(UserPrefs prefs, @Nullable CoinItem coin, double amount) {
+    private void addPortfolioCurrency(PortfolioHolder holder, @Nullable CoinItem coin, ExchangeType exchange, double amount) {
 
         if (coin == null) {
             return;
@@ -388,14 +397,14 @@ public class DataFetcher {
         PortfolioItem item = new PortfolioItem();
         item.coinId = coin.id;
         item.amount = amount;
-        item.exchange = ExchangeType.HIT_BTC;
+        item.exchange = exchange;
 
         PortfolioCoin portfolio = new PortfolioCoin();
         portfolio.coinId = coin.id;
         portfolio.items = new ArrayList<>();
         portfolio.items.add(item);
 
-        prefs.addPortfolioCoin(portfolio, ExchangeType.HIT_BTC);
+        holder.addPortfolioCoin(portfolio, exchange);
     }
 
 }

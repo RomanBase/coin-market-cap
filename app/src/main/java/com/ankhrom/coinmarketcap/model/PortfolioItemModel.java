@@ -88,7 +88,7 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         isEditable.set(false);
 
-        this.items = items;
+        this.items = new ArrayList<>(items);
         exchangeIcons.clear();
 
         double priceSum = 0.0;

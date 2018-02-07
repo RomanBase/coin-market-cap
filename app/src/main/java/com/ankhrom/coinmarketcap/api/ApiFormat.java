@@ -58,10 +58,10 @@ public class ApiFormat {
             number = NumberFormat.getInstance().format(Double.valueOf(toDigitFormat(value)));
         } else if (Math.abs(value) > TEN) {
             number = toShortFormatString(value);
-        } else if (Math.abs(value) > ONE) {
-            number = toExtendedFormatString(value);
-        } else {
+        } else if (Math.abs(value) < ONE) {
             number = toLongFormatString(value);
+        } else {
+            number = toExtendedFormatString(value);
         }
 
         return number;

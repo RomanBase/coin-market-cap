@@ -21,10 +21,8 @@ import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
-import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
-import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioEditViewModel;
@@ -39,7 +37,7 @@ import java.util.List;
  * Created by R' on 1/1/2018.
  */
 
-public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnPortfolioChangedListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener {
+public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, PortfolioAdapterModel> implements DataLoadingListener, OnExchangePortfolioChangedListener, OnItemSelectedListener<PortfolioItemModel>, OnExchangeAuthChangedListener, SwipeRefreshLayout.OnRefreshListener, OnItemSwipeListener {
 
     private PortfolioItemModel activeItem;
     private boolean itemActivated;
@@ -63,10 +61,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         DataHolder holder = getDataHolder();
         holder.getFetcher().addListener(this);
 
-        UserPrefs prefs = getUserPrefs();
-        prefs.setPortfolioChangedListener(this);
-        prefs.setExchangePortfolioListener(this);
-
+        getPortfolio().setExchangePortfolioListener(this);
         getExchangePrefs().addExchangeAuthListener(this);
     }
 
@@ -105,7 +100,10 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         isLoading.set(true);
 
         binding.pullToRefresh.setRefreshing(false);
-        model.adapter.clear();
+
+        if (isModelAvailable()) {
+            model.adapter.clear();
+        }
 
         DataHolder holder = getDataHolder();
         holder.reload();
@@ -115,15 +113,13 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
         item.isFavourite.set(!item.isFavourite.get());
 
-        UserPrefs prefs = getUserPrefs();
-
         if (item.isFavourite.get()) {
-            prefs.addFavourite(item.coin.id);
+            getDataHolder().addFavourite(item.coin.id);
         } else {
-            prefs.removeFavourite(item.coin.id);
+            getDataHolder().removeFavourite(item.coin.id);
         }
 
-        prefs.notifyFavouriteCoinChanged(item.coin, item.isFavourite.get());
+        getPortfolio().notifyFavouriteCoinChanged(item.coin, item.isFavourite.get());
     }
 
     public void onAddPressed(View view) {
@@ -138,7 +134,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             return;
         }
 
-        addViewModel(PortfolioEditViewModel.class, model, model.coin);
+        addViewModel(PortfolioEditViewModel.class, model.coin);
     }
 
     @Override
@@ -154,7 +150,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             if (item != null) {
 
                 activeItem = item;
-                activeItem.isFavourite.set(getUserPrefs().getFavourites().contains(activeItem.coin.id));
+                activeItem.isFavourite.set(getDataHolder().getFavourites().contains(activeItem.coin.id));
             }
 
             return;
@@ -198,17 +194,18 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             setModel(new PortfolioAdapterModel(getContext()));
         }
 
-        List<String> favs = getUserPrefs().getFavourites();
         List<PortfolioItemModel> items = removeExchange(exchange, model.adapter.getItems());
 
         if (portfolio != null && !portfolio.isEmpty()) {
-            items = addExchange(exchange, items, portfolio);
+            items = addExchange(items, portfolio);
         }
 
         if (items.size() > 0) {
 
             double invested = 0.0;
             double current = 0.0;
+
+            List<String> favs = getDataHolder().getFavourites();
 
             for (PortfolioItemModel item : items) {
                 invested += item.invested;
@@ -252,7 +249,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         setModel(new PortfolioAdapterModel(getContext(), items));
     }
 
-    private List<PortfolioItemModel> addExchange(ExchangeType exchange, List<PortfolioItemModel> currentPortfolio, List<PortfolioCoin> portfolio) {
+    private List<PortfolioItemModel> addExchange(List<PortfolioItemModel> currentPortfolio, List<PortfolioCoin> portfolio) {
 
         for (PortfolioCoin item : portfolio) {
 
@@ -307,20 +304,18 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
     private void updateExchanges() {
 
+        if (model == null) {
+            setModel(new PortfolioAdapterModel(getContext()));
+        }
+
         for (ExchangeType exchange : ExchangeType.values()) {
 
-            List<PortfolioCoin> portfolio = getUserPrefs().getPortfolio(exchange);
+            List<PortfolioCoin> portfolio = getPortfolio().getExchange(exchange);
 
-            if (portfolio != null && !portfolio.isEmpty()) {
+            if (!portfolio.isEmpty()) {
                 updatePortfolio(exchange, portfolio);
             }
         }
-    }
-
-    @Override
-    public void onPortfolioChanged(List<PortfolioCoin> portfolio) {
-
-        updatePortfolio(ExchangeType.NONE, portfolio);
     }
 
     @Override
@@ -335,7 +330,6 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         this.error.set(false);
 
         if (!isLoading) {
-            updatePortfolio(ExchangeType.NONE, getUserPrefs().getPortfolio());
             updateExchanges();
         }
 
@@ -353,7 +347,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     public void onExchangeAuthChanged(ExchangeType type, @Nullable AuthCredentials credentials) {
 
         if (credentials == null) {
-            getUserPrefs().setPortfolio(type, null);
+            getPortfolio().clear(type, true);
             onPortfolioChanged(type, null);
         } else {
             getDataHolder().getFetcher().requestExchangePortfolio(type, credentials);
