@@ -28,6 +28,12 @@ public class PortfolioAdapterModel extends AdapterModel<PortfolioItemModel> {
         isEmpty.set(collection.size() == 0);
     }
 
+    public void replace(Collection<PortfolioItemModel> collection) {
+
+        isEmpty.set(collection.size() == 0);
+        adapter.replace(collection);
+    }
+
     @Override
     public int getVariableBindingResource() {
         return BR.M;

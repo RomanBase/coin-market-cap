@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ankhrom.base.model.ItemModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,6 +68,12 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         notifyDataSetChanged();
     }
 
+    public void replace(@NonNull Collection<? extends T> collection) {
+
+        items.clear();
+        addAll(collection);
+    }
+
     public void remove(T item) {
 
         remove(items.indexOf(item));
@@ -98,6 +105,11 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
     public List<T> getItems() {
 
         return items;
+    }
+
+    public List<T> getItemsCopy() {
+
+        return new ArrayList<>(items);
     }
 
     public void post(Runnable runnable) {

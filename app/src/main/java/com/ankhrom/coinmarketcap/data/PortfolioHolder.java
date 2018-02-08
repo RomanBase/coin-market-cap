@@ -10,6 +10,7 @@ import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
 import com.ankhrom.coinmarketcap.listener.OnExchangePortfolioChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnFavouriteCoinStateChangedListener;
+import com.ankhrom.coinmarketcap.listener.OnPortfolioChangedListener;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class PortfolioHolder {
 
     private OnExchangePortfolioChangedListener portfolioExchangeListener;
     private OnFavouriteCoinStateChangedListener favouriteCoinChangedListener;
+    private OnPortfolioChangedListener portfolioChangedListener;
 
     private final UserPrefs prefs;
 
@@ -175,6 +177,10 @@ public class PortfolioHolder {
         this.favouriteCoinChangedListener = favouriteCoinChangedListener;
     }
 
+    public void setPortfolioChangedListener(OnPortfolioChangedListener portfolioChangedListener) {
+        this.portfolioChangedListener = portfolioChangedListener;
+    }
+
     public void notifyExchangePortfolioChanged(ExchangeType exchange) {
 
         if (portfolioExchangeListener != null) {
@@ -186,6 +192,20 @@ public class PortfolioHolder {
 
         if (favouriteCoinChangedListener != null) {
             favouriteCoinChangedListener.onFavouriteCoinStateChanged(coin, isFavourite);
+        }
+    }
+
+    public void notifyPortfolioItemAdded(PortfolioItem item) {
+
+        if (portfolioChangedListener != null) {
+            portfolioChangedListener.onPortfolioItemAdded(item);
+        }
+    }
+
+    public void notifyPortfolioItemRemoved(PortfolioItem item) {
+
+        if (portfolioChangedListener != null) {
+            portfolioChangedListener.onPortfolioItemRemoved(item);
         }
     }
 }

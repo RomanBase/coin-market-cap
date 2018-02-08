@@ -183,15 +183,15 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
                 PortfolioCoin portfolio = new PortfolioCoin();
                 portfolio.coinId = coin.id;
-                portfolio.items = getPortfolioItems();
+                portfolio.items = getPortfolioItems(item.exchange);
 
-                getPortfolio().updatePortfolioCoin(portfolio, ExchangeType.NONE);
+                getPortfolio().updatePortfolioCoin(portfolio, item.exchange);
+                getPortfolio().notifyPortfolioItemRemoved(item);
             }
 
             model.adapter.remove(index);
 
-            getPortfolio().persist(ExchangeType.NONE);
-            getPortfolio().notifyExchangePortfolioChanged(ExchangeType.NONE);
+            getPortfolio().persist(item.exchange);
 
             if (model.adapter.getItemCount() == 0) {
                 getNavigation().navigateBack();
@@ -203,12 +203,12 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
         }
     }
 
-    private List<PortfolioItem> getPortfolioItems() {
+    private List<PortfolioItem> getPortfolioItems(ExchangeType exchange) {
 
         List<PortfolioItem> items = new ArrayList<>();
 
         for (PortfolioItem item : parentModel.items) {
-            if (ObjectHelper.equals(item.exchange, ExchangeType.NONE)) {
+            if (ObjectHelper.equals(item.exchange, exchange)) {
                 items.add(item);
             }
         }

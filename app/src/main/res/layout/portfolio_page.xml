@@ -35,27 +35,12 @@
                 android:layout_height="match_parent"
                 app:onRefreshListener="@{VM}">
 
-                <android.support.v4.widget.NestedScrollView
+                <com.ankhrom.base.custom.view.BaseListView
+                    android:id="@+id/items_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    app:adapter="@{M.adapter}" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <com.ankhrom.base.custom.view.BaseListView
-                            android:id="@+id/items_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:adapter="@{M.adapter}" />
-
-                        <android.support.v4.widget.Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="96dp" />
-
-                    </LinearLayout>
-                </android.support.v4.widget.NestedScrollView>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 

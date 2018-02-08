@@ -210,7 +210,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
         getPortfolio().addPortfolioItem(item);
         getPortfolio().persist(item.exchange);
 
-        getPortfolio().notifyExchangePortfolioChanged(item.exchange);
+        getPortfolio().notifyPortfolioItemAdded(item);
 
         if (listener != null) {
             listener.onPortfolioChanged(item.exchange, getPortfolio().getExchange(item.exchange));
