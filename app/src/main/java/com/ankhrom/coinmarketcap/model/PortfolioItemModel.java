@@ -1,9 +1,8 @@
 package com.ankhrom.coinmarketcap.model;
 
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ObservableFloat;
-import android.databinding.ObservableList;
 
 import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.base.observable.ObservableString;
@@ -35,7 +34,7 @@ public class PortfolioItemModel extends SelectableItemModel {
     public final ObservableString profitLoss = new ObservableString();
     public final ObservableString profitLossAmount = new ObservableString();
 
-    public final ObservableList<Integer> exchangeIcons = new ObservableArrayList<>();
+    public final ObservableField<List<Integer>> exchangeIcons = new ObservableField<>();
 
     public final CoinItem coin;
     public final String marketPrice;
@@ -69,9 +68,11 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         items = new ArrayList<>();
         items.add(item);
-        exchangeIcons.clear();
+        List<Integer> icons = new ArrayList<>();
 
-        exchangeIcons.add(ExchangeTypeUtil.getIcon(item.exchange));
+        icons.add(ExchangeTypeUtil.getIcon(item.exchange));
+
+        exchangeIcons.set(icons);
 
         double unitPrice = Double.parseDouble(coin.priceUsd);
 
@@ -89,7 +90,6 @@ public class PortfolioItemModel extends SelectableItemModel {
         isEditable.set(false);
 
         this.items = new ArrayList<>(items);
-        exchangeIcons.clear();
 
         double priceSum = 0.0;
         double amountSum = 0.0;
@@ -98,11 +98,13 @@ public class PortfolioItemModel extends SelectableItemModel {
         double price = 0.0;
         double amount = 0.0;
 
+        List<Integer> icons = new ArrayList<>();
+
         for (PortfolioItem item : items) {
 
             Integer icon = ExchangeTypeUtil.getIcon(item.exchange);
-            if (!exchangeIcons.contains(icon)) {
-                exchangeIcons.add(icon);
+            if (!icons.contains(icon)) {
+                icons.add(icon);
             }
 
             if (!(item.unitPrice > 0.0)) {
@@ -117,6 +119,8 @@ public class PortfolioItemModel extends SelectableItemModel {
             priceSum += item.unitPrice * item.amount;
             amountSum += item.amount;
         }
+
+        exchangeIcons.set(icons);
 
         double averagePrice = priceSum / amountSum;
         double profit = unitPrice / averagePrice;

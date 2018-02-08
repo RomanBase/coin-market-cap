@@ -332,6 +332,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             if (model.coin.id.equals(item.coinId)) {
                 model.items.add(item);
                 model.updateData(model.items);
+                this.model.adapter.notifyItemChanged(model);
                 updated = true;
             }
         }
@@ -375,6 +376,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
                     emptyModel = model;
                 } else {
                     model.updateData(model.items);
+                    this.model.adapter.notifyItemChanged(model);
                 }
                 break;
             }
