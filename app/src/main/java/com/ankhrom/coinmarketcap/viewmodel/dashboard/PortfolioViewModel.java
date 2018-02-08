@@ -373,18 +373,21 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
                 model.items.remove(item);
                 if (model.items.size() == 0) {
                     emptyModel = model;
+                } else {
+                    model.updateData(model.items);
                 }
                 break;
             }
         }
 
         if (emptyModel != null) {
+            currentPortfolio.remove(emptyModel);
             model.adapter.remove(emptyModel);
         }
 
-        model.checkEmptiness();
+        updateHeader(currentPortfolio);
 
-        updateHeader(model.adapter.getItems(PortfolioItemModel.class));
+        model.checkEmptiness();
     }
 
     private void updateExchanges() {

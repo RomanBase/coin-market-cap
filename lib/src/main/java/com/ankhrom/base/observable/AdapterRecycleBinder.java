@@ -126,6 +126,15 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         return new ArrayList<>(items);
     }
 
+    public void notifyItemChanged(T item) {
+
+        int index = items.indexOf(item);
+
+        if (index > -1) {
+            notifyItemChanged(index);
+        }
+    }
+
     public void post(Runnable runnable) {
 
         if (view != null) {
