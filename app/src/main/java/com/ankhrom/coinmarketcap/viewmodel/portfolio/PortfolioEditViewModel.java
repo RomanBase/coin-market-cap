@@ -6,7 +6,9 @@ import android.view.View;
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.ObjectConverter;
+import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.interfaces.viewmodel.CloseableViewModel;
+import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
@@ -54,6 +56,9 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
+        setModel(new PortfolioAdapterModel(getContext()));
+        model.setOnAddItemPressedListener(onAddItemPressed);
+
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
 
         reloadParentModel();
@@ -67,6 +72,13 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
         attachSwipeListener();
     }
+
+    private final OnItemSelectedListener onAddItemPressed = new OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(View view, ItemModel model) {
+            onAddPressed(view);
+        }
+    };
 
     private void attachSwipeListener() {
 
@@ -118,7 +130,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             }
         });
 
-        setModel(new PortfolioAdapterModel(getContext(), items));
+        model.replace(items);
     }
 
     @Override
@@ -142,7 +154,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        activeItem = model.adapter.get(index);
+        activeItem = (PortfolioItemModel) model.adapter.get(index);
     }
 
     @Override
@@ -193,13 +205,14 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
 
             getPortfolio().persist(item.exchange);
 
-            if (model.adapter.getItemCount() == 0) {
-                getNavigation().navigateBack();
-                return;
-            }
+            model.checkEmptiness();
 
-            reloadParentModel();
-            reloadHeader();
+            if (model.isEmpty.get()) {
+                getNavigation().navigateBack();
+            } else {
+                reloadParentModel();
+                reloadHeader();
+            }
         }
     }
 

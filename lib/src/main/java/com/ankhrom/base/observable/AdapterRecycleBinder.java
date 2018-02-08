@@ -107,6 +107,20 @@ public class AdapterRecycleBinder<T extends ItemModel> extends RecyclerView.Adap
         return items;
     }
 
+    @SuppressWarnings("unchecked")
+    public <U> List<U> getItems(Class<U> clazz) {
+
+        List<U> list = new ArrayList<>();
+
+        for (T item : items) {
+            if (item.getClass().isAssignableFrom(clazz)) {
+                list.add((U) item);
+            }
+        }
+
+        return list;
+    }
+
     public List<T> getItemsCopy() {
 
         return new ArrayList<>(items);

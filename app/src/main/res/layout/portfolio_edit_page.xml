@@ -46,7 +46,8 @@
             android:layout_margin="@dimen/base_padding"
             android:onClick="@{VM::onAddPressed}"
             android:src="@drawable/ic_add"
-            android:tint="@color/background_color" />
+            android:tint="@color/background_color"
+            android:visibility="gone" />
 
     </FrameLayout>
 

@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
+import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
@@ -59,6 +60,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         headerTitle.set("Portfolio");
 
         setModel(new PortfolioAdapterModel(getContext()));
+        model.setOnAddItemPressedListener(onAddItemPressed);
 
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
 
@@ -76,6 +78,13 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
         attachSwipeListener();
     }
+
+    private final OnItemSelectedListener onAddItemPressed = new OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(View view, ItemModel model) {
+            onAddPressed(view);
+        }
+    };
 
     private void attachSwipeListener() {
 
@@ -150,7 +159,8 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
         if (index > -1) {
 
-            PortfolioItemModel item = model.adapter.get(index);
+            ItemModel model = this.model.adapter.get(index);
+            PortfolioItemModel item = model instanceof PortfolioItemModel ? (PortfolioItemModel) model : null;
 
             if (item != null) {
 
@@ -195,7 +205,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
     private void updatePortfolio(ExchangeType exchange, List<PortfolioCoin> portfolio) {
 
-        List<PortfolioItemModel> items = removeExchange(exchange, model.adapter.getItemsCopy());
+        List<PortfolioItemModel> items = removeExchange(exchange, model.adapter.getItems(PortfolioItemModel.class));
 
         if (portfolio != null && !portfolio.isEmpty()) {
             items = addExchange(items, portfolio);
@@ -314,7 +324,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
     private void addItem(PortfolioItem item) {
 
-        List<PortfolioItemModel> currentPortfolio = model.adapter.getItems();
+        List<PortfolioItemModel> currentPortfolio = model.adapter.getItems(PortfolioItemModel.class);
 
         boolean updated = false;
 
@@ -344,17 +354,18 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
                     }
                 }
 
-                this.model.isEmpty.set(false);
                 this.model.adapter.add(index, model);
+                this.model.checkFooter();
+                this.model.checkEmptiness();
             }
         }
 
-        updateHeader(model.adapter.getItems());
+        updateHeader(model.adapter.getItems(PortfolioItemModel.class));
     }
 
     private void removeItem(PortfolioItem item) {
 
-        List<PortfolioItemModel> currentPortfolio = model.adapter.getItems();
+        List<PortfolioItemModel> currentPortfolio = model.adapter.getItems(PortfolioItemModel.class);
         PortfolioItemModel emptyModel = null;
 
         for (PortfolioItemModel model : currentPortfolio) {
@@ -371,9 +382,9 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             model.adapter.remove(emptyModel);
         }
 
-        model.isEmpty.set(model.adapter.getItemCount() == 0);
+        model.checkEmptiness();
 
-        updateHeader(model.adapter.getItems());
+        updateHeader(model.adapter.getItems(PortfolioItemModel.class));
     }
 
     private void updateExchanges() {

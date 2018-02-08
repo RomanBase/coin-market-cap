@@ -44,15 +44,34 @@
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="@dimen/extended_padding"
-            android:text="Add virtual portfolio or connect to Exchange."
-            android:textAlignment="center"
-            android:textColor="@color/tint_dark_color"
-            android:visibility="@{M.isEmpty ? View.VISIBLE : View.GONE}" />
+            android:orientation="vertical"
+            android:visibility="@{M.isEmpty ? View.VISIBLE : View.GONE}">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/extended_padding"
+                android:text="Add virtual portfolio or connect to Exchange."
+                android:textAlignment="center"
+                android:textColor="@color/tint_dark_color" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tint_selectable_background"
+                android:onClick="@{VM::onAddPressed}"
+                android:padding="@dimen/base_padding"
+                android:text="+"
+                android:textAlignment="center"
+                android:textColor="@color/tint_dark_color"
+                android:textSize="@dimen/text_size_highlight"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
@@ -61,7 +80,8 @@
             android:layout_margin="@dimen/base_padding"
             android:onClick="@{VM::onAddPressed}"
             android:src="@drawable/ic_add"
-            android:tint="@color/background_color" />
+            android:tint="@color/background_color"
+            android:visibility="gone" />
 
     </FrameLayout>
 </layout>

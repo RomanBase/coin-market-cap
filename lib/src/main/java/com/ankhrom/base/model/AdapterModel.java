@@ -21,5 +21,4 @@ public abstract class AdapterModel<T extends ItemModel> extends Model {
 
         adapter.addAll(collection);
     }
-
 }
