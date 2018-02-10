@@ -211,7 +211,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="sum price">
+                    android:hint="price $">
 
                     <android.support.v7.widget.AppCompatEditText
                         android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="profit sum price">
+                    android:hint="profit">
 
                     <android.support.v7.widget.AppCompatEditText
                         android:layout_width="match_parent"

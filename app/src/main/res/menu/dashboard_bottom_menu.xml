@@ -4,35 +4,35 @@
     <item
         android:id="@+id/menu_market"
         android:enabled="true"
-        android:icon="@drawable/ic_multiline_chart"
+        android:icon="@drawable/ic_poll"
         android:title="Market"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_favourites"
         android:enabled="true"
-        android:icon="@drawable/ic_star_border"
+        android:icon="@drawable/ic_star"
         android:title="Favourites"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_search"
         android:enabled="true"
-        android:icon="@drawable/ic_copyright"
-        android:title="Coin calc"
+        android:icon="@drawable/ic_swap_vertical_circle"
+        android:title="Calculator"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_porfolio"
         android:enabled="true"
-        android:icon="@drawable/ic_trending"
+        android:icon="@drawable/ic_account_balance_wallet"
         android:title="Portfolio"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_settings"
         android:enabled="true"
-        android:icon="@drawable/ic_person_outline"
+        android:icon="@drawable/ic_person"
         android:title="Account"
         app:showAsAction="ifRoom" />
 </menu>
