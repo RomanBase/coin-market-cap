@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.ankhrom.base.custom.prefs.BasePrefs;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
-import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,8 +23,6 @@ public class UserPrefs extends BasePrefs {
     private static final String CURRENCY = "info";
     private static final String FAVOURITES = "favourites";
     private static final String PORTFOLIO = "portfolio";
-
-    public DataHolder holder;
 
     public UserPrefs(@NonNull Context context) {
         super(context);

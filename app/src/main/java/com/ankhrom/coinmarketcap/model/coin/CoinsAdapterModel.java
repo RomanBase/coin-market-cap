@@ -5,8 +5,8 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableList;
 
 import com.ankhrom.base.model.AdapterModel;
-import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.BR;
+import com.ankhrom.coinmarketcap.model.base.SortableCoinItemModel;
 
 import java.util.Collection;
 
@@ -14,7 +14,7 @@ import java.util.Collection;
  * Created by R' on 12/30/2017.
  */
 
-public class CoinsAdapterModel extends AdapterModel<ItemModel> {
+public class CoinsAdapterModel extends AdapterModel<SortableCoinItemModel> {
 
     public final ObservableBoolean isEmpty = new ObservableBoolean();
 
@@ -30,30 +30,30 @@ public class CoinsAdapterModel extends AdapterModel<ItemModel> {
         adapter.addOnDataSetChangedListener(datasetChangedListener);
     }
 
-    private final ObservableList.OnListChangedCallback<ObservableList<ItemModel>> datasetChangedListener = new ObservableList.OnListChangedCallback<ObservableList<ItemModel>>() {
+    private final ObservableList.OnListChangedCallback<ObservableList<SortableCoinItemModel>> datasetChangedListener = new ObservableList.OnListChangedCallback<ObservableList<SortableCoinItemModel>>() {
 
         @Override
-        public void onChanged(ObservableList<ItemModel> itemModels) {
+        public void onChanged(ObservableList<SortableCoinItemModel> itemModels) {
 
         }
 
         @Override
-        public void onItemRangeChanged(ObservableList<ItemModel> itemModels, int i, int i1) {
+        public void onItemRangeChanged(ObservableList<SortableCoinItemModel> itemModels, int i, int i1) {
 
         }
 
         @Override
-        public void onItemRangeInserted(ObservableList<ItemModel> itemModels, int i, int i1) {
+        public void onItemRangeInserted(ObservableList<SortableCoinItemModel> itemModels, int i, int i1) {
             isEmpty.set(false);
         }
 
         @Override
-        public void onItemRangeMoved(ObservableList<ItemModel> itemModels, int i, int i1, int i2) {
+        public void onItemRangeMoved(ObservableList<SortableCoinItemModel> itemModels, int i, int i1, int i2) {
 
         }
 
         @Override
-        public void onItemRangeRemoved(ObservableList<ItemModel> itemModels, int i, int i1) {
+        public void onItemRangeRemoved(ObservableList<SortableCoinItemModel> itemModels, int i, int i1) {
             isEmpty.set(adapter.getItemCount() <= 1);
         }
     };

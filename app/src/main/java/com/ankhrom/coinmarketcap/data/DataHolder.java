@@ -30,7 +30,7 @@ public class DataHolder { //todo cache
     private final ObjectFactory factory;
     private final DataFetcher fetcher;
 
-    private int itemsCount = 300;
+    private int itemsCount = 500;
 
     private DataHolder(ObjectFactory factory) {
         this.factory = factory;
@@ -211,11 +211,13 @@ public class DataHolder { //todo cache
     public void addFavourite(String id) {
 
         favourites.add(id);
+        getPrefs().setFavourites(favourites);
     }
 
     public void removeFavourite(String id) {
 
         favourites.remove(id);
+        getPrefs().setFavourites(favourites);
     }
 
     public List<String> getFavourites() {

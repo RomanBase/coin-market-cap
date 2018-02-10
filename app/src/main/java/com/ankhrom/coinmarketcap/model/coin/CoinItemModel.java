@@ -5,18 +5,18 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
-import com.ankhrom.base.model.SelectableItemModel;
-import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
+import com.ankhrom.coinmarketcap.model.base.SortableCoinItemModel;
 
 /**
  * Created by R' on 12/30/2017.
  */
 
-public class CoinItemModel extends SelectableItemModel {
+public class CoinItemModel extends SortableCoinItemModel {
 
     public final CoinItem coin;
 
@@ -37,6 +37,16 @@ public class CoinItemModel extends SelectableItemModel {
     public CoinItemModel(@NonNull CoinItem item) {
 
         coin = item;
+
+        isSortable = true;
+        itemRank = Integer.parseInt(coin.rank);
+        itemPrice = Double.parseDouble(coin.priceUsd);
+
+        if (!StringHelper.isEmpty(coin.percentChange24h)) {
+            itemChange24h = Double.parseDouble(coin.percentChange24h);
+        } else {
+            itemChange24h = 0.0;
+        }
 
         price = ApiFormat.toPriceFormat(coin.priceUsd) + " $";
         supply = ApiFormat.toShortFormat(coin.supply);
@@ -61,11 +71,6 @@ public class CoinItemModel extends SelectableItemModel {
         }
 
         return false;
-    }
-
-    @Override
-    public int getVariableBindingResource() {
-        return BR.M;
     }
 
     @Override

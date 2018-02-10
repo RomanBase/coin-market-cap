@@ -33,7 +33,9 @@
             <android.support.v7.widget.AppCompatTextView
                 style="@style/AppTheme.CoinItem"
                 android:layout_width="32dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{VM::onToggleRankFilter}"
                 android:text="#"
                 android:textAlignment="center"
                 android:textColor="@color/text_light_color"
@@ -42,8 +44,10 @@
             <android.support.v7.widget.AppCompatTextView
                 style="@style/AppTheme.CoinItem"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{VM::onToggleRankFilter}"
                 android:text="Currency"
                 android:textAlignment="textStart"
                 android:textColor="@color/text_light_color"
@@ -53,7 +57,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="end"
+                android:onClick="@{VM::onToggleUnitPriceFilter}"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -80,7 +86,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="end"
+                android:onClick="@{VM::onTogglePercentageFilter}"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -107,7 +115,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="end"
+                android:onClick="@{VM::onToggleRankFilter}"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView

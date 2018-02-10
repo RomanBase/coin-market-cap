@@ -12,6 +12,7 @@ import com.ankhrom.coinmarketcap.AppCode;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.common.AppVibrator;
+import com.ankhrom.coinmarketcap.common.CoinItemComparator;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.databinding.MarketPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
@@ -20,6 +21,7 @@ import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.listener.OnFavouriteCoinStateChangedListener;
 import com.ankhrom.coinmarketcap.listener.OnItemSwipeListener;
+import com.ankhrom.coinmarketcap.model.base.SortableCoinItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinAdapterFooterItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinsAdapterModel;
@@ -41,7 +43,16 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         FAVOURITES
     }
 
+    public enum SortState {
+        RANK,
+        PRICE_UP,
+        PRICE_DOWN,
+        CHANGE_UP,
+        CHANGE_DOWN
+    }
+
     private ListState state;
+    private SortState sort;
     private CoinItemModel activeItem;
     private boolean itemActivated;
 
@@ -53,6 +64,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         super.init(args);
 
         state = args.getArg(ListState.class, ListState.NORMAL);
+        sort = SortState.RANK;
     }
 
     @Override
@@ -95,17 +107,55 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         holder.reload();
     }
 
-    public void onSearchPressed(View view) {
-
-        addViewModel(SearchViewModel.class, this);
-    }
-
     private final OnItemSelectedListener onSearchSelected = new OnItemSelectedListener() {
         @Override
         public void onItemSelected(View view, ItemModel model) {
             onSearchPressed(view);
         }
     };
+
+    private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
+        @Override
+        public void onItemSelected(View view, CoinItemModel model) {
+
+            addViewModel(CoinDetailViewModel.class, model.coin);
+        }
+    };
+
+    private final OnItemSelectedListener<CoinItemModel> itemSelectedLongListener = new OnItemSelectedListener<CoinItemModel>() {
+        @Override
+        public void onItemSelected(View view, CoinItemModel model) {
+
+        }
+    };
+
+    public void onSearchPressed(View view) {
+
+        addViewModel(SearchViewModel.class, this);
+    }
+
+    public void onTogglePercentageFilter(View view) {
+
+        sort = sort == SortState.CHANGE_UP ? SortState.CHANGE_DOWN : SortState.CHANGE_UP;
+        sortItems();
+    }
+
+    public void onToggleUnitPriceFilter(View view) {
+
+        sort = sort == SortState.PRICE_DOWN ? SortState.PRICE_UP : SortState.PRICE_DOWN;
+        sortItems();
+    }
+
+    public void onToggleRankFilter(View view) {
+
+        sort = SortState.RANK;
+        sortItems();
+    }
+
+    private void sortItems() {
+
+        model.adapter.sort(CoinItemComparator.getSorter(sort));
+    }
 
     private void attachSwipeListener() {
 
@@ -147,21 +197,6 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     public ListState getListState() {
         return state;
     }
-
-    private final OnItemSelectedListener<CoinItemModel> itemSelectedListener = new OnItemSelectedListener<CoinItemModel>() {
-        @Override
-        public void onItemSelected(View view, CoinItemModel model) {
-
-            addViewModel(CoinDetailViewModel.class, model.coin);
-        }
-    };
-
-    private final OnItemSelectedListener<CoinItemModel> itemSelectedLongListener = new OnItemSelectedListener<CoinItemModel>() {
-        @Override
-        public void onItemSelected(View view, CoinItemModel model) {
-
-        }
-    };
 
     protected void toggleItemFavouriteState(CoinItemModel item) {
 
@@ -273,6 +308,11 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
         } else {
             int count = items.size();
+
+            if (sort != SortState.RANK) {
+                model.adapter.sort(CoinItemComparator.getSorter(sort = SortState.RANK));
+            }
+
             for (int i = 0; i < count; i++) {
                 CoinItemModel item = items.get(i);
 
@@ -302,15 +342,15 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
 
     private void insertItemIntoAdapter(CoinItemModel model) {
 
-        List<ItemModel> items = this.model.adapter.getItems();
+        List<SortableCoinItemModel> items = this.model.adapter.getItems();
         int count = items.size();
 
         for (int i = 0; i < count; i++) {
 
-            ItemModel item = items.get(i);
+            SortableCoinItemModel item = items.get(i);
 
-            if (item instanceof CoinItemModel) {
-                if (Integer.parseInt(model.coin.rank) < Integer.parseInt(((CoinItemModel) item).coin.rank)) {
+            if (item.isSortable) {
+                if (model.itemRank < item.itemRank) {
                     this.model.adapter.add(i, model);
                     break;
                 }
@@ -339,7 +379,7 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
         }
 
         item.isFavourite.set(isFavourite);
-        
+
         boolean isListed = model.adapter.getItems().contains(item);
 
         if (state == ListState.NORMAL) {
