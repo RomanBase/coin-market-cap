@@ -7,6 +7,8 @@ import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.model.AdapterModel;
 import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.BR;
+import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.model.coin.CoinAdapterFooterItemModel;
 
 import java.util.Collection;
@@ -17,14 +19,34 @@ import java.util.Collection;
 
 public class PortfolioAdapterModel extends AdapterModel<ItemModel> {
 
-    public ObservableBoolean isEmpty = new ObservableBoolean();
+    public ObservableBoolean isEmpty = new ObservableBoolean(true);
+
+    public final String change1h;
+    public final String change24h;
+    public final String change7d;
+    public final String marketCap;
+    public final String unitPrice;
+    public final String bitcoinUnitValue;
 
     private OnItemSelectedListener listener;
 
     public PortfolioAdapterModel(Context context) {
+        this(context, null);
+    }
+
+    public PortfolioAdapterModel(Context context, CoinItem coin) {
         super(context);
 
-        isEmpty.set(true);
+        if (coin != null) {
+            change1h = coin.percentChange1h + "%";
+            change24h = coin.percentChange24h + "%";
+            change7d = coin.percentChange7d + "%";
+            marketCap = ApiFormat.toShortFormat(coin.marketCap);
+            unitPrice = ApiFormat.toPriceFormat(coin.priceUsd) + " $";
+            bitcoinUnitValue = ApiFormat.toPriceFormat(coin.priceBtc);
+        } else {
+            change1h = change24h = change7d = marketCap = unitPrice = bitcoinUnitValue = null;
+        }
     }
 
     public void setOnAddItemPressedListener(OnItemSelectedListener listener) {

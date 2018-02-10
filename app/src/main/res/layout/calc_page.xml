@@ -123,14 +123,15 @@
                 layout="@layout/vertical_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/base_padding"
                 android:layout_marginTop="@dimen/base_quad_padding" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/base_padding"
-                android:paddingRight="@dimen/base_padding">
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{VM::onCoinDetailPressed}"
+                android:padding="@dimen/base_padding">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
@@ -170,14 +171,19 @@
                     android:layout_height="wrap_content"
                     android:text="@{M.change7d}" />
 
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_navigate_next"
+                    android:tint="@color/tint_dark_color" />
+
             </LinearLayout>
 
             <include
                 layout="@layout/vertical_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/base_padding"
-                android:layout_marginTop="@dimen/base_padding" />
+                android:layout_marginBottom="@dimen/base_padding" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

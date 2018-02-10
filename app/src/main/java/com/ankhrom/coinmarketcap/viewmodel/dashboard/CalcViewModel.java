@@ -15,6 +15,7 @@ import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnCoinSelectedListener;
 import com.ankhrom.coinmarketcap.model.CalcModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.SearchViewModel;
 
 /**
@@ -165,6 +166,13 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         ScreenHelper.hideSoftKeyboard(getBaseActivity(), true);
 
         addViewModel(SearchViewModel.class, this);
+    }
+
+    public void onCoinDetailPressed(View view) {
+
+        ScreenHelper.hideSoftKeyboard(getBaseActivity(), true);
+
+        addViewModel(CoinDetailViewModel.class, coin);
     }
 
     @Override

@@ -75,13 +75,17 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
             return;
         }
 
-        if (timeframe > 0) {
-            int count = response.price.size();
-            List<List<Double>> sublist = response.price.subList(count - timeframe * 12 - 3, count - 1);
+        int count = response.price.size();
+        int offset = 0;
 
-            response.price = new CapHistoryItem();
-            response.price.addAll(sublist);
+        if (timeframe > 0) {
+            offset = count - timeframe * 12 - 3;
         }
+
+        List<List<Double>> sublist = response.price.subList(offset, count - 1);
+
+        response.price = new CapHistoryItem();
+        response.price.addAll(sublist);
 
         model.min = Double.MAX_VALUE;
         model.mid = 0.0;

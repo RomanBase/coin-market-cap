@@ -22,6 +22,7 @@ import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
 import com.ankhrom.coinmarketcap.view.ItemSwipeListener;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
+import com.ankhrom.coinmarketcap.viewmodel.coin.CoinDetailViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        setModel(new PortfolioAdapterModel(getContext()));
+        setModel(new PortfolioAdapterModel(getContext(), coin));
         model.setOnAddItemPressedListener(onAddItemPressed);
 
         itemSwipeListener = new ItemSwipeListener(getContext(), R.id.item_foreground, this);
@@ -111,7 +112,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
             return;
         }
 
-        headerTitle.set(coin.symbol + " - " + coin.name + " - " + parentModel.amount.get());
+        headerTitle.set(coin.symbol + " - " + coin.name + " (" + parentModel.amount.get() + ")");
         headerSubTitle.set(parentModel.profitLossAmount.get() + " / " + parentModel.profitLoss.get());
         headerInfo.set(parentModel.currentValue.get());
         headerSubInfo.set(parentModel.investedValue.get());
@@ -232,6 +233,11 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
     public void onAddPressed(View view) {
 
         addViewModel(PortfolioPlusViewModel.class, coin, this);
+    }
+
+    public void onCoinDetailPressed(View view) {
+
+        addViewModel(CoinDetailViewModel.class, coin);
     }
 
     @Override
