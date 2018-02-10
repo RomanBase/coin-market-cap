@@ -17,7 +17,11 @@ public class ThirdPartyLoginModel extends Model {
 
     public final EditTextObservable key = new EditTextObservable();
     public final EditTextObservable secret = new EditTextObservable();
+    public final EditTextObservable pass = new EditTextObservable();
+
+    public final ObservableBoolean isPassRequired = new ObservableBoolean();
     public final ObservableCheckbox dontStore = new ObservableCheckbox();
+
     public final ObservableBoolean edit = new ObservableBoolean();
 
     public final int icon;
@@ -27,10 +31,11 @@ public class ThirdPartyLoginModel extends Model {
         icon = ExchangeTypeUtil.getLogo(type);
     }
 
-    public void presetEdit(String key, String secret) {
+    public void presetEdit(String key, String secret, String pass) {
 
         this.key.set(key);
         this.secret.set(secret);
+        this.pass.set(pass);
         this.edit.set(true);
     }
 

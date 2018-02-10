@@ -17,6 +17,8 @@ public final class ExchangeTypeUtil {
                 return R.drawable.ic_hitbtc;
             case BINANCE:
                 return R.drawable.ic_binance;
+            case GDAX:
+                return R.drawable.ic_gdax;
             default:
                 return R.drawable.ic_logo;
         }
@@ -31,6 +33,8 @@ public final class ExchangeTypeUtil {
                 return R.drawable.ic_hitbtc_icon;
             case BINANCE:
                 return R.drawable.ic_binance_icon;
+            case GDAX:
+                return R.drawable.ic_gdax_icon;
             default:
                 return R.drawable.ic_logo;
         }
@@ -39,5 +43,10 @@ public final class ExchangeTypeUtil {
     public static boolean isPortfolioPriceAvailable(ExchangeType type) {
 
         return type == ExchangeType.NONE;
+    }
+
+    public static boolean isPassRequired(ExchangeType type) {
+
+        return type == ExchangeType.GDAX;
     }
 }

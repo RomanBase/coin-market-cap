@@ -40,7 +40,7 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, QRModel> imp
         if (requestCode < 0) {
             model.tooltip.set("convert wallet address or transaction ID to QR and then scan");
         } else {
-            model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret)");
+            model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret or key:secret:pass)");
         }
     }
 

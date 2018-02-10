@@ -12,6 +12,8 @@
             name="M"
             type="com.ankhrom.coinmarketcap.model.auth.ThirdPartyLoginModel" />
 
+        <import type="android.view.View" />
+
     </data>
 
     <FrameLayout
@@ -74,7 +76,8 @@
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="@{VM::onKeyCameraPressed}"
                         android:padding="@dimen/base_half_padding"
-                        android:src="@drawable/ic_camera" />
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/tint_dark_color" />
 
                 </FrameLayout>
 
@@ -108,7 +111,44 @@
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="@{VM::onSecretCameraPressed}"
                         android:padding="@dimen/base_half_padding"
-                        android:src="@drawable/ic_camera" />
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/tint_dark_color" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/base_padding"
+                    android:paddingRight="@dimen/base_padding"
+                    android:visibility="@{M.isPassRequired ? View.VISIBLE : View.GONE}">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="pass">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:paddingEnd="42dp"
+                            app:text="@{M.pass}" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginTop="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:onClick="@{VM::onPassCameraPressed}"
+                        android:padding="@dimen/base_half_padding"
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/tint_dark_color" />
 
                 </FrameLayout>
 

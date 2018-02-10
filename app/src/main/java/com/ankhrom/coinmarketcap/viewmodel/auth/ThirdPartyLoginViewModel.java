@@ -11,6 +11,7 @@ import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.CameraRequest;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
+import com.ankhrom.coinmarketcap.common.ExchangeTypeUtil;
 import com.ankhrom.coinmarketcap.databinding.ThirdPartyLoginBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
@@ -24,8 +25,9 @@ import com.ankhrom.coinmarketcap.viewmodel.dialog.QRViewModel;
 
 public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBinding, ThirdPartyLoginModel> implements OnQRHandledListener {
 
-    private static final int QR_KEY = 1;
-    private static final int QR_SECRET = 2;
+    public static final int QR_KEY = 1;
+    public static final int QR_SECRET = 2;
+    public static final int QR_PASS = 3;
 
     private ExchangeType type;
     private AuthCredentials credentials;
@@ -48,8 +50,10 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         ThirdPartyLoginModel model = new ThirdPartyLoginModel(type);
 
         if (credentials.isValid()) {
-            model.presetEdit(credentials.key, credentials.secret);
+            model.presetEdit(credentials.key, credentials.secret, credentials.pass);
         }
+
+        model.isPassRequired.set(ExchangeTypeUtil.isPassRequired(type));
 
         setModel(model);
     }
@@ -62,8 +66,13 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         if (result.contains(":")) {
 
             String[] data = result.split(":");
+
             model.key.setValue(data[0]);
             model.secret.setValue(data[1]);
+
+            if (data.length > 2) {
+                model.pass.setValue(data[2]);
+            }
 
             return;
         }
@@ -75,9 +84,11 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
             case QR_SECRET:
                 model.secret.setValue(result);
                 break;
+            case QR_PASS:
+                model.pass.setValue(result);
+                break;
         }
     }
-
 
     private void openCamera(int qrField) {
 
@@ -100,6 +111,11 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         openCamera(QR_SECRET);
     }
 
+    public void onPassCameraPressed(View view) {
+
+        openCamera(QR_PASS);
+    }
+
     public void onLoginPressed(View view) {
 
         if (!(model.key.isValid() && model.secret.isValid())) {
@@ -116,6 +132,17 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         if (!model.secret.get().equals(credentials.secret)) {
             credentials.secret = model.secret.get();
             relogin = true;
+        }
+
+        if (model.isPassRequired.get()) {
+            if (!model.pass.isValid()) {
+                return;
+            }
+
+            if (!model.pass.get().equals(credentials.pass)) {
+                credentials.pass = model.pass.get();
+                relogin = true;
+            }
         }
 
         if (model.dontStore.get()) {

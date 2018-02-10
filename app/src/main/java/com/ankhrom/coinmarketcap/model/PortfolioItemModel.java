@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableFloat;
 
+import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.model.SelectableItemModel;
 import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coinmarketcap.BR;
@@ -93,7 +94,7 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         double priceSum = 0.0;
         double amountSum = 0.0;
-        double unitPrice = Double.parseDouble(coin.priceUsd);
+        double unitPrice = StringHelper.isEmpty(coin.priceUsd) ? 0.0 : Double.parseDouble(coin.priceUsd);
 
         double price = 0.0;
         double amount = 0.0;

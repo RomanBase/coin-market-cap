@@ -32,8 +32,6 @@ public class MainActivity extends BaseActivity {
         factory.add(PortfolioHolder.init(factory));
         factory.add(DataHolder.init(factory));
 
-        //Gdax.init(this).auth("7de06ade6286e81fd8c104824e4c6840", "XwsjLm0Th32B9QAw0JY3F5layFClo2+gNTofJQnHekpbwMqMksn2USqFNjBqFGuRVhjDu3eivS+qj2/tL+/SpQ==", "ahoy").getPortfolio(null);
-
         return BaseViewModelObserver.with(factory, R.id.root_container)
                 .setViewModel(MainViewModel.class)
                 .build();

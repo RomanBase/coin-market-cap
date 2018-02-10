@@ -10,6 +10,7 @@ public class AuthCredentials {
 
     public String key;
     public String secret;
+    public String pass;
     public boolean persist = true;
 
     public AuthCredentials() {

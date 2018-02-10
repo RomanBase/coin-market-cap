@@ -31,8 +31,6 @@ import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioEditViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.portfolio.PortfolioPlusViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -258,14 +256,14 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     }
 
     private void changeDataSet(List<PortfolioItemModel> items) {
-
+/*
         Collections.sort(items, new Comparator<PortfolioItemModel>() {
             @Override
             public int compare(PortfolioItemModel a, PortfolioItemModel b) {
-                return a.current < b.current ? 1 : -1; //Integer.parseInt(a.coin.rank) > Integer.parseInt(b.coin.rank) ? 1 : -1;
+                return a.current == b.current ? 0 : a.current < b.current ? 1 : -1; //Integer.parseInt(a.coin.rank) > Integer.parseInt(b.coin.rank) ? 1 : -1;
             }
         });
-
+*/
         model.replace(items);
     }
 

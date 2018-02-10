@@ -24,6 +24,9 @@ import com.ankhrom.coinmarketcap.listener.DataExchangeLoadingListener;
 import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
+import com.ankhrom.gdax.Gdax;
+import com.ankhrom.gdax.GdaxFilter;
+import com.ankhrom.gdax.entity.GdaxAccount;
 import com.ankhrom.hitbtc.HitBTC;
 import com.ankhrom.hitbtc.HitFilter;
 import com.ankhrom.hitbtc.entity.HitBalance;
@@ -48,6 +51,7 @@ public class DataFetcher {
 
     private boolean loadingHitBTC;
     private boolean loadingBinance;
+    private boolean loadingGdax;
 
     public DataFetcher(ObjectFactory factory) {
         this.factory = factory;
@@ -167,6 +171,8 @@ public class DataFetcher {
                 break;
             case BINANCE:
                 requestBinancePortfolio(credentials);
+            case GDAX:
+                requestGdaxPortfolio(credentials);
                 break;
         }
     }
@@ -183,6 +189,8 @@ public class DataFetcher {
                 return loadingHitBTC;
             case BINANCE:
                 return loadingBinance;
+            case GDAX:
+                return loadingGdax;
             default:
                 return loadingCoins || loadingMarket;
         }
@@ -215,6 +223,20 @@ public class DataFetcher {
         Binance binance = Binance.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
         binance.getAccountData(binanceAcountListener);
+    }
+
+    private void requestGdaxPortfolio(AuthCredentials credentials) {
+
+        if (loadingGdax) {
+            return;
+        }
+
+        loadingGdax = true;
+        notifyExchangeListeners(ExchangeType.GDAX, true, false);
+
+        Gdax gdax = Gdax.init(factory.getContext()).auth(credentials.key, credentials.secret, credentials.pass);
+
+        gdax.getPortfolio(gdaxAccountListener);
     }
 
     private void notifyListeners(final boolean isValid) {
@@ -385,6 +407,43 @@ public class DataFetcher {
             error.printStackTrace();
             loadingBinance = false;
             notifyExchangeListeners(ExchangeType.BINANCE, false, false);
+        }
+    };
+
+    private final ResponseListener<List<GdaxAccount>> gdaxAccountListener = new ResponseListener<List<GdaxAccount>>() {
+        @Override
+        public void onResponse(@Nullable List<GdaxAccount> response) {
+
+            getPortfoliHolder().clear(ExchangeType.GDAX, false);
+            getExchangePrefs().setTimestamp(ExchangeType.GDAX, System.currentTimeMillis());
+
+            List<GdaxAccount> accounts = GdaxFilter.filterZeroAccounts(response);
+
+            if (accounts.isEmpty()) {
+                loadingGdax = false;
+                notifyExchangeListeners(ExchangeType.GDAX, false, true);
+                return;
+            }
+
+            final DataHolder holder = getDataHolder();
+            final PortfolioHolder portfolio = holder.getPortfolio();
+
+            for (GdaxAccount account : accounts) {
+                addPortfolioCurrency(portfolio, holder.getCoinBySymbol(account.currency), ExchangeType.GDAX, Double.parseDouble(account.balance));
+            }
+
+            portfolio.persist(ExchangeType.GDAX);
+
+            loadingBinance = false;
+            notifyExchangeListeners(ExchangeType.GDAX, false, true);
+            getPortfoliHolder().notifyExchangePortfolioChanged(ExchangeType.GDAX);
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            loadingGdax = false;
+            notifyExchangeListeners(ExchangeType.GDAX, false, false);
         }
     };
 

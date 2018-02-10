@@ -97,7 +97,8 @@
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:onClick="@{VM::onCameraPressed}"
                         android:padding="@dimen/base_half_padding"
-                        android:src="@drawable/ic_camera" />
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/tint_dark_color" />
 
                 </FrameLayout>
 

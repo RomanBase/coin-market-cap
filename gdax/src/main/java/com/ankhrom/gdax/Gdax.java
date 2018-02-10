@@ -2,11 +2,8 @@ package com.ankhrom.gdax;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.ankhrom.base.Base;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.base.networking.volley.VolleyBuilder;
@@ -45,24 +42,13 @@ public class Gdax {
         return this;
     }
 
-    public void getPortfolio(ResponseListener<String> listener) {
+    public void getPortfolio(ResponseListener<List<GdaxAccount>> listener) {
 
         GdaxApi api = new GdaxApi(requestQueue);
         api.auth(key, secret, pass);
 
-        api.request(RequestBuilder.get("https://api.gdax.com/accounts"))
-                .listener(new ResponseListener<List<GdaxAccount>>() {
-
-                    @Override
-                    public void onResponse(@Nullable List<GdaxAccount> response) {
-                        Base.log(response);
-                    }
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                })
+        api.request(RequestBuilder.get(GdaxApiUrl.ACCOUNT))
+                .listener(listener)
                 .asGson(new TypeToken<List<GdaxAccount>>() {
                 }.getType())
                 .queue(requestQueue);
