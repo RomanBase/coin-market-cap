@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.base.networking.volley.VolleyBuilder;
+import com.ankhrom.gdax.entity.CoinbaseAccount;
 import com.ankhrom.gdax.entity.GdaxAccount;
 import com.google.gson.reflect.TypeToken;
 
@@ -42,7 +43,7 @@ public class Gdax {
         return this;
     }
 
-    public void getPortfolio(ResponseListener<List<GdaxAccount>> listener) {
+    public void getAccounts(ResponseListener<List<GdaxAccount>> listener) {
 
         GdaxApi api = new GdaxApi(requestQueue);
         api.auth(key, secret, pass);
@@ -50,6 +51,18 @@ public class Gdax {
         api.request(RequestBuilder.get(GdaxApiUrl.ACCOUNT))
                 .listener(listener)
                 .asGson(new TypeToken<List<GdaxAccount>>() {
+                }.getType())
+                .queue(requestQueue);
+    }
+
+    public void getCoinbaseAccounts(ResponseListener<List<CoinbaseAccount>> listener) {
+
+        GdaxApi api = new GdaxApi(requestQueue);
+        api.auth(key, secret, pass);
+
+        api.request(RequestBuilder.get(GdaxApiUrl.ACCOUNT_COINBASE))
+                .listener(listener)
+                .asGson(new TypeToken<List<CoinbaseAccount>>() {
                 }.getType())
                 .queue(requestQueue);
     }

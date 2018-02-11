@@ -26,6 +26,7 @@ import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.gdax.Gdax;
 import com.ankhrom.gdax.GdaxFilter;
+import com.ankhrom.gdax.entity.CoinbaseAccount;
 import com.ankhrom.gdax.entity.GdaxAccount;
 import com.ankhrom.hitbtc.HitBTC;
 import com.ankhrom.hitbtc.HitFilter;
@@ -52,6 +53,7 @@ public class DataFetcher {
     private boolean loadingHitBTC;
     private boolean loadingBinance;
     private boolean loadingGdax;
+    private boolean loadingCoinbase;
 
     public DataFetcher(ObjectFactory factory) {
         this.factory = factory;
@@ -173,6 +175,7 @@ public class DataFetcher {
                 requestBinancePortfolio(credentials);
             case GDAX:
                 requestGdaxPortfolio(credentials);
+                requestCoinbasePortfolio(credentials);
                 break;
         }
     }
@@ -191,6 +194,8 @@ public class DataFetcher {
                 return loadingBinance;
             case GDAX:
                 return loadingGdax;
+            case COINBASE:
+                return loadingCoinbase;
             default:
                 return loadingCoins || loadingMarket;
         }
@@ -236,7 +241,21 @@ public class DataFetcher {
 
         Gdax gdax = Gdax.init(factory.getContext()).auth(credentials.key, credentials.secret, credentials.pass);
 
-        gdax.getPortfolio(gdaxAccountListener);
+        gdax.getAccounts(gdaxAccountListener);
+    }
+
+    private void requestCoinbasePortfolio(AuthCredentials credentials) {
+
+        if (loadingCoinbase) {
+            return;
+        }
+
+        loadingCoinbase = true;
+        notifyExchangeListeners(ExchangeType.COINBASE, true, false);
+
+        Gdax gdax = Gdax.init(factory.getContext()).auth(credentials.key, credentials.secret, credentials.pass);
+
+        gdax.getCoinbaseAccounts(coinbaseAccountListener);
     }
 
     private void notifyListeners(final boolean isValid) {
@@ -434,7 +453,7 @@ public class DataFetcher {
 
             portfolio.persist(ExchangeType.GDAX);
 
-            loadingBinance = false;
+            loadingGdax = false;
             notifyExchangeListeners(ExchangeType.GDAX, false, true);
             getPortfoliHolder().notifyExchangePortfolioChanged(ExchangeType.GDAX);
         }
@@ -444,6 +463,43 @@ public class DataFetcher {
             error.printStackTrace();
             loadingGdax = false;
             notifyExchangeListeners(ExchangeType.GDAX, false, false);
+        }
+    };
+
+    private final ResponseListener<List<CoinbaseAccount>> coinbaseAccountListener = new ResponseListener<List<CoinbaseAccount>>() {
+        @Override
+        public void onResponse(@Nullable List<CoinbaseAccount> response) {
+
+            getPortfoliHolder().clear(ExchangeType.COINBASE, false);
+            getExchangePrefs().setTimestamp(ExchangeType.COINBASE, System.currentTimeMillis());
+
+            List<CoinbaseAccount> accounts = GdaxFilter.filterZeroCoinbaseAccounts(response);
+
+            if (accounts.isEmpty()) {
+                loadingCoinbase = false;
+                notifyExchangeListeners(ExchangeType.COINBASE, false, true);
+                return;
+            }
+
+            final DataHolder holder = getDataHolder();
+            final PortfolioHolder portfolio = holder.getPortfolio();
+
+            for (CoinbaseAccount account : accounts) {
+                addPortfolioCurrency(portfolio, holder.getCoinBySymbol(account.currency), ExchangeType.COINBASE, Double.parseDouble(account.balance));
+            }
+
+            portfolio.persist(ExchangeType.COINBASE);
+
+            loadingCoinbase = false;
+            notifyExchangeListeners(ExchangeType.COINBASE, false, true);
+            getPortfoliHolder().notifyExchangePortfolioChanged(ExchangeType.COINBASE);
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            loadingCoinbase = false;
+            notifyExchangeListeners(ExchangeType.COINBASE, false, false);
         }
     };
 

@@ -18,6 +18,7 @@ public final class ExchangeTypeUtil {
             case BINANCE:
                 return R.drawable.ic_binance;
             case GDAX:
+            case COINBASE:
                 return R.drawable.ic_gdax;
             default:
                 return R.drawable.ic_logo;
@@ -34,10 +35,16 @@ public final class ExchangeTypeUtil {
             case BINANCE:
                 return R.drawable.ic_binance_icon;
             case GDAX:
+            case COINBASE:
                 return R.drawable.ic_gdax_icon;
             default:
                 return R.drawable.ic_logo;
         }
+    }
+
+    public static boolean isListed(ExchangeType type) {
+
+        return !(type == ExchangeType.NONE || type == ExchangeType.COINBASE);
     }
 
     public static boolean isPortfolioPriceAvailable(ExchangeType type) {

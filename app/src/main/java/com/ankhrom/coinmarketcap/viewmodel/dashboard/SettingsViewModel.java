@@ -7,6 +7,7 @@ import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
+import com.ankhrom.coinmarketcap.common.ExchangeTypeUtil;
 import com.ankhrom.coinmarketcap.data.DataFetcher;
 import com.ankhrom.coinmarketcap.databinding.SettingsPageBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
@@ -46,18 +47,18 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
         fetcher.addExchangeListener(this);
 
         List<SettingsExchangeItemModel> exchanges = new ArrayList<>();
-        ExchangeType[] types = new ExchangeType[ExchangeType.values().length - 1];
-        System.arraycopy(ExchangeType.values(), 1, types, 0, types.length);
 
-        for (ExchangeType type : types) {
+        for (ExchangeType type : ExchangeType.values()) {
 
-            SettingsExchangeItemModel item = new SettingsExchangeItemModel(type);
-            item.setOnItemSelectedListener(this);
-            item.isLoading.set(fetcher.isLoading(type));
+            if (ExchangeTypeUtil.isListed(type)) {
+                SettingsExchangeItemModel item = new SettingsExchangeItemModel(type);
+                item.setOnItemSelectedListener(this);
+                item.isLoading.set(fetcher.isLoading(type));
 
-            setExchangeState(item, true);
+                setExchangeState(item, true);
 
-            exchanges.add(item);
+                exchanges.add(item);
+            }
         }
 
         setModel(new SettingsModel(getContext(), exchanges));
@@ -67,6 +68,10 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
 
         AuthCredentials credentials = getExchangePrefs().getAuth(item.type);
         List<PortfolioCoin> coins = getPortfolio().getExchange(item.type);
+
+        if (item.type == ExchangeType.GDAX) {
+            coins.addAll(getPortfolio().getExchange(ExchangeType.COINBASE));
+        }
 
         long timestamp = getExchangePrefs().getTimestamp(item.type);
 
