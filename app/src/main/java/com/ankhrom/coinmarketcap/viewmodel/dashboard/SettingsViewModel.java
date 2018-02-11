@@ -1,8 +1,10 @@
 package com.ankhrom.coinmarketcap.viewmodel.dashboard;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.ankhrom.base.common.statics.AppsHelper;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
@@ -68,10 +70,6 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
 
         AuthCredentials credentials = getExchangePrefs().getAuth(item.type);
         List<PortfolioCoin> coins = getPortfolio().getExchange(item.type);
-
-        if (item.type == ExchangeType.GDAX) {
-            coins.addAll(getPortfolio().getExchange(ExchangeType.COINBASE));
-        }
 
         long timestamp = getExchangePrefs().getTimestamp(item.type);
 
@@ -147,6 +145,20 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
     public void onDonatePressed(View view) {
 
         addViewModel(DonationViewModel.class);
+    }
+
+    public void onSharePressed(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + getContext().getPackageName());
+        intent.setType("text/plain");
+
+        getContext().startActivity(Intent.createChooser(intent, "Share CoinCap & Portfolio"));
+    }
+
+    public void onRatePressed(View view) {
+
+        AppsHelper.showInGooglePlay(getContext(), getContext().getPackageName());
     }
 
     @Override

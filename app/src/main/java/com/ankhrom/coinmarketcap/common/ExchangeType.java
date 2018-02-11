@@ -8,6 +8,5 @@ public enum ExchangeType {
     NONE,
     HIT_BTC,
     BINANCE,
-    GDAX,
-    COINBASE,
+    GDAX
 }
