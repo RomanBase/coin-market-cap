@@ -27,9 +27,15 @@ public class ApiFormat {
     public static final String MILLION_SIGN = " M";
     public static final String BILLION_SIGN = " B";
 
-    private static final NumberFormat shortFormat = new DecimalFormat("#0.00");
-    private static final NumberFormat extendedFormat = new DecimalFormat("#0.000");
-    private static final NumberFormat longFormat = new DecimalFormat("#0.000000");
+    private static final DecimalFormat shortFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+    private static final DecimalFormat extendedFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+    private static final DecimalFormat longFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+
+    static {
+        shortFormat.applyPattern("#0.00");
+        extendedFormat.applyPattern("#0.000");
+        longFormat.applyPattern("#0.000000");
+    }
 
     public static String toDigitFormat(String number) {
 
@@ -55,7 +61,7 @@ public class ApiFormat {
         String number;
 
         if (Math.abs(value) > THOUSAND) {
-            number = NumberFormat.getInstance().format(Double.valueOf(toDigitFormat(value)));
+            number = NumberFormat.getNumberInstance(Locale.US).format(Double.valueOf(toDigitFormat(value)));
         } else if (Math.abs(value) > TEN) {
             number = toShortFormatString(value);
         } else if (Math.abs(value) < ONE) {
@@ -96,7 +102,7 @@ public class ApiFormat {
 
     public static String toShortFormatString(double number) {
 
-        return shortFormat.format(number);
+        return toDigitFormat(number);
     }
 
     public static String toExtendedFormatString(double number) {
