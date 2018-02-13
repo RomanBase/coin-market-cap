@@ -1,7 +1,10 @@
 package com.ankhrom.coinmarketcap.viewmodel.dialog;
 
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.ankhrom.base.GlobalCode;
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.ScreenHelper;
 import com.ankhrom.base.common.statics.StringHelper;
@@ -78,6 +81,23 @@ public class FeatureRequestViewModel extends AppViewModel<FeatureRequestPageBind
     public void onQRHandled(int requestCode, String result) {
 
         model.donation.set(result);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == GlobalCode.CAMERA_REQUEST) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (getView() != null) {
+                    getView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onCameraPressed(null);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Override

@@ -186,7 +186,14 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         if (requestCode == GlobalCode.CAMERA_REQUEST) {
 
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && qrField > 0) {
-                openCamera(qrField);
+                if (getView() != null) {
+                    getView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            openCamera(qrField);
+                        }
+                    });
+                }
             }
         }
     }
