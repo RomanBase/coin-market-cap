@@ -195,7 +195,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             return;
         }
 
-        model.currency.set(coin.toString());
+        model.currency.set(coin.toString() + " (" + coin.rank + ")");
         model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd) + " $");
         model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(coin.priceBtc));
         model.marketCap.set(ApiFormat.toShortFormat(coin.marketCap));

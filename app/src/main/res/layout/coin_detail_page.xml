@@ -15,23 +15,24 @@
         <import type="android.view.View" />
     </data>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_color">
+        android:background="@color/background_color"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            layout="@layout/activity_toolbar_view"
+            app:VM="@{VM.ref}" />
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <include
-                layout="@layout/activity_toolbar_view"
-                app:VM="@{VM.ref}" />
+            android:focusable="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -405,8 +406,8 @@
                 <include layout="@layout/vertical_separator" />
 
             </LinearLayout>
+        </ScrollView>
 
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </layout>

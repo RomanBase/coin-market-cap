@@ -43,7 +43,7 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
         super.init(args);
 
         coin = args.getArg(CoinItem.class);
-        headerTitle.set(coin.symbol + " - " + coin.name);
+        headerTitle.set(coin.symbol + " - " + coin.name + " (" + coin.rank + ")");
         headerSubTitle.set(ApiFormat.toTimeFormat(coin.timestamp + "000"));
         headerInfo.set(ApiFormat.toShortFormat(coin.marketCap));
         headerSubInfo.set(ApiFormat.toShortFormat(coin.volumeUsd));
