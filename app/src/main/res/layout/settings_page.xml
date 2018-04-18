@@ -21,8 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/base_padding"
-            android:paddingTop="@dimen/base_padding">
+            android:paddingBottom="@dimen/base_padding">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/base_padding"
+                android:background="@color/tint_light_color"
+                android:padding="@dimen/base_padding"
+                android:text="For your secure provide API keys with minimum possible access."
+                android:textAlignment="center" />
 
             <com.ankhrom.base.custom.view.BaseListView
                 android:layout_width="match_parent"
@@ -36,7 +44,7 @@
                 android:layout_marginTop="@dimen/base_padding"
                 android:background="@color/tint_light_color"
                 android:padding="@dimen/base_padding"
-                android:text="This app is continuously under development. We work to add new markets, exchanges and features. You can speed up development by donating coins. Feature request or any feedback is appreciated too."
+                android:text="This app is continuously under development. We work to add new markets, exchanges and features. Feature request or any feedback is appreciated."
                 android:textAlignment="center" />
 
             <include layout="@layout/vertical_separator" />
@@ -71,9 +79,18 @@
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{VM::onRatePressed}"
-                    android:text="rate" />
+                    android:text="rate app" />
 
             </LinearLayout>
+
+            <include layout="@layout/vertical_separator" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{VM::onDonatePressed}"
+                android:text="app developer's wallet" />
 
             <include layout="@layout/vertical_separator" />
 
