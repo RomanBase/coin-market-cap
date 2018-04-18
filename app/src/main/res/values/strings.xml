@@ -7,6 +7,7 @@
     <string name="connect">connect</string>
     <string name="cancel">cancel</string>
     <string name="remove">remove</string>
+    <string name="donation_request">Please provide your wallet address or transaction ID to pair this request with donations. Don\'t worry if you not donated yet, we are glad for any feedback or good idea.</string>
 
     <string-array name="currency">
         <item>USD</item>

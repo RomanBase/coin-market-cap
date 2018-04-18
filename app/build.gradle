@@ -7,8 +7,8 @@ android {
         applicationId "com.ankhrom.coinmarketcap"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 9
-        versionName "0.9.9"
+        versionCode 10
+        versionName "0.9.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,11 +41,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile project(path: ':lib')
-    compile project(path: ':hitbtc')
-    compile project(path: ':binance')
-    compile project(path: ':coincap')
-    compile project(path: ':gdax')
+    implementation project(path: ':lib')
+    implementation project(path: ':hitbtc')
+    implementation project(path: ':binance')
+    implementation project(path: ':coincap')
+    implementation project(path: ':gdax')
 }
 
 apply plugin: 'com.google.gms.google-services'

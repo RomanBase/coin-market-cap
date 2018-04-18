@@ -57,12 +57,21 @@
                 <include layout="@layout/horizontal_separator" />
 
                 <android.support.v7.widget.AppCompatButton
+                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{VM::onDonatePressed}"
                     android:text="donate" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{VM::onRatePressed}"
+                    android:text="rate" />
 
             </LinearLayout>
 
@@ -93,15 +102,7 @@
                     android:onClick="@{VM::onSharePressed}"
                     android:text="share" />
 
-                <include layout="@layout/horizontal_separator" />
-
-                <android.support.v7.widget.AppCompatButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{VM::onRatePressed}"
-                    android:text="rate" />
+                <include android:visibility="gone" layout="@layout/horizontal_separator" />
 
             </LinearLayout>
 

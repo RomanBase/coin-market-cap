@@ -270,6 +270,10 @@ public class DataFetcher {
 
             listener.onExchangeLoading(exchange, isLoading, isValid);
         }
+
+        if (!isLoading && isValid) {
+            FireSynchronizer.init(factory).syncExchange(exchange);
+        }
     }
 
     private final ResponseListener<List<CoinItem>> coinsListener = new ResponseCacheListener<List<CoinItem>>() {
