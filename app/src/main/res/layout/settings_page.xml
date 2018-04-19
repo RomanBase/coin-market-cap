@@ -85,15 +85,6 @@
 
             <include layout="@layout/vertical_separator" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:onClick="@{VM::onDonatePressed}"
-                android:text="app developer's wallet" />
-
-            <include layout="@layout/vertical_separator" />
-
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
