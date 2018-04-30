@@ -18,16 +18,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_color"
         android:clickable="true"
         android:focusable="true"
-        android:background="@color/background_color"
         android:orientation="vertical">
 
         <include
             layout="@layout/activity_toolbar_view"
             app:VM="@{VM.ref}" />
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true">
@@ -282,7 +282,7 @@
                             android:layout_marginLeft="@dimen/base_padding"
                             android:layout_marginRight="@dimen/base_padding"
                             android:layout_marginTop="@dimen/base_quad_padding"
-                            app:adapter="@{M.adapter}"
+                            app:adapter="@{M.graphAdapter}"
                             app:scrubListener="@{VM}"
                             app:spark_lineColor="@color/colorAccent"
                             app:spark_scrubEnabled="true"
@@ -407,8 +407,22 @@
 
                 <include layout="@layout/vertical_separator" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:background="@color/tint_light_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/base_half_padding"
+                    android:text="Portfolio"
+                    android:textAlignment="center" />
+
+                <com.ankhrom.base.custom.view.BaseListView
+                    android:id="@+id/items_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:adapter="@{M.adapter}" />
+
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </LinearLayout>
 

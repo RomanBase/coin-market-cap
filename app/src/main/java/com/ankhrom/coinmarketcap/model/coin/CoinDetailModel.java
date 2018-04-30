@@ -1,21 +1,21 @@
 package com.ankhrom.coinmarketcap.model.coin;
 
+import android.content.Context;
 import android.databinding.ObservableField;
 
 import com.ankhrom.base.common.statics.StringHelper;
-import com.ankhrom.base.model.Model;
 import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coincap.entity.CapHistoryItem;
-import com.ankhrom.coinmarketcap.BR;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
+import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.robinhood.spark.SparkAdapter;
 
 /**
  * Created by R' on 1/10/2018.
  */
 
-public class CoinDetailModel extends Model {
+public class CoinDetailModel extends PortfolioAdapterModel {
 
     public final CoinItem coin;
     public final String marketCap;
@@ -32,14 +32,14 @@ public class CoinDetailModel extends Model {
     public final ObservableString maxPrice = new ObservableString();
     public final ObservableString midTime = new ObservableString();
 
-    public final ObservableField<SparkAdapter> adapter = new ObservableField<>();
+    public final ObservableField<SparkAdapter> graphAdapter = new ObservableField<>();
 
     public double min;
     public double mid;
     public double max;
 
-    public CoinDetailModel(CoinItem coin) {
-
+    public CoinDetailModel(Context context, CoinItem coin) {
+        super(context, coin);
         this.coin = coin;
 
         marketCap = ApiFormat.toShortFormat(coin.marketCap);
@@ -53,9 +53,9 @@ public class CoinDetailModel extends Model {
         supplyMax = StringHelper.isEmpty(coin.supplyMax) ? "∞" : ApiFormat.toShortFormat(coin.supplyMax);
     }
 
-    public void setAdapterValues(final CapHistoryItem data) {
+    public void setGraphAdapterValues(final CapHistoryItem data) {
 
-        adapter.set(new SparkAdapter() {
+        graphAdapter.set(new SparkAdapter() {
             @Override
             public int getCount() {
                 return data.size();
@@ -71,10 +71,5 @@ public class CoinDetailModel extends Model {
                 return (float) (double) data.get(index).get(1);
             }
         });
-    }
-
-    @Override
-    public int getVariableBindingResource() {
-        return BR.M;
     }
 }

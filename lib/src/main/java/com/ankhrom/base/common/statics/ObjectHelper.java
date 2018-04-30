@@ -1,5 +1,7 @@
 package com.ankhrom.base.common.statics;
 
+import android.support.annotation.NonNull;
+
 import com.ankhrom.base.interfaces.ObjectConverter;
 
 import java.util.ArrayList;
@@ -14,7 +16,12 @@ public final class ObjectHelper {
         return (o == null) ? (t == null) : o.equals(t);
     }
 
+    @NonNull
     public static <T, E> List<T> convert(List<E> items, ObjectConverter<T, E> converter) {
+
+        if (items == null) {
+            return new ArrayList<>();
+        }
 
         List<T> list = new ArrayList<>(items.size());
 

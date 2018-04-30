@@ -2,6 +2,7 @@ package com.ankhrom.coinmarketcap.model;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.support.annotation.NonNull;
 
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.model.AdapterModel;
@@ -54,16 +55,19 @@ public class PortfolioAdapterModel extends AdapterModel<ItemModel> {
         this.listener = listener;
     }
 
-    public void replace(Collection<? extends ItemModel> collection) {
+    public void replace(@NonNull Collection<? extends ItemModel> collection) {
+
+        replace(collection, true);
+    }
+
+    public void replace(@NonNull Collection<? extends ItemModel> collection, boolean addFooter) {
 
         isEmpty.set(collection.size() == 0);
         adapter.replace(collection);
-        adapter.add(new CoinAdapterFooterItemModel(listener));
-    }
 
-    @Override
-    public int getVariableBindingResource() {
-        return BR.M;
+        if(addFooter) {
+            adapter.add(new CoinAdapterFooterItemModel(listener));
+        }
     }
 
     public void checkEmptiness() {
@@ -76,5 +80,10 @@ public class PortfolioAdapterModel extends AdapterModel<ItemModel> {
         if (adapter.getItemCount() == 0 || !(adapter.get(adapter.getItemCount() - 1) instanceof CoinAdapterFooterItemModel)) {
             adapter.add(new CoinAdapterFooterItemModel(listener));
         }
+    }
+
+    @Override
+    public int getVariableBindingResource() {
+        return BR.M;
     }
 }

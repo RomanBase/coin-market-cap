@@ -8,8 +8,11 @@ import android.view.View;
 
 import com.android.volley.VolleyError;
 import com.ankhrom.base.common.statics.FragmentHelper;
+import com.ankhrom.base.common.statics.ObjectHelper;
 import com.ankhrom.base.custom.args.InitArgs;
+import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.viewmodel.CloseableViewModel;
+import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.coincap.CapHistoryTimeFrame;
 import com.ankhrom.coincap.CoinCap;
@@ -18,13 +21,17 @@ import com.ankhrom.coincap.entity.CapHistoryItem;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
 import com.ankhrom.coinmarketcap.api.ApiUrl;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.CoinDetailPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
+import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.listener.SelectableItem;
+import com.ankhrom.coinmarketcap.model.PortfolioItemModel;
 import com.ankhrom.coinmarketcap.model.coin.CoinDetailModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.robinhood.spark.SparkView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,7 +70,24 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
 
         CoinCap.init(getContext()).getHistory(coin.symbol, CapHistoryTimeFrame.D_1, this);
 
-        setModel(new CoinDetailModel(coin));
+        setModel(new CoinDetailModel(getContext(), coin));
+
+        List<ItemModel> items = new ArrayList<ItemModel>();
+
+        for (ExchangeType exchange : ExchangeType.values()) {
+            items.addAll(ObjectHelper.convert(getUserPrefs().getPortfolio(exchange), new ObjectConverter<ItemModel, PortfolioCoin>() {
+                @Override
+                public ItemModel convert(PortfolioCoin object) {
+                    if (object.coinId.equals(coin.id)) {
+                        return new PortfolioItemModel(coin, object.items);
+                    } else {
+                        return null;
+                    }
+                }
+            }));
+        }
+
+        model.replace(items, false);
     }
 
     @Override
@@ -110,7 +134,7 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
         model.minPrice.set(ApiFormat.toPriceFormat(model.min) + " $");
         model.maxPrice.set(ApiFormat.toPriceFormat(model.max) + " $");
         model.midPrice.set(ApiFormat.toPriceFormat(model.mid / (double) response.price.size()) + " $");
-        model.setAdapterValues(response.price);
+        model.setGraphAdapterValues(response.price);
 
         isLoading.set(false);
     }
