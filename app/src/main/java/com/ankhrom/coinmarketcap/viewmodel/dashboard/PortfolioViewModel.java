@@ -221,12 +221,14 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
 
             double invested = 0.0;
             double current = 0.0;
+            double currentBtc = 0.0;
 
             List<String> favs = getDataHolder().getFavourites();
 
             for (PortfolioItemModel item : items) {
                 invested += item.invested;
                 current += item.current;
+                currentBtc += Double.parseDouble(item.coin.priceBtc) * item.currentAmount;
                 item.isFavourite.set(favs.contains(item.coin.id));
             }
 
@@ -243,12 +245,12 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
             if (Math.abs(profitAmount) < 0.1) {
                 headerSubTitle.set("- / -");
             } else {
-                String profitValue = Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount);
+                String profitValue = (Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount)) + " $";
                 headerSubTitle.set(profitValue + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
             }
 
-            headerInfo.set(ApiFormat.toDigitFormat(current));
-            headerSubInfo.set(ApiFormat.toDigitFormat(invested));
+            headerInfo.set(ApiFormat.toDigitFormat(current) + " $");
+            headerSubInfo.set(ApiFormat.toDigitFormat(currentBtc) + " BTC");
 
         } else {
             headerSubTitle.set(null);
@@ -262,7 +264,7 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
         Collections.sort(items, new Comparator<PortfolioItemModel>() {
             @Override
             public int compare(PortfolioItemModel a, PortfolioItemModel b) {
-                return a.current == b.current ? 0 : a.current < b.current ? 1 : -1;
+                return Double.compare(b.current, a.current);
             }
         });
 

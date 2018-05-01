@@ -43,6 +43,7 @@ public class PortfolioItemModel extends SelectableItemModel {
     public List<PortfolioItem> items;
     public double invested;
     public double current;
+    public double currentAmount;
 
     public PortfolioItemModel(CoinItem coin) {
 
@@ -145,19 +146,23 @@ public class PortfolioItemModel extends SelectableItemModel {
         invested = priceSum;
         current = invested * profit;
 
-        investedValue.set(ApiFormat.toPriceFormat(invested) + " $");
         currentValue.set(ApiFormat.toPriceFormat(current) + " $");
         amount.set(ApiFormat.toPriceFormat(amountSum));
+        currentAmount = amountSum;
 
         avgPrice.set(ApiFormat.toPriceFormat(averagePrice) + " $");
 
         if (Math.abs(profitAmount) < 0.1) {
             profitLoss.set("-");
             profitLossAmount.set("-");
+            //investedValue.set("-");
         } else {
             profitLoss.set(ApiFormat.toDigitFormat(profit100) + "%");
             profitLossAmount.set((Math.abs(profitAmount) > 1.0 ? ApiFormat.toPriceFormat(profitAmount) : ApiFormat.toDigitFormat(profitAmount)) + " $");
+            //investedValue.set(ApiFormat.toPriceFormat(invested) + " $");
         }
+
+        investedValue.set(ApiFormat.toPriceFormat(amountSum * Double.parseDouble(coin.priceBtc)));
     }
 
     private double getProfit100(double profit) {

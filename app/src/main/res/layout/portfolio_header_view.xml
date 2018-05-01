@@ -93,7 +93,7 @@
             style="@style/AppTheme.CoinItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Invested"
+            android:text="BTC"
             android:textAlignment="textEnd"
             android:textColor="@color/text_light_color"
             android:textSize="@dimen/text_size_mini" />
