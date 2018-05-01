@@ -249,8 +249,8 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
                 headerSubTitle.set(profitValue + " / " + ApiFormat.toDigitFormat(profit * 100.0) + "%");
             }
 
-            headerInfo.set(ApiFormat.toDigitFormat(current) + " $");
-            headerSubInfo.set(ApiFormat.toDigitFormat(currentBtc) + " BTC");
+            headerInfo.set(ApiFormat.toPriceFormat(current) + " $");
+            headerSubInfo.set(ApiFormat.toPriceFormat(currentBtc) + " BTC");
 
         } else {
             headerSubTitle.set(null);
