@@ -38,12 +38,12 @@ public class FireSynchronizer { //TODO prep to synchronize across devices
         AuthCredentials auth = getExchangePrefs().getAuth(exchange);
 
         if (auth.isValid()) {
-            FirebaseDatabase.getInstance()
+/*            FirebaseDatabase.getInstance()
                     .getReference("auth")
                     .child(FirebaseInstanceId.getInstance().getId())
                     .child(exchange.name())
                     .setValue(auth);
-
+*/
             FirebaseDatabase.getInstance()
                     .getReference("portfolio")
                     .child(FirebaseInstanceId.getInstance().getId())
