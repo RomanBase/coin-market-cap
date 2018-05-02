@@ -408,12 +408,13 @@
                 <include layout="@layout/vertical_separator" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:background="@color/tint_light_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/tint_light_color"
                     android:padding="@dimen/base_half_padding"
                     android:text="Portfolio"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:visibility="@{M.isEmpty ? View.GONE : View.VISIBLE}" />
 
                 <com.ankhrom.base.custom.view.BaseListView
                     android:id="@+id/items_container"

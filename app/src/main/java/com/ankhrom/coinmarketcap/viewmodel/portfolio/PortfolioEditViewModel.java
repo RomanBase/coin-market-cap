@@ -115,7 +115,7 @@ public class PortfolioEditViewModel extends AppViewModel<PortfolioEditPageBindin
         headerTitle.set(coin.symbol + " - " + coin.name + " (" + parentModel.amount.get() + ")");
         headerSubTitle.set(parentModel.profitLossAmount.get() + " / " + parentModel.profitLoss.get());
         headerInfo.set(parentModel.currentValue.get());
-        headerSubInfo.set(parentModel.investedValue.get());
+        headerSubInfo.set(parentModel.investedValue.get() + " BTC");
     }
 
     protected void reloadModel() {
