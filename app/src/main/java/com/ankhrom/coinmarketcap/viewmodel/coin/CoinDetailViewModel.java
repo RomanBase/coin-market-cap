@@ -106,6 +106,11 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
             offset = count - timeframe * 12 - 3;
         }
 
+        if (count <= 1 || offset <= 0) {
+            isLoading.set(false);
+            return;
+        }
+
         List<List<Double>> sublist = response.price.subList(offset, count - 1);
 
         response.price = new CapHistoryItem();
