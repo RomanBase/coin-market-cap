@@ -64,9 +64,9 @@
                 android:orientation="vertical">
 
                 <com.ankhrom.base.custom.view.ImageGlideView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:padding="@dimen/base_quad_padding"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:padding="1dp"
                     app:imageURI="@{M.icon}"
                     app:placeholder="@drawable/ic_logo_dark"
                     app:placeholder_err="@drawable/ic_logo_dark" />
@@ -75,18 +75,11 @@
                     style="@style/AppTheme.CoinItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="@{M.coin.rank}"
-                    android:textSize="@dimen/text_size_small" />
-                <!--
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/AppTheme.CoinItem"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="•"
-                                    android:textSize="@dimen/text_size_small"
-                                    android:visibility="@{M.isFavourite ? View.VISIBLE : View.INVISIBLE}" />
-                -->
+                    android:textSize="@dimen/text_size_small"
+                    android:typeface='@{M.isFavourite ? "bold" : "normal"}' />
+
             </LinearLayout>
 
             <LinearLayout
