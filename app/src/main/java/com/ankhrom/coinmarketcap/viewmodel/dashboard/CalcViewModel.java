@@ -7,6 +7,7 @@ import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.data.DataHolder;
 import com.ankhrom.coinmarketcap.databinding.CalcPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
@@ -185,6 +186,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
         }
 
         if (coin == null) {
+            model.icon.set(null);
             model.currency.set("-");
             model.units.set(null);
             model.sumPrice.set(null);
@@ -195,6 +197,7 @@ public class CalcViewModel extends AppViewModel<CalcPageBinding, CalcModel> impl
             return;
         }
 
+        model.icon.set(ApiUrl.icon(coin));
         model.currency.set(coin.toString() + " (" + coin.rank + ")");
         model.unitPrice.setValue(ApiFormat.toPriceFormat(coin.priceUsd) + " $");
         model.bitcoinUnitValue.setValue(ApiFormat.toPriceFormat(coin.priceBtc));

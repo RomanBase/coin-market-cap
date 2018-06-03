@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import com.ankhrom.base.model.Model;
 import com.ankhrom.base.observable.EditTextObservable;
 import com.ankhrom.base.observable.ObservableString;
+import com.ankhrom.base.observable.ObservableUri;
 import com.ankhrom.coinmarketcap.BR;
 
 /**
@@ -13,6 +14,7 @@ import com.ankhrom.coinmarketcap.BR;
 
 public class PortfolioPlusModel extends Model {
 
+    public final ObservableUri icon = new ObservableUri();
     public final ObservableString currency = new ObservableString();
     public final EditTextObservable units = new EditTextObservable();
     public final EditTextObservable unitPrice = new EditTextObservable();

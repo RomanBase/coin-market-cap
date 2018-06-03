@@ -44,9 +44,18 @@
                     android:paddingLeft="@dimen/base_padding"
                     android:paddingRight="@dimen/base_padding">
 
+                    <com.ankhrom.base.custom.view.ImageGlideView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center_vertical"
+                        app:imageURI="@{M.icon}"
+                        app:placeholder="@drawable/ic_logo_dark"
+                        app:placeholder_err="@drawable/ic_logo_dark" />
+
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
                         android:maxLines="1"
                         android:paddingBottom="@dimen/base_padding"
                         android:paddingLeft="@dimen/base_quad_padding"

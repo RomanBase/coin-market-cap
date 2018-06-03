@@ -9,6 +9,7 @@ import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.PortfolioPlusPageBinding;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
@@ -52,11 +53,11 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
         if (coin != null) {
             model.editableCurrency.set(false);
-            model.currency.set(coin.symbol + " - " + coin.name);
         } else {
             coin = bitcoin;
-            model.currency.set(coin.symbol + " - " + coin.name);
         }
+
+        onCoinSelected(coin);
     }
 
     public final OnValueChangedListener<String> onUnitCountChanged = new OnValueChangedListener<String>() {
@@ -193,6 +194,7 @@ public class PortfolioPlusViewModel extends AppViewModel<PortfolioPlusPageBindin
 
         this.coin = coin;
         model.currency.set(coin.symbol + " - " + coin.name);
+        model.icon.set(ApiUrl.icon(coin));
     }
 
     public void onCreatePressed(View view) {
