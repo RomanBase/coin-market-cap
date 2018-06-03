@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.View;
 
+import com.ankhrom.base.common.statics.AppsHelper;
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
@@ -59,6 +60,11 @@ public class DonationViewModel extends AppViewModel<DonationPageBinding, Donatio
         ToastBuilder.with(getContext())
                 .text(model.currency + " address copied to clipboard")
                 .buildAndShow();
+    }
+
+    public void onGitPressed(View view) {
+
+        AppsHelper.openWeb(getContext(), "https://github.com/RomanBase/coin-market-cap");
     }
 
     private final OnItemSelectedListener<DonationWalletItemModel> onItemExpandListener = new OnItemSelectedListener<DonationWalletItemModel>() {

@@ -32,6 +32,30 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:onClick="@{VM::onGitPressed}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="vertical"
+                    android:padding="@dimen/base_padding">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GitHub"
+                        android:textSize="@dimen/text_size_highlight" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="https://github.com/RomanBase/coin-market-cap"
+                        android:textSize="@dimen/text_size_small" />
+
+                </LinearLayout>
+
+                <include layout="@layout/vertical_separator" />
+
                 <com.ankhrom.base.custom.view.BaseListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
