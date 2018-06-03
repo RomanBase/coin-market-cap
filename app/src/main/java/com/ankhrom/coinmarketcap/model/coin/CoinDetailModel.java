@@ -2,11 +2,13 @@ package com.ankhrom.coinmarketcap.model.coin;
 
 import android.content.Context;
 import android.databinding.ObservableField;
+import android.net.Uri;
 
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.observable.ObservableString;
 import com.ankhrom.coincap.entity.CapHistoryItem;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.model.PortfolioAdapterModel;
 import com.robinhood.spark.SparkAdapter;
@@ -26,6 +28,8 @@ public class CoinDetailModel extends PortfolioAdapterModel {
     public final String change7d;
     public final String supplyCurrent;
     public final String supplyMax;
+
+    public final Uri icon;
 
     public final ObservableString minPrice = new ObservableString();
     public final ObservableString midPrice = new ObservableString();
@@ -51,6 +55,8 @@ public class CoinDetailModel extends PortfolioAdapterModel {
 
         supplyCurrent = ApiFormat.toShortFormat(coin.supply);
         supplyMax = StringHelper.isEmpty(coin.supplyMax) ? "∞" : ApiFormat.toShortFormat(coin.supplyMax);
+
+        icon = ApiUrl.icon(coin);
     }
 
     public void setGraphAdapterValues(final CapHistoryItem data) {

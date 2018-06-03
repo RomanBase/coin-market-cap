@@ -99,6 +99,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/base_padding"
@@ -122,6 +123,13 @@
                             app:text="@{M.supplyCurrent}" />
 
                     </android.support.design.widget.TextInputLayout>
+
+                    <com.ankhrom.base.custom.view.ImageGlideView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        app:imageURI="@{M.icon}"
+                        app:placeholder="@drawable/ic_logo_dark"
+                        app:placeholder_err="@drawable/ic_logo_dark" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"

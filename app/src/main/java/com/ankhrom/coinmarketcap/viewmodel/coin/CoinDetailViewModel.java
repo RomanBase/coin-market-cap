@@ -106,7 +106,11 @@ public class CoinDetailViewModel extends AppViewModel<CoinDetailPageBinding, Coi
             offset = count - timeframe * 12 - 3;
         }
 
-        if (count <= 1 || offset <= 0) {
+        if (offset < 0) {
+            offset = 0;
+        }
+
+        if (count <= 1) {
             isLoading.set(false);
             return;
         }

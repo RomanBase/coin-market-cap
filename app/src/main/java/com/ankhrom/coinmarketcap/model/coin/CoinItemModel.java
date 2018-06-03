@@ -2,6 +2,7 @@ package com.ankhrom.coinmarketcap.model.coin;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableFloat;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
 
@@ -9,6 +10,7 @@ import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.api.ApiFormat;
+import com.ankhrom.coinmarketcap.api.ApiUrl;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.model.base.SortableCoinItemModel;
 
@@ -27,6 +29,8 @@ public class CoinItemModel extends SortableCoinItemModel {
     public final String change7d;
     public final String marketCap;
     public final String volume;
+
+    public final Uri icon;
 
     public final ObservableBoolean isFavourite = new ObservableBoolean();
     public final ObservableFloat swipeProgress = new ObservableFloat();
@@ -57,6 +61,8 @@ public class CoinItemModel extends SortableCoinItemModel {
 
         marketCap = ApiFormat.toShortFormat(coin.marketCap);
         volume = ApiFormat.toShortFormat(coin.volumeUsd);
+
+        icon = ApiUrl.icon(coin);
     }
 
     public void setOnItemSelectedLongListener(OnItemSelectedListener<CoinItemModel> itemSelectedLongListener) {
