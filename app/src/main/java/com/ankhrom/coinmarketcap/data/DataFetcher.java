@@ -24,6 +24,8 @@ import com.ankhrom.coinmarketcap.listener.DataExchangeLoadingListener;
 import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
+import com.ankhrom.etherscan.EtherApiParam;
+import com.ankhrom.etherscan.Etherscan;
 import com.ankhrom.gdax.Gdax;
 import com.ankhrom.gdax.GdaxFilter;
 import com.ankhrom.gdax.entity.CoinbaseAccount;
@@ -54,6 +56,7 @@ public class DataFetcher {
     private boolean loadingBinance;
     private boolean loadingGdax;
     private boolean loadingCoinbase;
+    private boolean loadingEther;
 
     public DataFetcher(ObjectFactory factory) {
         this.factory = factory;
@@ -175,6 +178,8 @@ public class DataFetcher {
                 requestBinancePortfolio(credentials);
             case GDAX:
                 requestGdaxPortfolio(credentials);
+            case ETHER:
+                requestEtherscan(credentials);
                 break;
         }
     }
@@ -187,6 +192,8 @@ public class DataFetcher {
     public boolean isLoading(ExchangeType exchange) {
 
         switch (exchange) {
+            case ETHER:
+                return loadingEther;
             case HIT_BTC:
                 return loadingHitBTC;
             case BINANCE:
@@ -243,6 +250,20 @@ public class DataFetcher {
 
         gdax.getAccounts(gdaxAccountListener);
         gdax.getCoinbaseAccounts(coinbaseAccountListener);
+    }
+
+    private void requestEtherscan(AuthCredentials credentials) {
+
+        if (loadingEther) {
+            return;
+        }
+
+        loadingEther = true;
+        notifyExchangeListeners(ExchangeType.ETHER, true, false);
+
+        Etherscan etherscan = Etherscan.init(factory.getContext()).auth(credentials.key, credentials.secret);
+
+        etherscan.requestBalance(etherscanBalanceListener);
     }
 
     private void notifyListeners(final boolean isValid) {
@@ -479,7 +500,7 @@ public class DataFetcher {
 
             loadingCoinbase = false;
             notifyExchangeListeners(ExchangeType.GDAX, isLoading(ExchangeType.GDAX), true);
-            getPortfoliHolder().notifyExchangePortfolioChanged(ExchangeType.GDAX);
+            portfolio.notifyExchangePortfolioChanged(ExchangeType.GDAX);
         }
 
         @Override
@@ -487,6 +508,35 @@ public class DataFetcher {
             error.printStackTrace();
             loadingCoinbase = false;
             notifyExchangeListeners(ExchangeType.GDAX, isLoading(ExchangeType.GDAX), false);
+        }
+    };
+
+    private final ResponseListener<Double> etherscanBalanceListener = new ResponseListener<Double>() {
+        @Override
+        public void onResponse(@Nullable Double response) {
+
+            if (response == null) {
+                loadingEther = false;
+                notifyExchangeListeners(ExchangeType.ETHER, false, true);
+                return;
+            }
+
+            final DataHolder holder = getDataHolder();
+            final PortfolioHolder portfolio = holder.getPortfolio();
+
+            addPortfolioCurrency(portfolio, holder.getCoinBySymbol(EtherApiParam.CURRENCY), ExchangeType.ETHER, response);
+
+            portfolio.persist(ExchangeType.ETHER);
+
+            notifyExchangeListeners(ExchangeType.ETHER, false, true);
+            portfolio.notifyExchangePortfolioChanged(ExchangeType.ETHER);
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            loadingEther = false;
+            notifyExchangeListeners(ExchangeType.ETHER, false, false);
         }
     };
 

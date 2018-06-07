@@ -46,6 +46,7 @@ dependencies {
     implementation project(path: ':binance')
     implementation project(path: ':coincap')
     implementation project(path: ':gdax')
+    compile project(path: ':etherscan')
 }
 
 apply plugin: 'com.google.gms.google-services'

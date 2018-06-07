@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/binance/binance.iml" filepath="$PROJECT_DIR$/binance/binance.iml" />
       <module fileurl="file://$PROJECT_DIR$/coin-market-cap.iml" filepath="$PROJECT_DIR$/coin-market-cap.iml" />
       <module fileurl="file://$PROJECT_DIR$/coincap/coincap.iml" filepath="$PROJECT_DIR$/coincap/coincap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/etherscan/etherscan.iml" filepath="$PROJECT_DIR$/etherscan/etherscan.iml" />
       <module fileurl="file://$PROJECT_DIR$/gdax/gdax.iml" filepath="$PROJECT_DIR$/gdax/gdax.iml" />
       <module fileurl="file://$PROJECT_DIR$/hitbtc/hitbtc.iml" filepath="$PROJECT_DIR$/hitbtc/hitbtc.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />

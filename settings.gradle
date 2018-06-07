@@ -1,1 +1,1 @@
-include ':app', ':lib', ':hitbtc', ':binance', ':coincap', ':gdax'
+include ':app', ':lib', ':hitbtc', ':binance', ':coincap', ':gdax', ':etherscan'
