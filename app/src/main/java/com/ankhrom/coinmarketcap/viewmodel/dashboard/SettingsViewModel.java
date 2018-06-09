@@ -18,6 +18,7 @@ import com.ankhrom.coinmarketcap.listener.DataExchangeLoadingListener;
 import com.ankhrom.coinmarketcap.listener.OnExchangeAuthChangedListener;
 import com.ankhrom.coinmarketcap.model.settings.SettingsExchangeItemModel;
 import com.ankhrom.coinmarketcap.model.settings.SettingsModel;
+import com.ankhrom.coinmarketcap.viewmodel.auth.EtherWalletViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.auth.ThirdPartyLoginViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.DonationViewModel;
@@ -134,7 +135,11 @@ public class SettingsViewModel extends AppViewModel<SettingsPageBinding, Setting
     @Override
     public void onItemSelected(View view, SettingsExchangeItemModel model) {
 
-        addViewModel(ThirdPartyLoginViewModel.class, model.type);
+        if (model.type == ExchangeType.ETHER) {
+            addViewModel(EtherWalletViewModel.class, model.type);
+        } else {
+            addViewModel(ThirdPartyLoginViewModel.class, model.type);
+        }
     }
 
     public void onFeatureRequestPressed(View view) {

@@ -2,6 +2,7 @@
 <resources>
     <string name="btc_wallet">1M9NUJbzr6amfPTc8WHjxrBiqpdRgcU8x</string>
     <string name="bch_wallet">qpz7sw2crc9ny7kgnd9vs8wpz7yvk5huj59c300ln7</string>
-    <string name="eth_wallet">0xDe904608230a213F2740Ec679bc053C06f552fDd</string>
+    <string name="eth_wallet">0x23e3559df38d61609254b36fc1b05ae1a0fed14c</string>
     <string name="ltc_wallet">LQJkqEKqiyP1YmsueWDtjEdz6b7NY2zwPH</string>
+    <string name="etherscan_key">MB7JUV348KV451KPRNWXHBV6I77TJ9BPYN</string>
 </resources>

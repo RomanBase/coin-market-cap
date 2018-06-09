@@ -176,8 +176,10 @@ public class DataFetcher {
                 break;
             case BINANCE:
                 requestBinancePortfolio(credentials);
+                break;
             case GDAX:
                 requestGdaxPortfolio(credentials);
+                break;
             case ETHER:
                 requestEtherscan(credentials);
                 break;
@@ -528,6 +530,7 @@ public class DataFetcher {
 
             portfolio.persist(ExchangeType.ETHER);
 
+            loadingEther = false;
             notifyExchangeListeners(ExchangeType.ETHER, false, true);
             portfolio.notifyExchangePortfolioChanged(ExchangeType.ETHER);
         }

@@ -6,6 +6,7 @@ import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.coinmarketcap.R;
+import com.ankhrom.coinmarketcap.common.ExchangeType;
 import com.ankhrom.coinmarketcap.databinding.QrScannerPageBinding;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
 import com.ankhrom.coinmarketcap.model.dialog.QRModel;
@@ -29,6 +30,8 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, QRModel> imp
     public void init(InitArgs args) {
         super.init(args);
 
+        ExchangeType type = args.getArg(ExchangeType.class);
+
         Integer code = args.getArg(Integer.class);
         requestCode = code == null ? -1 : code;
         listener = args.getArg(OnQRHandledListener.class);
@@ -37,10 +40,25 @@ public class QRViewModel extends AppViewModel<QrScannerPageBinding, QRModel> imp
 
         model.showTooltip.set(true);
 
-        if (requestCode < 0) {
-            model.tooltip.set("convert wallet address or transaction ID to QR and then scan");
+        if (type == null) {
+            if (requestCode < 0) {
+                model.tooltip.set("convert public wallet address or transaction ID to QR and then scan");
+            } else {
+                model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret or key:secret:pass)");
+            }
         } else {
-            model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret or key:secret:pass)");
+            switch (type) {
+                case HIT_BTC:
+                case BINANCE:
+                    model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret)");
+                    break;
+                case ETHER:
+                    model.tooltip.set("convert public wallet address or contract to QR code and then scan");
+                    break;
+                case GDAX:
+                default:
+                    model.tooltip.set("convert text to QR code and then scan each field separately or at once with colon separator (key:secret or key:secret:pass)");
+            }
         }
     }
 

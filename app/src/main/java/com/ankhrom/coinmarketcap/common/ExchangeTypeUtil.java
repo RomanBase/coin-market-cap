@@ -11,24 +11,22 @@ public final class ExchangeTypeUtil {
     public static int getLogo(ExchangeType type) {
 
         switch (type) {
-            case NONE:
-                return R.drawable.ic_virtual_icon;
             case HIT_BTC:
                 return R.drawable.ic_hitbtc;
             case BINANCE:
                 return R.drawable.ic_binance;
             case GDAX:
                 return R.drawable.ic_gdax;
+            case ETHER:
+                return R.drawable.ic_ether_wallet;
             default:
-                return R.drawable.ic_logo;
+                return R.drawable.ic_logo_dark;
         }
     }
 
     public static int getIcon(ExchangeType type) {
 
         switch (type) {
-            case NONE:
-                return R.drawable.ic_virtual_icon;
             case HIT_BTC:
                 return R.drawable.ic_hitbtc_icon;
             case BINANCE:
@@ -36,7 +34,7 @@ public final class ExchangeTypeUtil {
             case GDAX:
                 return R.drawable.ic_gdax_icon;
             default:
-                return R.drawable.ic_logo;
+                return R.drawable.ic_logo_dark;
         }
     }
 

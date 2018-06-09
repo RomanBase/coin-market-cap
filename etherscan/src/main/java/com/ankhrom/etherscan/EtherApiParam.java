@@ -18,7 +18,7 @@ public final class EtherApiParam {
     public static final String ok = "OK";
     public static final Double VALUE_MULTIPLIER = 1000000000000000000.0;
 
-    public static final String CURRENCY = "eth";
+    public static final String CURRENCY = "ETH";
 
     public static final class Module {
 
@@ -32,6 +32,7 @@ public final class EtherApiParam {
     public static final class Action {
 
         public static final String balance = "balance";
+        public static final String balanceToken = "tokenbalance";
         public static final String abi = "getabi";
         public static final String balanceMulti = "balancemulti";
         public static final String transactions = "txlist";

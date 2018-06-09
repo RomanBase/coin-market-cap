@@ -1,33 +1,33 @@
 package com.ankhrom.coinmarketcap.viewmodel.auth;
 
 import android.content.pm.PackageManager;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.ankhrom.base.GlobalCode;
 import com.ankhrom.base.common.statics.FragmentHelper;
 import com.ankhrom.base.common.statics.ScreenHelper;
+import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.args.InitArgs;
+import com.ankhrom.base.custom.listener.ImeActionDoneListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.CameraRequest;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
-import com.ankhrom.coinmarketcap.common.ExchangeTypeUtil;
-import com.ankhrom.coinmarketcap.databinding.ThirdPartyLoginBinding;
 import com.ankhrom.coinmarketcap.entity.AuthCredentials;
 import com.ankhrom.coinmarketcap.listener.OnQRHandledListener;
-import com.ankhrom.coinmarketcap.model.auth.ThirdPartyLoginModel;
+import com.ankhrom.coinmarketcap.model.auth.EtherContractItemModel;
+import com.ankhrom.coinmarketcap.model.auth.EtherWalletLoginModel;
 import com.ankhrom.coinmarketcap.viewmodel.base.AppViewModel;
 import com.ankhrom.coinmarketcap.viewmodel.dialog.QRViewModel;
 
 /**
- * Created by romanhornak on 1/4/18.
+ * Created by R' on 6/8/2018.
  */
+public class EtherWalletViewModel extends AppViewModel<ViewDataBinding, EtherWalletLoginModel> implements OnQRHandledListener {
 
-public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBinding, ThirdPartyLoginModel> implements OnQRHandledListener {
-
-    public static final int QR_KEY = 1;
-    public static final int QR_SECRET = 2;
-    public static final int QR_PASS = 3;
+    public static final int QR_ADDRESS = 10;
+    public static final int QR_CONTRACT = 11;
 
     private ExchangeType type;
     private AuthCredentials credentials;
@@ -47,13 +47,27 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
 
         credentials = getExchangePrefs().getAuth(type);
 
-        ThirdPartyLoginModel model = new ThirdPartyLoginModel(type);
+        final EtherWalletLoginModel model = new EtherWalletLoginModel(type);
 
         if (credentials.isValid()) {
-            model.presetEdit(credentials.key, credentials.secret, credentials.pass);
+            model.edit.set(true);
+            model.address.set(credentials.key);
+
+            String[] contracts = splitContracts(credentials.pass);
+
+            if (contracts != null) {
+                for (String contract : contracts) {
+                    model.contracts.add(new EtherContractItemModel(contract));
+                }
+            }
         }
 
-        model.isPassRequired.set(ExchangeTypeUtil.isPassRequired(type));
+        model.contract.setImeActionListener(new ImeActionDoneListener() {
+            @Override
+            protected void onDone(String value) {
+                addContract(value);
+            }
+        });
 
         setModel(model);
     }
@@ -66,28 +80,29 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         if (result.contains(":")) {
 
             String[] data = result.split(":");
-
-            model.key.setValue(data[0]);
-            model.secret.setValue(data[1]);
-
-            if (data.length > 2) {
-                model.pass.setValue(data[2]);
-            }
-
-            return;
         }
 
         switch (requestCode) {
-            case QR_KEY:
-                model.key.setValue(result);
+            case QR_ADDRESS:
+                model.address.set(result);
                 break;
-            case QR_SECRET:
-                model.secret.setValue(result);
-                break;
-            case QR_PASS:
-                model.pass.setValue(result);
+            case QR_CONTRACT:
+                addContract(result);
                 break;
         }
+    }
+
+    private void addContract(String contract) {
+
+        model.contract.set(null);
+
+        EtherContractItemModel item = new EtherContractItemModel(contract);
+
+        model.contracts.add(item);
+
+        ScreenHelper.hideSoftKeyboard(getActivity());
+
+        // TODO: 6/9/2018 check contract
     }
 
     private void openCamera(int qrField) {
@@ -103,59 +118,34 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         addViewModel(QRViewModel.class, qrField, type, this);
     }
 
-    public void onKeyCameraPressed(View view) {
+    public void onAddressCameraPressed(View view) {
 
-        openCamera(QR_KEY);
+        openCamera(QR_ADDRESS);
     }
 
-    public void onSecretCameraPressed(View view) {
+    public void onContractCameraPressed(View view) {
 
-        openCamera(QR_SECRET);
-    }
+        if (model.contractEdit.get()) {
+            addContract(model.contract.get());
+            return;
+        }
 
-    public void onPassCameraPressed(View view) {
-
-        openCamera(QR_PASS);
+        openCamera(QR_CONTRACT);
     }
 
     public void onLoginPressed(View view) {
 
-        if (!(model.key.isValid() && model.secret.isValid())) {
+        if (model.address.isEmpty()) {
             return;
         }
 
-        boolean relogin = false;
-
-        if (!model.key.get().equals(credentials.key)) {
-            credentials.key = model.key.get();
-            relogin = true;
-        }
-
-        if (!model.secret.get().equals(credentials.secret)) {
-            credentials.secret = model.secret.get();
-            relogin = true;
-        }
-
-        if (model.isPassRequired.get()) {
-            if (!model.pass.isValid()) {
-                return;
-            }
-
-            if (!model.pass.get().equals(credentials.pass)) {
-                credentials.pass = model.pass.get();
-                relogin = true;
-            }
-        }
-
-        if (model.dontStore.get()) {
-            relogin = true;
-        }
+        credentials.key = model.address.get();
+        credentials.secret = getString(R.string.etherscan_key);
+        credentials.pass = mergeContracts();
 
         credentials.persist = !model.dontStore.get();
 
-        if (relogin) {
-            getExchangePrefs().setAuth(type, credentials);
-        }
+        getExchangePrefs().setAuth(type, credentials);
 
         close();
     }
@@ -182,6 +172,39 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
         getNavigation().setPreviousViewModel();
     }
 
+    private String mergeContracts() {
+
+        int count = model.contracts.size();
+
+        if (count == 0) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < count; i++) {
+            builder.append(model.contracts.get(i).contract);
+            builder.append(":");
+        }
+
+        builder.deleteCharAt(builder.length() - 1);
+
+        return builder.toString();
+    }
+
+    private String[] splitContracts(String input) {
+
+        if (StringHelper.isEmpty(input)) {
+            return null;
+        }
+
+        if (!input.contains(":")) {
+            return new String[]{input};
+        }
+
+        return input.split(":");
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -202,6 +225,6 @@ public class ThirdPartyLoginViewModel extends AppViewModel<ThirdPartyLoginBindin
 
     @Override
     public int getLayoutResource() {
-        return R.layout.third_party_login;
+        return R.layout.ether_wallet;
     }
 }

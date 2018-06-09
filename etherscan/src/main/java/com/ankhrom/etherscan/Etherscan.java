@@ -53,6 +53,43 @@ public class Etherscan {
                             return;
                         }
 
+                        try {
+                            double value = Double.parseDouble(response.result);
+
+                            listener.onResponse(value / EtherApiParam.VALUE_MULTIPLIER);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+
+                            listener.onErrorResponse(new VolleyError(ex.getMessage()));
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onErrorResponse(error);
+                    }
+                })
+                .asGson(EtherResponse.class)
+                .queue(requestQueue);
+    }
+
+    public void requestContract(final String contract, final ResponseListener<Double> listener) {
+
+        RequestBuilder.get(EtherApiUrl.BASE_URL)
+                .param(EtherApiParam.module, EtherApiParam.Module.account)
+                .param(EtherApiParam.action, EtherApiParam.Action.balanceToken)
+                .param(EtherApiParam.contact, contract)
+                .param(EtherApiParam.address, address)
+                .param(EtherApiParam.key, apiKey)
+                .listener(new ResponseListener<EtherResponse>() {
+                    @Override
+                    public void onResponse(@Nullable EtherResponse response) {
+
+                        if (response == null) {
+                            listener.onResponse(0.0);
+                            return;
+                        }
+
                         double value = Double.parseDouble(response.result);
 
                         listener.onResponse(value / EtherApiParam.VALUE_MULTIPLIER);

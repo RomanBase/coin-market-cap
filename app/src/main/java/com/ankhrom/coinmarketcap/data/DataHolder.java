@@ -1,5 +1,6 @@
 package com.ankhrom.coinmarketcap.data;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
@@ -167,7 +168,7 @@ public class DataHolder { //todo cache
     }
 
     @Nullable
-    public CoinItem getCoin(String id) {
+    public CoinItem getCoin(@NonNull String id) {
 
         for (CoinItem coin : coins) {
             if (coin.id.equals(id)) {
@@ -179,7 +180,7 @@ public class DataHolder { //todo cache
     }
 
     @Nullable
-    public CoinItemModel getCoinItem(String id) {
+    public CoinItemModel getCoinItem(@NonNull String id) {
 
         for (CoinItemModel coin : coinItems) {
             if (coin.coin.id.equals(id)) {
@@ -197,7 +198,7 @@ public class DataHolder { //todo cache
     }
 
     @Nullable
-    public CoinItem getCoinBySymbol(String symbol) {
+    public CoinItem getCoinBySymbol(@NonNull String symbol) {
 
         for (CoinItem coin : coins) {
             if (coin.symbol.equals(symbol)) {
