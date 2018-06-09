@@ -218,7 +218,7 @@ public class DataFetcher {
 
         HitBTC hitBTC = HitBTC.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
-        //hitBTC.balanceAccount(hitBalanceListener);
+        hitBTC.balanceAccount(hitBalanceListener);
         hitBTC.balanceTrading(hitBalanceListener);
     }
 
@@ -516,6 +516,9 @@ public class DataFetcher {
     private final ResponseListener<Double> etherscanBalanceListener = new ResponseListener<Double>() {
         @Override
         public void onResponse(@Nullable Double response) {
+
+            getPortfoliHolder().clear(ExchangeType.ETHER, false);
+            getExchangePrefs().setTimestamp(ExchangeType.ETHER, System.currentTimeMillis());
 
             if (response == null) {
                 loadingEther = false;
