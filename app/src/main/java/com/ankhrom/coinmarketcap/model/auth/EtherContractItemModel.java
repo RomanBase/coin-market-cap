@@ -1,5 +1,6 @@
 package com.ankhrom.coinmarketcap.model.auth;
 
+import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.model.base.AppSelectableItemModel;
 
@@ -11,6 +12,12 @@ public class EtherContractItemModel extends AppSelectableItemModel {
     public final String contract;
 
     public EtherContractItemModel(String contract) {
+        this.contract = contract;
+    }
+
+    public EtherContractItemModel(String contract, OnItemSelectedListener<EtherContractItemModel> listener) {
+        super(listener);
+
         this.contract = contract;
     }
 

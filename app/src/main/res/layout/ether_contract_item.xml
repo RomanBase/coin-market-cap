@@ -28,7 +28,7 @@
             android:layout_gravity="end"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:foregroundGravity="center_vertical"
-            android:onClick="@{M.onItemSelected}"
+            android:onClick="@{M::onItemSelected}"
             android:scaleType="center"
             android:src="@drawable/ic_cancel"
             android:tint="@color/tint_dark_color" />

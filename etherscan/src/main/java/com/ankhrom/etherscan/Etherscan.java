@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseListener;
 import com.ankhrom.base.networking.volley.VolleyBuilder;
+import com.ankhrom.etherscan.entity.EtherBalance;
 import com.ankhrom.etherscan.entity.EtherResponse;
 
 /**
@@ -37,7 +38,7 @@ public class Etherscan {
         return this;
     }
 
-    public void requestBalance(final ResponseListener<Double> listener) {
+    public void requestBalance(final ResponseListener<EtherBalance> listener) {
 
         RequestBuilder.get(EtherApiUrl.BASE_URL)
                 .param(EtherApiParam.module, EtherApiParam.Module.account)
@@ -49,18 +50,20 @@ public class Etherscan {
                     public void onResponse(@Nullable EtherResponse response) {
 
                         if (response == null) {
-                            listener.onResponse(0.0);
+                            listener.onResponse(null);
                             return;
                         }
 
                         try {
                             double value = Double.parseDouble(response.result);
 
-                            listener.onResponse(value / EtherApiParam.VALUE_MULTIPLIER);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                            EtherBalance balance = new EtherBalance();
+                            balance.address = address;
+                            balance.balance = value / EtherApiParam.VALUE_MULTIPLIER;
 
-                            listener.onErrorResponse(new VolleyError(ex.getMessage()));
+                            listener.onResponse(balance);
+                        } catch (Exception ex) {
+                            listener.onErrorResponse(new VolleyError(ex));
                         }
                     }
 
@@ -73,7 +76,7 @@ public class Etherscan {
                 .queue(requestQueue);
     }
 
-    public void requestContract(final String contract, final ResponseListener<Double> listener) {
+    public void requestContract(final String contract, final ResponseListener<EtherBalance> listener) {
 
         RequestBuilder.get(EtherApiUrl.BASE_URL)
                 .param(EtherApiParam.module, EtherApiParam.Module.account)
@@ -86,13 +89,21 @@ public class Etherscan {
                     public void onResponse(@Nullable EtherResponse response) {
 
                         if (response == null) {
-                            listener.onResponse(0.0);
+                            listener.onResponse(null);
                             return;
                         }
 
-                        double value = Double.parseDouble(response.result);
+                        try {
+                            double value = Double.parseDouble(response.result);
 
-                        listener.onResponse(value / EtherApiParam.VALUE_MULTIPLIER);
+                            EtherBalance balance = new EtherBalance();
+                            balance.address = contract;
+                            balance.balance = value / EtherApiParam.VALUE_MULTIPLIER;
+
+                            listener.onResponse(balance);
+                        } catch (Exception e) {
+                            listener.onErrorResponse(new VolleyError(e));
+                        }
                     }
 
                     @Override

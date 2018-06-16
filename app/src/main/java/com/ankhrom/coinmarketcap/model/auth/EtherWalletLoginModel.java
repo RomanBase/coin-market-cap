@@ -1,8 +1,10 @@
 package com.ankhrom.coinmarketcap.model.auth;
 
 import android.databinding.ObservableBoolean;
+import android.view.View;
 
 import com.ankhrom.base.common.statics.StringHelper;
+import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.interfaces.OnValueChangedListener;
 import com.ankhrom.base.observable.EditTextObservable;
 import com.ankhrom.base.observable.ViewGroupObservable;

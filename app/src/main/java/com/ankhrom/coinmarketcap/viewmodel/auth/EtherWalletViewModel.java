@@ -11,6 +11,7 @@ import com.ankhrom.base.common.statics.ScreenHelper;
 import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.custom.args.InitArgs;
 import com.ankhrom.base.custom.listener.ImeActionDoneListener;
+import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.coinmarketcap.R;
 import com.ankhrom.coinmarketcap.common.CameraRequest;
 import com.ankhrom.coinmarketcap.common.ExchangeType;
@@ -24,7 +25,7 @@ import com.ankhrom.coinmarketcap.viewmodel.dialog.QRViewModel;
 /**
  * Created by R' on 6/8/2018.
  */
-public class EtherWalletViewModel extends AppViewModel<ViewDataBinding, EtherWalletLoginModel> implements OnQRHandledListener {
+public class EtherWalletViewModel extends AppViewModel<ViewDataBinding, EtherWalletLoginModel> implements OnQRHandledListener, OnItemSelectedListener<EtherContractItemModel> {
 
     public static final int QR_ADDRESS = 10;
     public static final int QR_CONTRACT = 11;
@@ -57,7 +58,7 @@ public class EtherWalletViewModel extends AppViewModel<ViewDataBinding, EtherWal
 
             if (contracts != null) {
                 for (String contract : contracts) {
-                    model.contracts.add(new EtherContractItemModel(contract));
+                    model.contracts.add(new EtherContractItemModel(contract, this));
                 }
             }
         }
@@ -96,13 +97,16 @@ public class EtherWalletViewModel extends AppViewModel<ViewDataBinding, EtherWal
 
         model.contract.set(null);
 
-        EtherContractItemModel item = new EtherContractItemModel(contract);
+        EtherContractItemModel item = new EtherContractItemModel(contract, this);
 
         model.contracts.add(item);
 
         ScreenHelper.hideSoftKeyboard(getActivity());
+    }
 
-        // TODO: 6/9/2018 check contract
+    @Override
+    public void onItemSelected(View view, EtherContractItemModel item) {
+        model.contracts.remove(item);
     }
 
     private void openCamera(int qrField) {

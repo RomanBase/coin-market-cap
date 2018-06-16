@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
+import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
@@ -176,7 +177,7 @@ public class DataHolder { //todo cache
             }
         }
 
-        return null;
+        return mockCoin(id);
     }
 
     @Nullable
@@ -206,7 +207,28 @@ public class DataHolder { //todo cache
             }
         }
 
-        return null;
+        return mockCoin(symbol);
+    }
+
+    public CoinItem mockCoin(String symbol) {
+
+        CoinItem coin = new CoinItem();
+        coin.symbol = symbol;
+        coin.id = symbol;
+        coin.name = symbol;
+        coin.rank = String.valueOf(coins.size());
+        coin.marketCap = "0";
+        coin.priceBtc = "0";
+        coin.priceUsd = "0";
+        coin.supply = "0";
+        coin.supplyMax = "0";
+        coin.supplyTotal = "0";
+        coin.volumeUsd = "0";
+        coin.percentChange1h = "0";
+        coin.percentChange7d = "0";
+        coin.percentChange24h = "0";
+
+        return coin;
     }
 
     public void addFavourite(String id) {

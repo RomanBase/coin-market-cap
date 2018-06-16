@@ -23,15 +23,25 @@ var $ = require('jquery')(window);
 
 exports.token = functions.https.onRequest((request, response) => {
 
-  var url_parts = url.parse(request.url, true);
-  var query = url_parts.query;
+  var query = request.query;
 
-  var ethAddress = query.eth;
+  //var ethAddress = query.eth;
   var contractAddress = query.contract;
+
+  if(!contractAddress){
+      contractAddress = request.body.contract;
+  }
 
   var ether = 'https://api.etherscan.io/api?module=contract&action=getabi&address=' + contractAddress;
 
   console.log(ether);
+
+  if(!contractAddress){
+    response.status(400).send({
+      error: "missing contract address"
+    });
+    return;
+  }
 
   $.getJSON(ether, function (data) {
       var contractABI = "";
@@ -53,20 +63,29 @@ exports.token = functions.https.onRequest((request, response) => {
                   var ref = admin.database().ref();
                   var path = "/token/" + contractAddress;
 
-                  console.log(path);
-
                   ref.child(path).child("symbol").set(result);
                   ref.child(path).child("address").set(contractAddress);
 
-                  response.send(result);
+                  response.status(200).send({
+                    symbol: result,
+                    contract: contractAddress
+                  });
                 } else if(err){
                   console.log("symbol : " + err);
-                  response.send(err);
+                  response.status(500).send({
+                    error: err,
+                    contract: contractAddress
+                  });
                 } else {
-                  console.log("symbol error!");
-                  response.send(contractABI);
+                  console.log("symbol error! " + contractABI);
+                  response.status(500).send({
+                    error: "symbol not found",
+                    contract: contractAddress
+                  });
                 }
               });
+          } else {
+            response.send();
           }
 
       } else {

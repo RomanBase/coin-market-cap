@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 
 import com.android.volley.Cache;
 import com.android.volley.VolleyError;
+import com.ankhrom.base.Base;
+import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.base.networking.volley.RequestBuilder;
 import com.ankhrom.base.networking.volley.ResponseCacheListener;
@@ -20,12 +22,14 @@ import com.ankhrom.coinmarketcap.entity.CoinItem;
 import com.ankhrom.coinmarketcap.entity.MarketData;
 import com.ankhrom.coinmarketcap.entity.PortfolioCoin;
 import com.ankhrom.coinmarketcap.entity.PortfolioItem;
+import com.ankhrom.coinmarketcap.entity.TokenItem;
 import com.ankhrom.coinmarketcap.listener.DataExchangeLoadingListener;
 import com.ankhrom.coinmarketcap.listener.DataLoadingListener;
 import com.ankhrom.coinmarketcap.prefs.ExchangePrefs;
 import com.ankhrom.coinmarketcap.prefs.UserPrefs;
 import com.ankhrom.etherscan.EtherApiParam;
 import com.ankhrom.etherscan.Etherscan;
+import com.ankhrom.etherscan.entity.EtherBalance;
 import com.ankhrom.gdax.Gdax;
 import com.ankhrom.gdax.GdaxFilter;
 import com.ankhrom.gdax.entity.CoinbaseAccount;
@@ -266,6 +270,21 @@ public class DataFetcher {
         Etherscan etherscan = Etherscan.init(factory.getContext()).auth(credentials.key, credentials.secret);
 
         etherscan.requestBalance(etherscanBalanceListener);
+
+        requestContracts(etherscan, credentials);
+    }
+
+    private void requestContracts(Etherscan etherscan, AuthCredentials credentials) {
+
+        if (StringHelper.isEmpty(credentials.pass)) {
+            return;
+        }
+
+        String[] contracts = credentials.pass.split(":");
+
+        for (String contract : contracts) {
+            etherscan.requestContract(contract, contractBalanceListener);
+        }
     }
 
     private void notifyListeners(final boolean isValid) {
@@ -513,9 +532,9 @@ public class DataFetcher {
         }
     };
 
-    private final ResponseListener<Double> etherscanBalanceListener = new ResponseListener<Double>() {
+    private final ResponseListener<EtherBalance> etherscanBalanceListener = new ResponseListener<EtherBalance>() {
         @Override
-        public void onResponse(@Nullable Double response) {
+        public void onResponse(@Nullable EtherBalance response) {
 
             getPortfoliHolder().clear(ExchangeType.ETHER, false);
             getExchangePrefs().setTimestamp(ExchangeType.ETHER, System.currentTimeMillis());
@@ -529,7 +548,7 @@ public class DataFetcher {
             final DataHolder holder = getDataHolder();
             final PortfolioHolder portfolio = holder.getPortfolio();
 
-            addPortfolioCurrency(portfolio, holder.getCoinBySymbol(EtherApiParam.CURRENCY), ExchangeType.ETHER, response);
+            addPortfolioCurrency(portfolio, holder.getCoinBySymbol(EtherApiParam.CURRENCY), ExchangeType.ETHER, response.balance);
 
             portfolio.persist(ExchangeType.ETHER);
 
@@ -543,6 +562,46 @@ public class DataFetcher {
             error.printStackTrace();
             loadingEther = false;
             notifyExchangeListeners(ExchangeType.ETHER, false, false);
+        }
+    };
+
+    private final ResponseListener<EtherBalance> contractBalanceListener = new ResponseListener<EtherBalance>() {
+        @Override
+        public void onResponse(@Nullable EtherBalance response) {
+
+            if (response == null) {
+                return;
+            }
+
+            final DataHolder holder = getDataHolder();
+            final PortfolioHolder portfolio = holder.getPortfolio();
+
+            final double balance = response.balance;
+
+            new FireToken(factory.getRequestQueue()).tokenInfo(response.address, new ResponseListener<TokenItem>() {
+                @Override
+                public void onResponse(@Nullable TokenItem response) {
+
+                    if (response == null || !response.isValid()) {
+                        return;
+                    }
+
+                    addPortfolioCurrency(portfolio, holder.getCoinBySymbol(response.symbol), ExchangeType.ETHER, balance);
+
+                    portfolio.persist(ExchangeType.ETHER);
+                    portfolio.notifyExchangePortfolioChanged(ExchangeType.ETHER);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
         }
     };
 

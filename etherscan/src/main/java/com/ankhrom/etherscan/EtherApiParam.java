@@ -8,7 +8,7 @@ public final class EtherApiParam {
     public static final String module = "module";
     public static final String action = "action";
     public static final String address = "address";
-    public static final String contact = "contactaddress";
+    public static final String contact = "contractaddress";
     public static final String tag = "tag";
     public static final String page = "page";
     public static final String sort = "sort";
