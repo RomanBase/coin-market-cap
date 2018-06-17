@@ -32,16 +32,32 @@ exports.token = functions.https.onRequest((request, response) => {
       contractAddress = request.body.contract;
   }
 
-  var ether = 'https://api.etherscan.io/api?module=contract&action=getabi&address=' + contractAddress;
-
-  console.log(ether);
-
   if(!contractAddress){
     response.status(400).send({
       error: "missing contract address"
     });
     return;
   }
+
+  var ref = admin.database().ref();
+  var path = "/token/" + contractAddress;
+
+/* this is solved in app
+  ref.child(path).on("symbol", function (snapshot){
+
+    response.status(200).send({
+      symbol: snapshot.val(),
+      contract: contractAddress
+    });
+
+  }, function (error){
+      requestTokenSymbol(contractAddress, response);
+  });
+*/
+
+  var ether = 'https://api.etherscan.io/api?module=contract&action=getabi&address=' + contractAddress;
+
+  console.log(ether);
 
   $.getJSON(ether, function (data) {
       var contractABI = "";
@@ -59,9 +75,6 @@ exports.token = functions.https.onRequest((request, response) => {
               token.symbol((err, result) => {
                 if(result){
                   console.log("symbol : " + result);
-
-                  var ref = admin.database().ref();
-                  var path = "/token/" + contractAddress;
 
                   ref.child(path).child("symbol").set(result);
                   ref.child(path).child("address").set(contractAddress);
@@ -85,12 +98,18 @@ exports.token = functions.https.onRequest((request, response) => {
                 }
               });
           } else {
-            response.send();
+            console.log("symbol error! " + contractABI);
+            response.status(500).send({
+              error: "symbol not found",
+              contract: contractAddress
+            });
           }
-
       } else {
-          console.log("Error" );
-          response.send(contractABI);
+          console.log("symbol error! " + contractABI);
+          response.status(500).send({
+            error: "symbol not found",
+            contract: contractAddress
+          });
       }
   });
 });
