@@ -589,6 +589,7 @@ public class DataFetcher {
                     addPortfolioCurrency(portfolio, holder.getCoinBySymbol(response.symbol), ExchangeType.ETHER, balance);
 
                     portfolio.persist(ExchangeType.ETHER);
+                    notifyExchangeListeners(ExchangeType.ETHER, loadingEther, true);
                     portfolio.notifyExchangePortfolioChanged(ExchangeType.ETHER);
                 }
 

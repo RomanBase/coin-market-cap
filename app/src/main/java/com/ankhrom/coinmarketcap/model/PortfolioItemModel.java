@@ -76,13 +76,13 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         exchangeIcons.set(icons);
 
-        double unitPrice = Double.parseDouble(coin.priceUsd);
+        double unitPrice = StringHelper.isEmpty(coin.priceUsd) ? 0.0 : Double.parseDouble(coin.priceUsd);
 
         if (!(item.unitPrice > 0.0)) {
             item.unitPrice = unitPrice;
         }
 
-        double profit = unitPrice / item.unitPrice;
+        double profit = item.unitPrice > 0.0 ? unitPrice / item.unitPrice : 0.0;
 
         setUpModel(profit, item.unitPrice * item.amount, item.amount, item.unitPrice);
     }
@@ -124,8 +124,8 @@ public class PortfolioItemModel extends SelectableItemModel {
 
         exchangeIcons.set(icons);
 
-        double averagePrice = priceSum / amountSum;
-        double profit = unitPrice / averagePrice;
+        double averagePrice = amountSum > 0.0 ? priceSum / amountSum : 0.0;
+        double profit = averagePrice > 0.0 ? unitPrice / averagePrice : 0.0;
 
         setUpModel(profit, priceSum, amountSum, averagePrice);
 

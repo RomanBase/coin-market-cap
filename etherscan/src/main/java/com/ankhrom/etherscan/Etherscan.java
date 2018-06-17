@@ -98,7 +98,7 @@ public class Etherscan {
 
                             EtherBalance balance = new EtherBalance();
                             balance.address = contract;
-                            balance.balance = value / EtherApiParam.VALUE_MULTIPLIER;
+                            balance.balance = value;
 
                             listener.onResponse(balance);
                         } catch (Exception e) {
