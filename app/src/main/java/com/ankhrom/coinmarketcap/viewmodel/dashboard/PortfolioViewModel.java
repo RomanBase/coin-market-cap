@@ -6,6 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
+import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.R;
@@ -124,6 +125,14 @@ public class PortfolioViewModel extends AppViewModel<PortfolioPageBinding, Portf
     }
 
     protected void toggleItemFavouriteState(PortfolioItemModel item) {
+
+        if (item.coin.mock) {
+            ToastBuilder.with(getContext())
+                    .text("Not listed yet")
+                    .buildAndShow();
+
+            return;
+        }
 
         item.isFavourite.set(!item.isFavourite.get());
 

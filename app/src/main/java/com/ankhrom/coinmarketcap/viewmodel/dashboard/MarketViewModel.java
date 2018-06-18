@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.ankhrom.base.common.statics.ArgsHelper;
 import com.ankhrom.base.custom.args.InitArgs;
+import com.ankhrom.base.custom.builder.ToastBuilder;
 import com.ankhrom.base.interfaces.OnItemSelectedListener;
 import com.ankhrom.base.model.ItemModel;
 import com.ankhrom.coinmarketcap.AppCode;
@@ -199,6 +200,14 @@ public class MarketViewModel extends AppViewModel<MarketPageBinding, CoinsAdapte
     }
 
     protected void toggleItemFavouriteState(CoinItemModel item) {
+
+        if (item.coin.mock) {
+            ToastBuilder.with(getContext())
+                    .text("Not listed yet")
+                    .buildAndShow();
+
+            return;
+        }
 
         item.isFavourite.set(!item.isFavourite.get());
 

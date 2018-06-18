@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.ankhrom.base.common.statics.ObjectHelper;
-import com.ankhrom.base.common.statics.StringHelper;
 import com.ankhrom.base.interfaces.ObjectConverter;
 import com.ankhrom.base.interfaces.ObjectFactory;
 import com.ankhrom.coinmarketcap.entity.CoinItem;
@@ -219,7 +218,7 @@ public class DataHolder { //todo cache
         coin.rank = String.valueOf(coins.size());
         coin.marketCap = "1";
         coin.priceBtc = "0";
-        coin.priceUsd = null;
+        coin.priceUsd = "0";
         coin.supply = "1";
         coin.supplyMax = "1";
         coin.supplyTotal = "1";
@@ -227,6 +226,7 @@ public class DataHolder { //todo cache
         coin.percentChange1h = "0";
         coin.percentChange7d = "0";
         coin.percentChange24h = "0";
+        coin.mock = true;
 
         return coin;
     }

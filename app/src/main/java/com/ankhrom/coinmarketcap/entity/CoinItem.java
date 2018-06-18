@@ -46,6 +46,8 @@ public class CoinItem {
     @SerializedName("last_updated")
     public String timestamp;
 
+    public boolean mock;
+
     @Override
     public String toString() {
         return symbol + " - " + name;
