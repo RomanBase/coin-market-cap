@@ -13,7 +13,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 /**
  * Created by R' on 4/18/2018.
  */
-public class FireSynchronizer { //TODO prep to synchronize across devices
+public class FireSynchronizer { //TODO synchronize AuthCredentials across devices. Requires login/hash/phase. Data encoding and firebase database rules.
 
     private final ObjectFactory factory;
 
@@ -38,12 +38,7 @@ public class FireSynchronizer { //TODO prep to synchronize across devices
         AuthCredentials auth = getExchangePrefs().getAuth(exchange);
 
         if (auth.isValid()) {
-/*            FirebaseDatabase.getInstance()
-                    .getReference("auth")
-                    .child(FirebaseInstanceId.getInstance().getId())
-                    .child(exchange.name())
-                    .setValue(auth);
-*/
+
             FirebaseDatabase.getInstance()
                     .getReference("portfolio")
                     .child(FirebaseInstanceId.getInstance().getId())
