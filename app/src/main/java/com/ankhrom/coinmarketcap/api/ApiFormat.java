@@ -20,8 +20,8 @@ public class ApiFormat {
 
     public static final double THOUSAND = 1000;
     public static final double HUNDRED_THOUSAND = 100000;
-    public static final double MILLION = HUNDRED_THOUSAND * 100;
-    public static final double BILLION = MILLION * 100;
+    public static final double MILLION = HUNDRED_THOUSAND * 10;
+    public static final double BILLION = MILLION * 1000;
 
     public static final String THOUSAND_SIGN = " K";
     public static final String MILLION_SIGN = " M";
